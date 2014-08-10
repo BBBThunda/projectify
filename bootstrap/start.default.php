@@ -1,5 +1,10 @@
 <?php
 
+// FIRST-TIME INSTALLERS OF PROJECTIFY, DO THE FOLLOWING:
+// 1) Copy this file from "bootstrap/start.default.php" to "bootstrap/start.php"
+// 2) In start.php, change 'YOUR-HOSTNAME' to the hostname of your machine
+//    If you don't know it, run the 'hostname' command from the terminal
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -26,7 +31,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(array(
 
-	'local' => array('homestead'),
+	'dev' => array('YOUR-HOSTNAME'),
 
 ));
 
