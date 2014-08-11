@@ -13,5 +13,22 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+    return View::make('hello');
 });
+
+Route::get('/register','UsersController@register');
+
+Route::get('login', 'SessionsController@create');
+Route::get('logout', 'SessionsController@destroy');
+Route::resource('sessions', 'SessionsController');
+
+//Route::resource('account', 'AccountController');
+
+Route::get('account', function()
+    {
+        $buffer = 'My Account';
+        $buffer .= "\n";
+        $buffer .= '<a href="/logout">Log Out</a>';
+
+        return $buffer;
+    })->before('auth');

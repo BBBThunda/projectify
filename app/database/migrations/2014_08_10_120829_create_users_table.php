@@ -16,8 +16,11 @@ class CreateUsersTable extends Migration {
             {
                 //Create initial users table
                 $table->increments('id');
+                $table->string('display_name')->unique();
                 $table->string('email')->unique();
-                $table->string('passhash');
+                $table->string('password');
+                $table->tinyInteger('is_admin');
+                $table->rememberToken();
                 $table->timestamps();
             });
 
