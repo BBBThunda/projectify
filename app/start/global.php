@@ -79,3 +79,17 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+
+
+
+/*******************************
+ * Projectify Exception Classes
+ *******************************/
+
+//TODO: Add custom error messages, etc. to these
+class NoConfirmationCodeException extends Exception { }
+class UnknownConfirmationCodeException extends Exception { }
+class ExpiredConfirmationCodeException extends Exception { }
+class InsertUserFailException extends Exception { }
+class NoUserForResendException extends Exception { }

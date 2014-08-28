@@ -11,7 +11,7 @@ class SessionsController extends BaseController {
 	*/
 
 	public function create()
-	{
+        {
             return View::make('sessions.create');
         }
 
@@ -23,14 +23,24 @@ class SessionsController extends BaseController {
 
         public function store()
         {
-            if (Auth::attempt(Input::only('email', 'password')))
+            if (Auth::attempt(Input::only('email', 'password'), Input::has('remember')))
             {
-               return Redirect::to('account');
+                if (User::find(Auth::id())->confirmed) {
+                    return Redirect::to('/home');
+                }
+                else {
+                    // User still needs to verify email address
+                    Session::flash('unverifiedUserId', Auth::id());
+                    Auth::logout();
+                    return Redirect::to('/unverified');
+                }
             }
-
-            // TODO: add an error message flash here 
-
+            
+            //TODO: add an error message flash here
+            Session::flash('error', 'The email/password combination was not found in our system.');
+            
             // Re-display login form
-            return Redirect::back()->withInput();
+            return Redirect::to('/login')->withInput();
         }
+
 }

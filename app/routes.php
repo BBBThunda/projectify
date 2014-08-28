@@ -16,19 +16,31 @@ Route::get('/', function()
     return View::make('hello');
 });
 
-Route::get('/register','UsersController@register');
-
-Route::get('login', 'SessionsController@create');
-Route::get('logout', 'SessionsController@destroy');
 Route::resource('sessions', 'SessionsController');
+Route::get('/login', 'SessionsController@create');
+Route::get('/logout', 'SessionsController@destroy');
 
-//Route::resource('account', 'AccountController');
+Route::resource('projects', 'ProjectsController');
+Route::get('/home', 'ProjectsController@home')->before('auth');
+Route::get('/addProject', 'ProjectsController@add')->before('auth');
 
-Route::get('account', function()
-    {
-        $buffer = 'My Account';
-        $buffer .= "\n";
-        $buffer .= '<a href="/logout">Log Out</a>';
+Route::resource('users', 'UsersController');
 
-        return $buffer;
-    })->before('auth');
+//Stuff to be moved to Profile controller
+Validator::extend('password', 'User@validatePassword');
+Route::post('users.store','UsersController@store')->before('csrf');
+Route::get('verifyEmail/{confirmationCode}', [
+    'as' => 'confirmation_path',
+    'uses' => 'UsersController@verifyEmail'
+    ]);
+Route::get('/unverified', 'UsersController@unverified')->before('auth');
+Route::get('/resend', [
+    'as' => 'resendVerificationMail',
+    'uses' => 'UsersController@resend'
+    ]);
+Route::get('/register','UsersController@register');
+Route::get('/forgotPassword', 'RemindersController@getRemind');
+Route::get('/editProfile', 'UsersController@editProfile')->before('auth');
+Route::post('/updateProfile', 'UsersController@updateProfile')->before(['auth','csrf']);
+
+Route::controller('password', 'RemindersController');
