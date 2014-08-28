@@ -8,8 +8,8 @@
 
         <h1>Edit profile</h1>
 
-        @if (!empty($message))
-        <p>{{ $message }}</p>
+        @if (Session::has('message'))
+        <p>{{{ Session::get('message') }}}</p>
         @endif
 
         {{ Form::open([ 'url' => '/updateProfile' ]) }}
@@ -21,7 +21,7 @@
             @endforeach
             </ul>
             {{ Form::label('display_name', 'Display name') }}
-            {{ Form::text('display_name', $user->display_name) }}
+            {{ Form::text('display_name', $user->display_name, ['autofocus', 'autofocus']) }}
 
             {{-- Password field. ------------------------}}
             <ul class="errors">

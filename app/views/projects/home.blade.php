@@ -8,6 +8,10 @@
 
         <h1>{{ Auth::user()->display_name . '\'s Home' }}</h1>
 
+        @if (Session::has('message'))
+        <p>{{{ Session::get('message') }}}</p>
+        @endif
+
         <div>
             <h2>Todo List</h2>
 
