@@ -6,7 +6,7 @@
     </head>
     <body>
 
-        <h1> Sign in</h1>
+        <h1>Sign in</h1>
         
         {{-- If any messages were passed, display them ------------}}
         @if (Session::has('error'))

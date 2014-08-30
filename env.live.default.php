@@ -10,8 +10,8 @@
 return array(
 
     'DB_HOST' => 'your-db-hostname',
-    'DB_NAME' => 'projectify-dev',
-    'DB_USER' => 'projectify-dev',
+    'DB_NAME' => 'projectifylive',
+    'DB_USER' => 'projectifylive',
     'DB_PASS' => 'password-for-projectify-dev-user',
     'MAIL_PRETEND' => false,
     'MAIL_HOST' => 'your.smtp.server.com',
