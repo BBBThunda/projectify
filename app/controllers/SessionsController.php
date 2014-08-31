@@ -2,45 +2,45 @@
 
 class SessionsController extends BaseController {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Sessions Controller
-	|--------------------------------------------------------------------------
-	|
-	|
-	*/
+    /*
+    |--------------------------------------------------------------------------
+    | Sessions Controller
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 
-	public function create()
-        {
-            return View::make('sessions.create');
-        }
+    public function create()
+    {
+        return View::make('sessions.create');
+    }
 
-        public function destroy()
-        {
-            Auth::logout();
-            return Redirect::to('login');
-        }
+    public function destroy()
+    {
+        Auth::logout();
+        return Redirect::to('login');
+    }
 
-        public function store()
+    public function store()
+    {
+        if (Auth::attempt(Input::only('email', 'password'), Input::has('remember')))
         {
-            if (Auth::attempt(Input::only('email', 'password'), Input::has('remember')))
-            {
-                if (User::find(Auth::id())->confirmed) {
-                    return Redirect::to('/home');
-                }
-                else {
-                    // User still needs to verify email address
-                    Session::flash('unverifiedUserId', Auth::id());
-                    Auth::logout();
-                    return Redirect::to('/unverified');
-                }
+            if (User::find(Auth::id())->confirmed) {
+                return Redirect::to('/home');
             }
-            
-            //TODO: add an error message flash here
-            Session::flash('error', 'The email/password combination was not found in our system.');
-            
-            // Re-display login form
-            return Redirect::to('/login')->withInput();
+            else {
+                // User still needs to verify email address
+                Session::flash('unverifiedUserId', Auth::id());
+                Auth::logout();
+                return Redirect::to('/unverified');
+            }
         }
+        
+        //TODO: add an error message flash here
+        Session::flash('error', 'The email/password combination was not found in our system.');
+        
+        // Re-display login form
+        return Redirect::to('/login')->withInput();
+    }
 
 }

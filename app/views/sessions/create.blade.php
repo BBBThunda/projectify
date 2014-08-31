@@ -1,3 +1,7 @@
+@extends('layouts.master')
+
+@section('bodyContent')
+
 <h1> Sign in</h1>
 
 {{-- If any messages were passed, display them ------------}}
@@ -39,3 +43,5 @@
 
 <a href="/register">Sign Up</a>
 <a href="/forgotPassword">Forgot Password</a>
+
+@stop

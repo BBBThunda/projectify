@@ -3,9 +3,9 @@
 class BaseController extends Controller {
 
     /**
-     * Use the master layout by default
+     * Use the master layout by default (doesn't seeem to do anything... need to investigate)
      */
-    protected $layout = 'layouts.master';
+    //protected $layout = 'layouts.master';
 
 
 
