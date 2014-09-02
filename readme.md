@@ -15,6 +15,11 @@ Projectify is blahblahblahblahdescription  This readme needs some work... just p
 
 If you did not already have mysql-server, you will be prompted to create a root password. Pick a good one and don't lose it.
 
+1b Install composer if needed
+ curl -sS https://getcomposer.org/installer | php
+ mv composer.phar /usr/local/bin/composer
+ composer self-update
+
 2 Clone the repository into your preferreed <projectify_root> and copy 
  cd <parent_of_projectify_root>
  git clone ????????????
