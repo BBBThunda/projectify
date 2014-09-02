@@ -29,11 +29,22 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(function() {
 
-	'dev' => array('YOUR-HOSTNAME'),
+    $hostname = gethostname();
+    switch ($hostname) {
+    case 'proj.ectify.com':
+    case 'ectify.com':
+        return 'live';
+    case 'stagingServerHostname':
+        return 'staging';
+    default:
+        return 'dev';
+    }
 
-));
+});
+
+
 
 /*
 |--------------------------------------------------------------------------
