@@ -1,50 +1,45 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+@extends('layouts.master')
 
-        {{ Form::open([ 'route' => 'users.store' ]) }}
+@section('bodyContent')
 
-            {{-- Email address field. -------------------}}
-            <ul class="errors">
-            @foreach($errors->get('email') as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-            </ul>
-            {{ Form::label('email', 'Email address') }}
-            {{ Form::email('email', '', ['autofocus', 'autofocus']) }}
+{{ Form::open([ 'route' => 'users.store' ]) }}
 
-            {{-- Display name field. ------------------------}}
-            <ul class="errors">
-            @foreach($errors->get('display_name') as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-            </ul>
-            {{ Form::label('display_name', 'Display name') }}
-            {{ Form::text('display_name') }}
+{{-- Email address field. -------------------}}
+<ul class="errors">
+    @foreach($errors->get('email') as $message)
+    <li>{{ $message }}</li>
+    @endforeach
+</ul>
+{{ Form::label('email', 'Email address') }}
+{{ Form::email('email', '', ['autofocus', 'autofocus']) }}
 
-            {{-- Password field. ------------------------}}
-            <ul class="errors">
-            @foreach($errors->get('password') as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-            </ul>
-            {{ Form::label('password', 'Password') }}
-            {{ Form::password('password') }}
+{{-- Display name field. ------------------------}}
+<ul class="errors">
+    @foreach($errors->get('display_name') as $message)
+    <li>{{ $message }}</li>
+    @endforeach
+</ul>
+{{ Form::label('display_name', 'Display name') }}
+{{ Form::text('display_name') }}
 
-            {{-- Password confirmation field. -----------}}
-            {{ Form::label('password_confirmation', 'Confirm password') }}
-            {{ Form::password('password_confirmation') }}
+{{-- Password field. ------------------------}}
+<ul class="errors">
+    @foreach($errors->get('password') as $message)
+    <li>{{ $message }}</li>
+    @endforeach
+</ul>
+{{ Form::label('password', 'Password') }}
+{{ Form::password('password') }}
 
-            {{-- Form submit button. --------------------}}
-            {{ Form::submit('Register') }}
+{{-- Password confirmation field. -----------}}
+{{ Form::label('password_confirmation', 'Confirm password') }}
+{{ Form::password('password_confirmation') }}
 
-        {{ Form::close() }}
+{{-- Form submit button. --------------------}}
+{{ Form::submit('Register') }}
 
-        <p>Already have an account? <a href="/login">Log In</a></p>
-        
-    </body>
-</html>
+{{ Form::close() }}
+
+<p>Already have an account? <a href="/login">Log In</a></p>
+
+@stop

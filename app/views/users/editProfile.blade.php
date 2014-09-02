@@ -1,45 +1,40 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+@extends('layouts.master')
 
-        <h1>Edit profile</h1>
+@section('bodyContent')
 
-        @if (Session::has('message'))
-        <p>{{{ Session::get('message') }}}</p>
-        @endif
+<h1>Edit profile</h1>
 
-        {{ Form::open([ 'url' => '/updateProfile' ]) }}
+@if (Session::has('message'))
+<p>{{{ Session::get('message') }}}</p>
+@endif
 
-            {{-- Display name field. ------------------------}}
-            <ul class="errors">
-            @foreach($errors->get('display_name') as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-            </ul>
-            {{ Form::label('display_name', 'Display name') }}
-            {{ Form::text('display_name', $user->display_name, ['autofocus', 'autofocus']) }}
+{{ Form::open([ 'url' => '/updateProfile' ]) }}
 
-            {{-- Password field. ------------------------}}
-            <ul class="errors">
-            @foreach($errors->get('password') as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-            </ul>
-            {{ Form::label('password', 'Password') }}
-            {{ Form::password('password') }}
+{{-- Display name field. ------------------------}}
+<ul class="errors">
+    @foreach($errors->get('display_name') as $message)
+    <li>{{ $message }}</li>
+    @endforeach
+</ul>
+{{ Form::label('display_name', 'Display name') }}
+{{ Form::text('display_name', $user->display_name, ['autofocus', 'autofocus']) }}
 
-            {{-- Password confirmation field. -----------}}
-            {{ Form::label('password_confirmation', 'Confirm password') }}
-            {{ Form::password('password_confirmation') }}
+{{-- Password field. ------------------------}}
+<ul class="errors">
+    @foreach($errors->get('password') as $message)
+    <li>{{ $message }}</li>
+    @endforeach
+</ul>
+{{ Form::label('password', 'Password') }}
+{{ Form::password('password') }}
 
-            {{-- Form submit button. --------------------}}
-            {{ Form::submit('Save Changes') }}
+{{-- Password confirmation field. -----------}}
+{{ Form::label('password_confirmation', 'Confirm password') }}
+{{ Form::password('password_confirmation') }}
 
-        {{ Form::close() }}
+{{-- Form submit button. --------------------}}
+{{ Form::submit('Save Changes') }}
 
-    </body>
-</html>
+{{ Form::close() }}
+
+@stop

@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+@extends('layouts.master')
 
-        <h1>Welcome to Projectify!</h1>
+@section('bodyContent')
 
-        <p>Thanks for registering!  Your account has been registered.  A message has been sent with a link to confirm your email address.</p>
+<h1>Welcome to Projectify!</h1>
 
-        <p><a href="login">Log in</a></p>
+<p>Thanks for registering!  Your account has been registered.  A message has been sent with a link to confirm your email address.</p>
 
-    </body>
-</html>
+<p><a href="login">Log in</a></p>
+
+@stop

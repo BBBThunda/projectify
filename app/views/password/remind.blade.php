@@ -1,31 +1,26 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+@extends('layouts.master')
 
-        <h1>Reset Password</h1>
+@section('bodyContent')
 
-        {{ Form::open([ 'action' => 'RemindersController@postRemind', 'method' => 'post' ]) }}
+<h1>Reset Password</h1>
 
-            @if (Session::has('error'))
-            <ul class="errors">
-                <li>{{ trans(Session::get('error')) }}</li>
-            </ul>
-            @elseif (Session::has('status'))
-                <ul><li>{{ trans(Session::get('status')) }}</li></ul>
-            @endif
-            
-            {{-- Email address field. -------------------}}
-            {{ Form::label('email', 'Email address') }}
-            {{ Form::email('email') }}
+{{ Form::open([ 'action' => 'RemindersController@postRemind', 'method' => 'post' ]) }}
 
-            {{-- Form submit button. --------------------}}
-            {{ Form::submit('Send Email') }}
+@if (Session::has('error'))
+<ul class="errors">
+    <li>{{ trans(Session::get('error')) }}</li>
+</ul>
+@elseif (Session::has('status'))
+<ul><li>{{ trans(Session::get('status')) }}</li></ul>
+@endif
 
-        {{ Form::close() }}
+{{-- Email address field. -------------------}}
+{{ Form::label('email', 'Email address') }}
+{{ Form::email('email') }}
 
-    </body>
-</html>
+{{-- Form submit button. --------------------}}
+{{ Form::submit('Send Email') }}
+
+{{ Form::close() }}
+
+@stop

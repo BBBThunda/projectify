@@ -7,7 +7,7 @@
     </head>
     <body>
 
-        <!-- HEADER -->
+        @include('layouts.header')
 
         @yield('bodyContent')
 

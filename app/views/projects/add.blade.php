@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+@extends('layouts.master')
 
-        {{ Form::open([ 'route' => 'projects.store' ]) }}
+@section('bodyContent')
 
-                {{ Form::label('text', 'Text:') }}
-                {{ Form::text('text') }}
-            
-                {{ Form::submit('Add Task') }}
+{{ Form::open([ 'route' => 'projects.store' ]) }}
 
-        {{ Form::close() }}
+{{ Form::label('text', 'Text:') }}
+{{ Form::text('text') }}
 
-    </body>
-</html>
+{{ Form::submit('Add Task') }}
+
+{{ Form::close() }}
+
+@stop
