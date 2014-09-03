@@ -1,27 +1,22 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+@extends('layouts.master')
 
-        {{ Form::open([ 'route' => 'sessions.store' ]) }}
+@section('bodyContent')
 
-            <div>
-                {{ Form::label('email', 'Email:') }}
-                {{ Form::email('email') }}
-            </div>
-            
-            <div>
-                {{ Form::label('password', 'Password:') }}
-                {{ Form::password('password') }}
-            </div>
-            <div>
-                {{ Form::submit('Login') }}
-            </div>
+{{ Form::open([ 'route' => 'sessions.store' ]) }}
 
-        {{ Form::close() }}
+<div>
+    {{ Form::label('email', 'Email:') }}
+    {{ Form::email('email') }}
+</div>
 
-    </body>
-</html>
+<div>
+    {{ Form::label('password', 'Password:') }}
+    {{ Form::password('password') }}
+</div>
+<div>
+    {{ Form::submit('Login') }}
+</div>
+
+{{ Form::close() }}
+
+@stop

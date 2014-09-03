@@ -1,19 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+@extends('layouts.master')
 
-        {{ Form::open([ 'route' => 'projects.store' ]) }}
+@section('bodyContent')
 
-                {{ Form::label('text', 'Text:') }}
-                {{ Form::text('text') }}
-            
-                {{ Form::submit('Add Task') }}
+{{ Form::open([ 'route' => 'projects.store' ]) }}
 
-        {{ Form::close() }}
+{{-- Description field. -------------------}}
+<ul class="errors">
+    @foreach($errors->get('description') as $message)
+    <li>{{ $message }}</li>
+    @endforeach
+</ul>
+{{ Form::label('description', 'Text:') }}
+{{ Form::text('description') }}
 
-    </body>
-</html>
+{{ Form::submit('Add Task') }}
+
+{{ Form::close() }}
+
+@stop

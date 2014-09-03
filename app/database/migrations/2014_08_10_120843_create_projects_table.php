@@ -18,7 +18,7 @@ class CreateProjectsTable extends Migration {
                 $table->increments('id');
                 $table->integer('user_id');
                 $table->integer('sequence');
-                $table->integer('parent_project');
+                $table->integer('parent_project')->nullable();
                 $table->timestamps();
             });
 	}

@@ -1,37 +1,35 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
+@extends('layouts.master')
 
-        <h1>{{ Auth::user()->display_name . '\'s Home' }}</h1>
+@section('bodyContent')
 
-        @if (Session::has('message'))
-        <p>{{{ Session::get('message') }}}</p>
+<h1>{{ Auth::user()->display_name . '\'s Home' }}</h1>
+
+@if (Session::has('message'))
+<p>{{{ Session::get('message') }}}</p>
+@endif
+
+<?php //dd(Session::all()); ?>
+<?php //dd($projects); ?>
+<div>
+    <h2>Todo List</h2>
+
+    <ul>
+        @if (!empty($projects))
+        @foreach ($projects as $project)
+        <li>{{ Form::checkbox($project->id . 'completed', $project->completed) }}
+        {{{ $project->description }}}</li>
+        @endforeach
+        @else
+        <li>No todo items - go have some fun!</li>
         @endif
+    </ul>
+</div>
 
-        <div>
-            <h2>Todo List</h2>
+<br />
+<a href="/addProject">Add Project</a>
+<br />
+<a href="/editProfile">Edit Profile</a>
+<br />
+<a href="/logout">Log Out</a>
 
-            <ul>
-                @if (empty($project))
-                <li>No todo items - go have some fun!</li>
-                @else
-                    @foreach ($projects as $project)
-                    <li>List Item</li>
-                    @endforeach
-                @endif
-            </ul>
-        </div>
-
-        <br />
-        <a href="/addProject">Add Project</a>
-        <br />
-        <a href="/editProfile">Edit Profile</a>
-        <br />
-        <a href="/logout">Log Out</a>
-
-    </body>
-</html>
+@stop
