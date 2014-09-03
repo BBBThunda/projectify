@@ -1,6 +1,6 @@
-<div class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-       
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+
         <!-- Group Brand and toggle for mobile -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed"
@@ -12,31 +12,36 @@
             </button>
             <a class="navbar-brand" href="/">
                 <img src="/img/projectify.jpg"
-               height="30" width="120" /></a>
+                height="35" /></a>
         </div>
 
         <!-- Links and dropdowns -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())
+
                 <li><a href="/login">Login</a></li>
+                <li><a href="/register">Sign Up</a></li>
+
                 @else
-                <p class="navbar-text">Signed in as (put display name here)</p>
+
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    {{{ User::find(Auth::id())->display_name }}}
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/editProfile">Edit Profile</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/logout">Sign Out</a></li>
+                </ul>
+                </li>
+
                 @endif
 
-                <!--
-                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul> -->
-                </li>
             </ul>
         </div>
 
     </div>
 </div>
+
+<div class="container">
