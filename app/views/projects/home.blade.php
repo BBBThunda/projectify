@@ -12,12 +12,13 @@
     <h2>Todo List</h2>
 
     <ul>
-        @if (empty($project))
-        <li>No todo items - go have some fun!</li>
+        @if (!empty($projects))
+            @foreach ($projects as $project)
+            <li>{{ Form::checkbox($project->id . 'completed', $project->completed) }}
+            {{{ $project->description }}}</li>
+            @endforeach
         @else
-        @foreach ($projects as $project)
-        <li>List Item</li>
-        @endforeach
+            <li>No todo items - go have some fun!</li>
         @endif
     </ul>
 </div>
