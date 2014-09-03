@@ -2,8 +2,6 @@
 
 @section('bodyContent')
 
-<h1> Sign in</h1>
-
 {{-- If any messages were passed, display them ------------}}
 @if (Session::has('error'))
 <div class="error">
@@ -15,33 +13,32 @@
 </div>
 @endif
 
-{{ Form::open([ 'route' => 'sessions.store' ]) }}
+{{ Form::open([ 'route' => 'sessions.store', 'role' => 'form'  ]) }}
+
+<h2> Sign in</h2>
 
 {{-- Email field ---------------------------------------------}}
-<div>
-    {{ Form::label('email', 'Email:') }}
-    {{ Form::email('email', '', ['autofocus' => 'autofocus']) }}
+<div class="form-group">
+{{ Form::label('email', 'Email:') }}
+{{ Form::email('email', '', ['class' => 'form-control', 'placeholder' => 'Enter email', 'autofocus' => 'autofocus']) }}
 </div>
 
 {{-- Password field ------------------------------------------}}
-<div>
-    {{ Form::label('password', 'Password:') }}
-    {{ Form::password('password') }}
+<div class="form-group">
+{{ Form::label('password', 'Password:') }}
+{{ Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) }}
 </div>
 
 {{-- Remember checkbox ---------------------------------------}}
-<div>
-    {{ Form::label('Remember me:') }}
-    {{ Form::checkbox('remember') }}
+<div class="form-group">
+{{ Form::label('Remember me:') }}
+{{ Form::checkbox('remember') }}
 </div>
 
-<div>
-    {{ Form::submit('Login') }}
-</div>
+{{ Form::submit('Login', ['class' => 'btn btn-default'] ) }}
+<a class="btn btn-primary pull-right" href="/forgotPassword">I forgot my password</a>
 
 {{ Form::close() }}
 
-<a href="/register">Sign Up</a>
-<a href="/forgotPassword">Forgot Password</a>
 
 @stop
