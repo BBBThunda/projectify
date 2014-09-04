@@ -15,30 +15,39 @@
 
 {{ Form::open([ 'route' => 'sessions.store', 'role' => 'form'  ]) }}
 
-<h2> Sign in</h2>
+<div class="row">
+    <h2>Sign in</h2>
+    <div class="col-md-4">
+        {{-- Email field ---------------------------------------------}}
+        <div class="form-group">
+            {{-- Form::label('email', 'Email:') --}}
+            {{ Form::email('email', '', ['class' => 'form-control', 'placeholder' => 'Enter email', 'autofocus' => 'autofocus']) }}
+        </div>
 
-{{-- Email field ---------------------------------------------}}
-<div class="form-group">
-{{ Form::label('email', 'Email:') }}
-{{ Form::email('email', '', ['class' => 'form-control', 'placeholder' => 'Enter email', 'autofocus' => 'autofocus']) }}
+        {{-- Password field ------------------------------------------}}
+        <div class="form-group">
+            {{-- Form::label('password', 'Password:') --}}
+            {{ Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) }}
+        </div>
+
+        {{-- Remember checkbox ---------------------------------------}}
+        <div class="form-group">
+            {{ Form::label('Remember me:') }}
+            {{ Form::checkbox('remember') }}
+            {{ Form::submit('Login', ['class' => 'btn btn-primary pull-right'] ) }}
+        </div>
+
+
+        {{ Form::close() }}
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <a class="btn btn-default" href="/forgotPassword">I forgot my password</a>
+        </div>
+        <div class="form-group">
+            <a class="btn btn-default" href="/register">Sign me up!</a>
+        </div>
+    </div>
 </div>
-
-{{-- Password field ------------------------------------------}}
-<div class="form-group">
-{{ Form::label('password', 'Password:') }}
-{{ Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) }}
-</div>
-
-{{-- Remember checkbox ---------------------------------------}}
-<div class="form-group">
-{{ Form::label('Remember me:') }}
-{{ Form::checkbox('remember') }}
-</div>
-
-{{ Form::submit('Login', ['class' => 'btn btn-default'] ) }}
-<a class="btn btn-primary pull-right" href="/forgotPassword">I forgot my password</a>
-
-{{ Form::close() }}
-
 
 @stop
