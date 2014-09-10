@@ -12,13 +12,17 @@ class AddDescCompletedToProjectTable extends Migration {
      */
     public function up()
     {
-        Schema::table('projects', function(Blueprint $table)
+        if (!Schema::hasColumn('projects', 'description')
+            && !Schema::hasColumn('projects', 'completed'))
         {
-            //Add columns ['description', 'completed']
-            $table->string('description')->after('parent_project');
-            $table->boolean('completed')->after('description');
+            Schema::table('projects', function(Blueprint $table)
+            {
+                //Add columns ['description', 'completed']
+                $table->string('description')->before('sequence');
+                $table->boolean('completed')->before('sequence')->default(0);
 
-        });
+            });
+        }
     }
 
     /**
@@ -28,12 +32,16 @@ class AddDescCompletedToProjectTable extends Migration {
      */
     public function down()
     {
-        Schema::table('projects', function(Blueprint $table)
+        if (!Schema::hasColumn('projects', 'description')
+            && !Schema::hasColumn('projects', 'completed'))
         {
-            //Drop columns
-            $table->dropColumn('description');
-            $table->dropColumn('completed');
-        });
+            Schema::table('projects', function(Blueprint $table)
+            {
+                //Drop columns
+                $table->dropColumn('description');
+                $table->dropColumn('completed');
+            });
+        }
     }
 
 }

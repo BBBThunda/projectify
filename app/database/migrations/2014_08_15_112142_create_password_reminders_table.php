@@ -13,13 +13,16 @@ class CreatePasswordRemindersTable extends Migration {
      */
     public function up()
     {
-        Schema::create('password_reminders', function(Blueprint $table)
+        if (!Schema::hasTable('password_reminders'))
         {
-            $table->increments('id');
-            $table->string('email')->index();
-            $table->string('token')->index();
-            $table->timestamps('created_at');
-        });
+            Schema::create('password_reminders', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->string('email')->index();
+                $table->string('token')->index();
+                $table->timestamps('created_at');
+            });
+        }
     }
 
     /**
@@ -29,7 +32,10 @@ class CreatePasswordRemindersTable extends Migration {
      */
     public function down()
     {
+        if (!Schema::hasTable('password_reminders'))
+        {
             Schema::drop('password_reminders');
+        }
     }
 
 }
