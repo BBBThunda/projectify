@@ -15,12 +15,16 @@ class TagTableSeeder extends Seeder {
         // Update autoincrement value to 1 in case table was not dropped
         DB::statement('ALTER TABLE tags AUTO_INCREMENT = 1');
 
+        // Insert seed records
         foreach($tags as $description)
         {
             Tag::create(array(
                 'description' => $description
             ));
         }
+
+        // Update autoincrement value to 101 to separate user-defined values from system defaults
+        DB::statement('ALTER TABLE tags AUTO_INCREMENT = 101');
 
     }
 }

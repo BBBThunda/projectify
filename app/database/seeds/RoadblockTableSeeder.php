@@ -5,10 +5,6 @@ class RoadblockTableSeeder extends Seeder {
     public function run()
     {
 
-        DB::table('roadblocks')->delete();
-
-        //TODO: Add query to update autoincrement value to 0
-
         // List of roadblocks
         // DO NOT change the order of existing roadblocks.  Append only.
         $roadblocks = array(
@@ -17,6 +13,13 @@ class RoadblockTableSeeder extends Seeder {
             'Waiting on Event'
         );
 
+        // Empty roadblocks table
+        DB::table('roadblocks')->delete();
+
+        // Update autoincrement value to 1 in case table was not dropped
+        DB::statement('ALTER TABLE tags AUTO_INCREMENT = 1');
+
+        // Insert seed records
         foreach($roadblocks as $description)
         {
             Roadblock::create(array(
@@ -24,7 +27,9 @@ class RoadblockTableSeeder extends Seeder {
             ));
         }
 
-        //TODO: Add query to update autoincrement value to 100
+        // Update autoincrement value to 101 to separate user-defined values from system defaults
+        // Not really necessary unless we begin supporting custom roadblocks
+        DB::statement('ALTER TABLE tags AUTO_INCREMENT = 101');
 
     }
 }
