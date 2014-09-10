@@ -2,42 +2,50 @@
 
 class DatabaseSeeder extends Seeder {
 
-	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
-	 */
-	public function run()
-	{
-		Eloquent::unguard();
-
-                $this->call('UserTableSeeder');
-
-                $this->command->info('User table seeded!');
-	}
-
-}
-
-class UserTableSeeder extends Seeder {
-
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run()
     {
-        DB::table('users')->delete();
 
-        // Create one admin user
-        User::create(array(
-            'email' => 'admin@proj.ectify.com',
-            'display_name' => 'Administrator',
-            'password' => Hash::make('adminpassword'),
-            'is_admin' => 1
-        ));
+        Eloquent::unguard();
 
-        // Create one regular user
-        User::create(array(
-            'email' => 'user@proj.ectify.com',
-            'display_name' => 'User',
-            'password' => Hash::make('password'),
-            'is_admin' => 0
-        ));
+        $this->command->info('SEEDING DATABASE');
+
+        $tablesSeeded = 0;
+
+        if (Schema::hasTable('users'))
+        {
+            $this->call('UserTableSeeder');
+            $tablesSeeded++;
+            $this->command->info('users table seeded!');
+        }
+
+        if (Schema::hasTable('roadblocks'))
+        {
+            $this->call('RoadblockTableSeeder');
+            $tablesSeeded++;
+            $this->command->info('roadblocks table seeded!');
+        }
+
+        if (Schema::hasTable('tags'))
+        {
+            $this->call('TagTableSeeder');
+            $tablesSeeded++;
+            $this->command->info('tags table seeded!');
+        }
+
+        if (Schema::hasTable('contexts'))
+        {
+            $this->call('ContextTableSeeder');
+            $tablesSeeded++;
+            $this->command->info('contexts table seeded!');
+        }
+
+        $this->command->info('SEEDING COMPLETE: ' . $tablesSeeded . ' tables seeded.');
+
     }
+
 }

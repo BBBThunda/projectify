@@ -17,18 +17,22 @@ class CreateRoadblockTagAndContextTables extends Migration {
             Schema::create('roadblocks', function(Blueprint $table)
             {
                 $table->increments('id');
-                $table->integer('project_id')->unsigned();
-                $table->foreign('project_id')->references('id')->on('projects');
+                $table->string('description');
+                $table->integer('user_id')->unsigned()->nullable();
+                $table->foreign('user_id')->references('id')->on('users');
                 $table->timestamps();
             });
         }
 
-        if (!Schema::hasTable('roadblock_list'))
+        if (!Schema::hasTable('project_roadblock'))
         {
-            Schema::create('roadblock_list', function(Blueprint $table)
+            Schema::create('project_roadblock', function(Blueprint $table)
             {
                 $table->increments('id');
-                $table->string('description');
+                $table->integer('project_id')->unsigned();
+                $table->foreign('project_id')->references('id')->on('projects');
+                $table->integer('roadblock_id')->unsigned();
+                $table->foreign('roadblock_id')->references('id')->on('roadblocks');
                 $table->timestamps();
             });
         }
@@ -38,18 +42,22 @@ class CreateRoadblockTagAndContextTables extends Migration {
             Schema::create('tags', function(Blueprint $table)
             {
                 $table->increments('id');
-                $table->integer('project_id')->unsigned();
-                $table->foreign('project_id')->references('id')->on('projects');
+                $table->string('description');
+                $table->integer('user_id')->unsigned()->nullable();
+                $table->foreign('user_id')->references('id')->on('users');
                 $table->timestamps();
             });
         }
 
-        if (!Schema::hasTable('tag_list'))
+        if (!Schema::hasTable('project_tag'))
         {
-            Schema::create('tag_list', function(Blueprint $table)
+            Schema::create('project_tag', function(Blueprint $table)
             {
                 $table->increments('id');
-                $table->string('description');
+                $table->integer('project_id')->unsigned();
+                $table->foreign('project_id')->references('id')->on('projects');
+                $table->integer('tag_id')->unsigned();
+                $table->foreign('tag_id')->references('id')->on('tags');
                 $table->timestamps();
             });
         }
@@ -59,18 +67,22 @@ class CreateRoadblockTagAndContextTables extends Migration {
             Schema::create('contexts', function(Blueprint $table)
             {
                 $table->increments('id');
-                $table->integer('project_id')->unsigned();
-                $table->foreign('project_id')->references('id')->on('projects');
+                $table->string('description');
+                $table->integer('user_id')->unsigned()->nullable();
+                $table->foreign('user_id')->references('id')->on('users');
                 $table->timestamps();
             });
         }
 
-        if (!Schema::hasTable('context_list'))
+        if (!Schema::hasTable('project_context'))
         {
-            Schema::create('context_list', function(Blueprint $table)
+            Schema::create('project_context', function(Blueprint $table)
             {
                 $table->increments('id');
-                $table->string('description');
+                $table->integer('project_id')->unsigned();
+                $table->foreign('project_id')->references('id')->on('projects');
+                $table->integer('context_id')->unsigned();
+                $table->foreign('context_id')->references('id')->on('contexts');
                 $table->timestamps();
             });
         }
@@ -85,14 +97,19 @@ class CreateRoadblockTagAndContextTables extends Migration {
     public function down()
     {
 
+        if (Schema::hasTable('project_roadblock'))
+        {
+            Schema::drop('project_roadblock');
+        }
+
         if (Schema::hasTable('roadblocks'))
         {
             Schema::drop('roadblocks');
         }
 
-        if (Schema::hasTable('roadblock_list'))
+        if (Schema::hasTable('project_tag'))
         {
-            Schema::drop('roadblock_list');
+            Schema::drop('project_tag');
         }
 
         if (Schema::hasTable('tags'))
@@ -100,19 +117,14 @@ class CreateRoadblockTagAndContextTables extends Migration {
             Schema::drop('tags');
         }
 
-        if (Schema::hasTable('tag_list'))
+        if (Schema::hasTable('project_context'))
         {
-            Schema::drop('tag_list');
+            Schema::drop('project_context');
         }
 
         if (Schema::hasTable('contexts'))
         {
             Schema::drop('contexts');
-        }
-
-        if (Schema::hasTable('context_list'))
-        {
-            Schema::drop('context_list');
         }
 
     }
