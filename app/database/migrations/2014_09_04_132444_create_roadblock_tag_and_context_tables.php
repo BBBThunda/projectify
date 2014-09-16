@@ -74,9 +74,9 @@ class CreateRoadblockTagAndContextTables extends Migration {
             });
         }
 
-        if (!Schema::hasTable('project_context'))
+        if (!Schema::hasTable('context_project'))
         {
-            Schema::create('project_context', function(Blueprint $table)
+            Schema::create('context_project', function(Blueprint $table)
             {
                 $table->increments('id');
                 $table->integer('project_id')->unsigned();
@@ -117,9 +117,9 @@ class CreateRoadblockTagAndContextTables extends Migration {
             Schema::drop('tags');
         }
 
-        if (Schema::hasTable('project_context'))
+        if (Schema::hasTable('context_project'))
         {
-            Schema::drop('project_context');
+            Schema::drop('context_project');
         }
 
         if (Schema::hasTable('contexts'))
