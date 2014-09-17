@@ -8,26 +8,29 @@
 <p>{{{ Session::get('message') }}}</p>
 @endif
 
-<div>
+<div class="row">
     <h2>Todo List</h2>
 
-    <ul>
-        @if (!empty($projects))
+    <div class="col-md-8">
+        <ul>
+            @if (!empty($projects))
             @foreach ($projects as $project)
-            <li>{{ Form::checkbox($project->id . 'completed', $project->completed) }}
-            {{{ $project->description }}}</li>
+                <li>
+                {{ Form::checkbox($project->id . 'completed', $project->completed) }}
+                {{{ $project->description }}}
+                @foreach ($project->contexts as $context)
+                <p class="label label-info">{{{ $context->description }}}</p>
+                @endforeach
+                </li>
             @endforeach
-        @else
+            @else
             <li>No todo items - go have some fun!</li>
-        @endif
-    </ul>
+            @endif
+        </ul>
+    </div>
+
 </div>
 
-<br />
-<a href="/addProject">Add Project</a>
-<br />
-<a href="/editProfile">Edit Profile</a>
-<br />
-<a href="/logout">Log Out</a>
+<a class="btn btn-primary" href="/addProject">Add Project</a>
 
 @stop

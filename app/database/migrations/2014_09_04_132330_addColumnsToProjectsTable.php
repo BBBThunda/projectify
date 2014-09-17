@@ -18,8 +18,10 @@ class AddColumnsToProjectsTable extends Migration {
             //Add columns ['description', 'completed', 'projectified', 'completed_time']
             Schema::table('projects', function(Blueprint $table)
             {
-                $table->tinyInteger('projectified')->default('0');
-                $table->timestamp('completed_time')->nullable();
+                $table->boolean('projectified')->default(false);
+                $table->timestamp('completed_at')->nullable();
+                $table->boolean('deleted')->default(false);
+                $table->timestamp('deleted_at')->nullable();
             });
         }
     }
@@ -32,14 +34,19 @@ class AddColumnsToProjectsTable extends Migration {
     public function down()
     {
         if (Schema::hasColumn('projects', 'projectified')
-            && Schema::hasColumn('projects', 'completed_time'))
-        {
+            && Schema::hasColumn('projects', 'completed_at')
+            && Schema::hasColumn('projects', 'deleted')
+            && Schema::hasColumn('projects', 'deleted_at')) {
+        
             //Drop added columns
             Schema::table('projects', function(Blueprint $table)
             {
                 $table->dropColumn('projectified');
-                $table->dropColumn('completed_time');
+                $table->dropColumn('completed_at');
+                $table->dropColumn('deleted');
+                $table->dropColumn('deleted_at');
             });
+
         }
     }
 

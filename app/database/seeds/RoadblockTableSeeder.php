@@ -13,9 +13,6 @@ class RoadblockTableSeeder extends Seeder {
             'Waiting on Event'
         );
 
-        // Empty roadblocks table
-        DB::table('roadblocks')->delete();
-
         // Update autoincrement value to 1 in case table was not dropped
         DB::statement('ALTER TABLE tags AUTO_INCREMENT = 1');
 

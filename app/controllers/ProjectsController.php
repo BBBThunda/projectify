@@ -152,7 +152,7 @@ class ProjectsController extends BaseController {
         // Get projects for this user
         $projects = Project::where('user_id', Auth::id())->get();
 
-        //dd($projects);
+        //die($projects->toJson());
 
         // Display home screen page
         return View::make('projects.home')->with('projects', $projects);
