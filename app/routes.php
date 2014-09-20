@@ -26,7 +26,8 @@ Route::get('/logout', 'SessionsController@destroy');
 Route::get('/home', 'ProjectsController@home')->before('auth');
 Route::get('/addProject', 'ProjectsController@add')->before('auth');
 Route::post('/projects', 'ProjectsController@store')->before(['auth', 'csrf']);
-Route::resource('projects', 'ProjectsController');
+Route::post('/projects/setCompleted', 'ProjectsController@setCompleted')->before(['auth', 'csrf']);
+//Route::resource('projects', 'ProjectsController');
 
 Route::resource('users', 'UsersController');
 

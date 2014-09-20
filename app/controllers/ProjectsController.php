@@ -4,7 +4,7 @@ use Carbon\Carbon;
 
 class ProjectsController extends BaseController {
 
-    /*
+    /**
      * ------------------------------------
      * Projects Controller
      * ------------------------------------
@@ -14,8 +14,7 @@ class ProjectsController extends BaseController {
     /**
      * Instantiate a new UserController instance.
      */
-    public function __construct()
-    {
+    public function __construct() {
 
         $this->beforeFilter('auth', array('except' => 'login'));
 
@@ -30,8 +29,8 @@ class ProjectsController extends BaseController {
      *
      * @return Response
      */
-    public function add()
-    {
+    public function add() {
+
         if (Auth::check())
         {
             // Get contexts
@@ -44,12 +43,12 @@ class ProjectsController extends BaseController {
 
 
     public function show() {
-        dd('wtf?!?!');
+        dd('show? wtf?!?!');
     }
 
 
-    public function edit()
-    {
+    public function edit() {
+        dd('edit? wtf?!?!');
     }
 
 
@@ -62,8 +61,8 @@ class ProjectsController extends BaseController {
      *
      * @return Response
      */
-    public function store()
-    {
+    public function store() {
+
         // Validate inputs
         $user = Auth::id();
         $sequence = Project::where('user_id', $user)->max('sequence') + 1;
@@ -132,8 +131,7 @@ class ProjectsController extends BaseController {
 
     }
 
-    public function delete()
-    {
+    public function delete() {
     }
 
 
@@ -147,8 +145,8 @@ class ProjectsController extends BaseController {
      * @param $message
      * @return Response
      */
-    public function home($message = null)
-    {
+    public function home($message = null) {
+
         // Get projects for this user
         $projects = Project::where('user_id', Auth::id())->get();
 
@@ -156,6 +154,50 @@ class ProjectsController extends BaseController {
 
         // Display home screen page
         return View::make('projects.home')->with('projects', $projects);
+
+    }
+
+
+
+
+    /**
+     * complete
+     * Mark project as completed or uncompleted
+     *
+     * Requires post values:
+     * 'project_id' (valid project_id belonging to current user)
+     * 'value' ('0' or '1' expected)
+     *
+     * @return Response
+     */
+    public function setCompleted() {
+
+        // Get inputs from request
+        $projectId = Input::get('project_id');
+        $value = Input::get('value') == "0" ? 0 : 1; //Prevent strange values
+
+        // First make sure the user is authorized to modify this project
+        //TODO: add way to catch error if projectId is empty/invalid?
+        $project = Project::find($projectId)->first();
+
+        if ($project->user_id !== Auth::id()) {
+            if (Request::ajax()) {
+                return Response::make('Unauthorized', 401);
+            }
+            else {
+                return Redirect::to('/home');
+            }
+        }
+
+        // Update DB and build/return response
+        $status = $project->setCompleted($value);
+
+        $response = array(
+            'response' => $status
+        );
+
+        //TODO: add conditional here to support non-ajax form submit
+        return Response::json($response);
 
     }
 }

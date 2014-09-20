@@ -12,21 +12,23 @@
     <h2>Todo List</h2>
 
     <div class="col-md-8">
+        {{ Form::open([ 'method' => 'post', 'url' => '/projects/setCompleted' ]) }}
         <ul>
             @if (!empty($projects))
             @foreach ($projects as $project)
-                <li>
-                {{ Form::checkbox($project->id . 'completed', $project->completed) }}
-                {{{ $project->description }}}
-                @foreach ($project->contexts as $context)
-                <p class="label label-info">{{{ $context->description }}}</p>
-                @endforeach
-                </li>
+            <li>
+            {{ Form::checkbox($project->id . '_completed', $project->id, $project->completed, ['class' => 'cb-completed']) }}
+            {{{ $project->description }}}
+            @foreach ($project->contexts as $context)
+            <p class="label label-info">{{{ $context->description }}}</p>
+            @endforeach
+            </li>
             @endforeach
             @else
             <li>No todo items - go have some fun!</li>
             @endif
         </ul>
+        {{ Form::close() }}
     </div>
 
 </div>

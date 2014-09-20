@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 class Project extends Eloquent { 
 
     protected $fillable = array('user_id', 'parent_project', 'sequence', 'description', 'completed');
@@ -67,6 +69,34 @@ class Project extends Eloquent {
         );
 
         return Validator::make($data, $rules);
+    }
+
+    /**
+     * setCompleted
+     * Change the value of 'completed' for this project
+     *
+     * @param $value (boolean)
+     * @return boolean
+     */
+    public function setCompleted($value) {
+
+        // Only update if value is changing
+        if ($value == $this->completed) {
+            Log::warning('Completed value for project id ' . $this->id . ' already set to ' . $value);
+            return false;
+        }
+
+        // Update value and if completed, update timestamp too
+        $this->completed = $value;
+        if ($value == true) {
+            $this->completed_at = new Carbon;
+        }
+        $this->save();
+
+        return true;
+
+        //TODO: If there are incomplete child tasks, complete them as well (maybe do this in controller?):
+
     }
 
 }
