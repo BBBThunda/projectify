@@ -175,12 +175,11 @@ class ProjectsController extends BaseController {
         // Get inputs from request
         $projectId = Input::get('project_id');
         $value = Input::get('value') == "0" ? 0 : 1; //Prevent strange values
-
+        
         // First make sure the user is authorized to modify this project
-        //TODO: add way to catch error if projectId is empty/invalid?
-        $project = Project::find($projectId)->first();
+        $project = Project::find($projectId);
 
-        if ($project->user_id !== Auth::id()) {
+        if (!$project || $project->user_id !== Auth::id()) {
             if (Request::ajax()) {
                 return Response::make('Unauthorized', 401);
             }
