@@ -22,7 +22,10 @@
         <p><strong>Projectify is an open-source to-do list application for people who are serious 
             about digitizing their responsibilities.</strong></p>
 
-        <p class="text-warning"><strong>Warning:</strong> Currently, the site is in a pre-alpha stage. Although passwords are stored securely, the site does not yet use SSL encryption.  If you choose to try the site in the meantime, please (at least for now) be careful not to use any sensitive passwords that you use elsewhere.</p>
+        <p class="text-warning">The site is in a pre-alpha stage. SSL is working now, but we're not 
+        forcing it for now.  So unless you have a reason not to, make sure you are accessing the site 
+        via https.  If you're not sure, <a href="https://proj.ectify.com">click here.</a>  In the future 
+        we will automatically redirect you.</p>
 
         <p><a class="btn btn-primary btn-lg" role="button">Sign Up Now!</a></p>
 
