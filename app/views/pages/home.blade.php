@@ -22,9 +22,7 @@
         <p><strong>Projectify is an open-source to-do list application for people who are serious 
             about digitizing their responsibilities.</strong></p>
 
-        <p class="warn">Currently, passwords are stored securely, but the site does not yet use 
-        SSL encryption.  If you choose to try the site in the meantime, please be careful not to
-        use any sensitive passwords that you use elsewhere.</p>
+        <p class="text-warning"><strong>Warning:</strong> Currently, the site is in a pre-alpha stage. Although passwords are stored securely, the site does not yet use SSL encryption.  If you choose to try the site in the meantime, please (at least for now) be careful not to use any sensitive passwords that you use elsewhere.</p>
 
         <p><a class="btn btn-primary btn-lg" role="button">Sign Up Now!</a></p>
 
@@ -33,49 +31,50 @@
 
 <div class="container">
 
-    <div class="row">
-   
-        <div class="col-md-4">
-            <h2>Features</h2>
-            <p>
-            <ul>
-                <li>Register</li>
-                <li>verify email</li>
-                <li>login</li>
-                <li>forgot password reset via email</li>
-                <li>edit display name and password.</li>
-                <li>Add TBS3 framework to make the site look nicer</li>
-                <li>Master template for views (with page headers/footers)</li>
-            </ul>
-            </p>
-        </div>
+    <div class="well">
+        <div class="row">
 
-        <div class="col-md-4">
-            <h2>Features to be added next</h2>
-            <ul>
-                <li>Projects module<ul>
+            <div class="col-md-4">
+                <h2>Features</h2>
+                <p>
+                <ul>
+                    <li>Register</li>
+                    <li>verify email</li>
+                    <li>login</li>
+                    <li>forgot password reset via email</li>
+                    <li>edit display name and password.</li>
+                    <li>Add TBS3 framework to make the site look nicer</li>
+                    <li>Master template for views (with page headers/footers)</li>
                     <li>Create task</li>
                     <li>List tasks</li>
-                    <li>Filter tasks</li>
+                    <li>Filter tasks by context</li>
                     <li>Check off completed tasks</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h2>Coming Soon</h2>
+                <ul>
+                    <li>Edit task</li>
                     <li>Projectify task (add child tasks, etc.)</li>
-                </ul></li>
-            </ul>
-        </div>
-    
-        <div class="col-md-4">
-            <h2>"Someday Maybe" Features</h2>
-            <ul>
-                <li>Create API</li>
-                <li>Integrate with Evernote, Dropbox, etc.</li>
-                <li>Share projects w/ friends</li>
-                <li>API-based mobile apps</li>
-                <li>Use mobile apps offline</li>
-                <li>Shopping lists</li>
-                <li>Recurring tasks</li>
-            </ul>
-        </div>
-  
+                    <li>Customize contexts</li>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <h2>"Someday Maybe"</h2>
+                <ul>
+                    <li>Create API</li>
+                    <li>Integrate with Evernote, Dropbox, etc.</li>
+                    <li>Share projects w/ friends</li>
+                    <li>API-based mobile apps</li>
+                    <li>Use mobile apps offline</li>
+                    <li>Shopping lists</li>
+                    <li>Recurring tasks</li>
+                </ul>
+            </div>
+        </div> 
     </div>
 
-@stop
+    @stop

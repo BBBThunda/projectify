@@ -16,25 +16,26 @@
                 @endforeach
             </ul>
             @endif
-            {{ Form::label('description', 'Text:') }}
+            {{ Form::label('description', 'Description:') }}
             {{ Form::text('description', '', ['autofocus' => 'autofocus', 'tabindex' => '1' ]) }}
         </div>
+        
+        {{-- Submit button ----------------------------------------------}}
+        {{ Form::submit('Add Task', ['class' => 'btn btn-primary'] ) }}
+
     </div>
-    
-    {{-- Submit button ----------------------------------------------}}
-    {{ Form::submit('Add Task', ['class' => 'btn btn-primary'] ) }}
 
     @if (!empty($contexts))
     <div class="col-md-4">
-        <div class="form-group">
-            {{-- Context Checkboxes ---------------------------------}}
-            {{ Form::label('context', 'Context:') }}
-            @foreach ($contexts as $context)
+        {{-- Context Checkboxes ---------------------------------}}
+        {{ Form::label('context', 'Context:') }}
+        @foreach ($contexts as $context)
+        <div class="form-group-fluid">
             {{ Form::checkbox('context[]', $context['id'], $context['checked'], 
-                ['id' => 'context_' . $context['id'] ]) }}
+            ['id' => 'context_' . $context['id'] ]) }}
             {{ Form::label('context_' . $context['id'], $context['description']) }}
-            @endforeach
         </div>
+        @endforeach
     </div>
     @endif
 
