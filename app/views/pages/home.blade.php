@@ -22,12 +22,13 @@
         <p><strong>Projectify is an open-source to-do list application for people who are serious 
             about digitizing their responsibilities.</strong></p>
 
-        <p class="text-warning">The site is in a pre-alpha stage. SSL is working now, but we're not 
-        forcing it for now.  So unless you have a reason not to, make sure you are accessing the site 
-        via https.  If you're not sure, <a href="https://proj.ectify.com">click here.</a>  In the future 
-        we will automatically redirect you.</p>
+        <p class="text-warning">The site is in a pre-alpha stage. Once I select a license I will be 
+        uploading this project to GitHub.  In the meantime, please try out the site and contact 
+        Support (me) with your comments/suggestions/issues: 
+        <a href="mailto:bobby@<?php print $_SERVER['SERVER_NAME'] ?>">
+            bobby@<?php print $_SERVER['SERVER_NAME'] ?></a></p>
 
-        <p><a class="btn btn-primary btn-lg" role="button">Sign Up Now!</a></p>
+        <p><a class="btn btn-primary btn-lg" href="/register" role="button">Sign Up Now!</a></p>
 
     </div>
 </div>
