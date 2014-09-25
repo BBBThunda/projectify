@@ -41,7 +41,7 @@ Route::get('verifyEmail/{confirmationCode}', [
     'as' => 'confirmation_path',
     'uses' => 'UsersController@verifyEmail'
     ]);
-Route::get('/unverified', 'UsersController@unverified')->before('auth');
+Route::get('/unverified', 'UsersController@unverified');
 Route::get('/resend', [
     'as' => 'resendVerificationMail',
     'uses' => 'UsersController@resend'
