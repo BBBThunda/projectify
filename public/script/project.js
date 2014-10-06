@@ -13,6 +13,12 @@ $(document).ready(function() {
     //TODO: check whether calling this before it's defined can affect performance
     $('li.project').trigger('refreshVisibility');
 
+    // Double clicking task description allows edit
+    //$('li.project').doubleclick(makeEditable);
+    $('li.project').dblclick(function() {
+	    alert('dblclick');
+	});
+
     // Clicking 'Show Completed' button 
     $('#show-completed-btn').click(showCompletedToggle);
 
@@ -53,6 +59,10 @@ function contextButtonClick(event) {
     $('.context-btn.btn-info').removeClass('btn-info');
     $(this).addClass('btn-info');
 
+}
+
+function makeEditable(event) {
+    alert($(this).text());
 }
 
 

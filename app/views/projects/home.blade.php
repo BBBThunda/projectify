@@ -63,7 +63,7 @@
             <li class="{{{ $class }}}">
 
             {{ Form::checkbox($project->id . '_completed', $project->id, $project->completed, ['class' => 'cb-completed']) }}
-            {{{ $project->description }}}
+            <input type="text" readonly="readonly" value="{{{ $project->description }}}" />
             @foreach ($project->contexts as $context)
             <a class="context-label label label-info">{{{ $context->description }}}</a>
             @endforeach

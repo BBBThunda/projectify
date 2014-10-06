@@ -3,8 +3,11 @@
     <head>
         <meta charset="utf-8">
         
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/style/projectify.css" rel="stylesheet">
+	<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        -->
+	<link href="/style/projectify.css" rel="stylesheet">
+
+        <link href="/style/bootstrap.min.css" rel="stylesheet">
         
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
