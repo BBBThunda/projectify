@@ -1,6 +1,6 @@
 ## Projectify - get stuff done
 
-[Projectify](https://proj.ectify.com) is a todo-list manager that's laser-focused on digitizing your responsibilities and getting them done.
+[Projectify](https://proj.ectify.com) is a todo-list manager that's laser-focused on digitizing your responsibilities and getting them done.  It does this by giving you just it needs to only show you those tasks you can do now and not distract you with an unnecessarily long list.
 
 ## Installation
 
@@ -8,7 +8,7 @@
 
 # Install and configure Git, Apache, PHP and MySQL
 
-I've put these here for the convenience of those who aren't too comfortable with any of these tools.  Most of you probably use these already and can skip this part.
+I've put these here for the convenience of those who aren't too comfortable with any of these tools.  Most likely you probably use these already and can skip this section.  Just make sure you are using PHP 5.6 or higher.
 
 ## 1. Install any of the following you do not already have
 What we're doing in this crazy long command is
@@ -40,27 +40,22 @@ sudo mv composer.phar /usr/local/bin/composer
 composer self-update
 ```
 
-## 3. Clone the repository (or your own fork of the repository if you plan to contribute) into your preferreed <projectify_root> and copy 
+## 3. Clone the repository (or your own fork of the repository if you plan to contribute) into your preferred \<projectify_root\> and copy 
 ```
 cd <parent_of_projectify_root>
-git clone git@github.com:BBBThunda/projectify.git
-cp <projectify_root>/projectify.conf /etc/apache2/sites-available
+git clone git://github.com/BBBThunda/projectify.git
 ```
 
 ## 4. Configure an Apache virtual host
-Edit /etc/apache2/sites-available/projectify.conf so that ServerName is whatever you plan to type into your browser to access the site and point DocumentRoot to your <projectfy_root>/public folder.  If you're not familiar with apache virtual hosts, do the following:
-- Copy the default site file
+Copy the projectify.conf from the repository into your apache sites directory:
 ```
-sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/projectify.conf
+cp <projectify_root>/projectify.conf /etc/apache2/sites-available
 ```
-- Edit the projectify.conf file:
- - Add a ServerName directive where 'hostname' is the host you plan to type into your browser to access the test site:
-```
-ServerName hostname
-```
- - Change the <directory> tag pointing to /var/www/html (if one exists) and point it to <projectify_root>/public/
- - It's recommended you also change the error.log filename to something like projectify_error.log
-- If you are not using an existing hostname like localhost or some name your DNS server understands, add the new hostname to your /etc/hosts file under 127.0.0.1 (localhost is probably there already, just add a space, followed by your ServerName).
+Edit /etc/apache2/sites-available/projectify.conf:
+1. Set the ServerName to whatever hostname you plan to type into your browser to access the site.
+1. Point DocumentRoot to your \<projectfy_root\>/public folder.
+1. Change the \<directory\> tag pointing to /var/www/html (if one exists) and point it to \<projectify_root\>/public/
+*Note: If you are not using an existing hostname like localhost or some name your DNS server already understands, add the new hostname to your /etc/hosts file under 127.0.0.1 (localhost is probably there already, just add a space, followed by your ServerName).*
 
 ## 5. Enable modules, disable the default site (if enabled by default), enable projectify.conf and restart apache.
 ```
@@ -71,28 +66,31 @@ sudo a2dissite 000-default
 sudo a2ensite projectify
 sudo service apache2 restart
 ```
-
 Now it's time to set up your environment in Laravel.
 
 # Setting up your environment and migrating the DB
 
 ## 1. Copy and edit default config files and make storage directory writeable
-Basically you want to find all of the files with .default.php and remove the .default.  In the case of the env.default files in the projectify_root> directory, you also want to prepend a dot. So copy the files and then edit them to fit your environment:
+- Copy the files
+Basically you want to find all of the files ending with .default.php and remove the .default.  In the case of the env.default files in the \<projectify_root\> directory, you also want to prepend a dot.
 ```
 cd <projectify_root>
 cp env.dev.default.php .env.dev.php
 cp bootstrap/start.default.php bootstrap/start.php
 chmod 777 app/storage/*
 ```
+- Edit the files to fit your environment
+ - Configure the MySQL database credentials you plan to use
+ - Configure email credentials.  For dev, you can just set 'MAIL_PRETEND' to true.  I prefer to use a personal email account, but this can be dangerous.  If you do this, just be careful not to do anything to spam the server.
 
-Note: env.live.default.php can be ignored since we only use the "live" environment if the request domain is proj.ectify.com
+*Note: env.live.default.php can be ignored since we only use the "live" environment if the request domain is proj.ectify.com.  Most likely you will use env.dev.default.php.*
 
 ## 2. Do a composer update in your repository to download dependencies.
+This will take a couple minutes.  It may appear to be hung at first.  Be patient.
 ```
 cd <projectify_root>
 composer update
 ```
-
 This will download all of the dependencies required for projectify, including those required for Laravel and store them in the "vendor" directory.
 
 ## 3. Initialize the database
@@ -108,6 +106,7 @@ mysqladmin -u root -p create projectify_dev
 ```
 mysql -u root -p
 ```
+You should get the mysql prompt.
 
 - Create user and grant privileges (change 'password' before pasting into terminal)
 ```
@@ -121,16 +120,16 @@ quit
 ```
 mysql -u projectify_dev -p
 ```
-
 If this is confusing, [this tutorial](https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql) might be helpful, or check the MySQL documentation.
+*Also, if you use PHPMyAdmin, there is an option to create a new user that includes a checkbox to automatically create a new db with the same name and grant all privs like we did above.*
 
-Also, if you use PHPMyAdmin, there is an option to create a new user that includes a checkbox to automatically create a new db with the same name and grant all privs like we did above.
-
-## 4. Run the migrations and seed the database.  If you have set up the database and environment correctly, you should be able to  run the following command from the <projectify_home> directory:
-
+## 4. Run the migrations and seed the database.  If you have set up the database and environment correctly, you should be able to  run the following command from the \<projectify_home\> directory:
 ```
 php artisan migrate --seed
 ```
+
+## 5. Browse to the dev site you just configured
+You should now be able to browse to http://\<ServerName\> and bring up the Projectify home page.
 
 # Contributing To Projectify
 
