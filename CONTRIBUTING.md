@@ -3,7 +3,8 @@
 Are you a fan of [Projectify](http://proj.ectify.com) and want to get involved?
 Here are some things you can do to help!
 
-Before you contribute, please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
+Before you contribute, please take a moment to review this document in order to
+ make the contribution process easy and effective for everyone involved.
 
 Following these guidelines helps to communicate that you respect the time of
 the developers managing and developing this open source project. In return,
@@ -24,8 +25,9 @@ restrictions:
 * Please **do not** open issues or pull requests regarding the code in
   [`.htaccess`](https://github.com/h5bp/server-configs-apache),
   [`jQuery`](https://github.com/jquery/jquery/),
-  [`Laravel`](https://github.com/laravel/laravel) or any other included libraries, especially those in the /vendor directory (open such issues or pull requests in
-  their respective repositories).
+  [`Laravel`](https://github.com/laravel/laravel) or any other included
+ libraries, especially those in the /vendor directory (open such issues or pull
+ requests in their respective repositories).
 
 
 <a name="bugs"></a>
