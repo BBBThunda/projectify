@@ -2,6 +2,12 @@
 
 [Projectify](https://proj.ectify.com) is a todo-list manager that's laser-focused on digitizing your responsibilities and getting them done.  It does this by giving you just it needs to only show you those tasks you can do now and not distract you with an unnecessarily long list.  Check it out at [https://proj.ectify.com].
 
+# Code Stack
+- PHP 5.6
+- Laravel 4
+- Twitter Bootstrap 3.2
+- jQuery 1.11
+
 # Installation
 
 ## Install and configure Git, Apache, PHP and MySQL
