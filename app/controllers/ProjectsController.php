@@ -199,4 +199,17 @@ class ProjectsController extends BaseController {
         return Response::json($response);
 
     }
+
+    /**
+     * projectify
+     * Turn a task into a project (or just edit the task)
+     *
+     * @return Response
+     */
+    public function projectify($projectid) {
+        $data['project'] = Project::find($projectid);
+        $data['subtasks'] = Project::where('parent_project_id', $projectid);
+        return View::make('projects.projectify')->with('project', $project);
+    }
+
 }

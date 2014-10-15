@@ -10,7 +10,8 @@ class UserTableSeeder extends Seeder {
             'email' => 'admin@proj.ectify.com',
             'display_name' => 'Administrator',
             'password' => Hash::make('adminpassword'),
-            'is_admin' => 1
+            'is_admin' => 1,
+            'confirmed' => 1
         ));
 
         // Create one regular user
@@ -18,7 +19,8 @@ class UserTableSeeder extends Seeder {
             'email' => 'user@proj.ectify.com',
             'display_name' => 'User',
             'password' => Hash::make('password'),
-            'is_admin' => 0
+            'is_admin' => 0,
+            'confirmed' => 1
         ));
     }
 }
