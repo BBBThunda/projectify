@@ -62,8 +62,9 @@
 
             <li class="{{{ $class }}}">
 
+            <a class="projectifyButton" href="/projectify/{{ $project->id }}"><img src="/img/projectify-icon2.jpg" /></a>
             {{ Form::checkbox($project->id . '_completed', $project->id, $project->completed, ['class' => 'cb-completed']) }}
-            {{{ $project->description }}}
+            <span class="projectDesc">{{{ $project->description }}}</span>
             @foreach ($project->contexts as $context)
             <a class="context-label label label-info">{{{ $context->description }}}</a>
             @endforeach

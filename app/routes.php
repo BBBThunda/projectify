@@ -31,6 +31,7 @@ Route::post('/projects', [
     ])->before(['auth', 'csrf']);
 Route::post('/projects/setCompleted', 'ProjectsController@setCompleted')->before(['auth', 'csrf']);
 //Route::resource('projects', 'ProjectsController');
+Route::get('/projectify/{project_id}', 'ProjectsController@projectify')->before('auth');
 
 Route::resource('users', 'UsersController');
 
