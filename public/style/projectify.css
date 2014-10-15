@@ -16,3 +16,16 @@ ul
     border: 2px;
     border-color: red;
 }
+
+ul {
+    padding: 1em;
+}
+
+/* If a project is marked completed, cross it out */
+li.project.completed>span.projectDesc {
+    text-decoration: line-through;
+}
+
+a.projectifyButton {
+    margin-right: 10px;
+}
