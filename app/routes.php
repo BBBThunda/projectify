@@ -18,6 +18,12 @@ Route::get('/', function()
     }
     return View::make('pages.home');
 });
+Route::get('/contribute', function() {
+    return View::make('pages.contribute');
+});
+Route::get('/about', function() {
+    return View::make('pages.about');
+});
 
 Route::resource('sessions', 'SessionsController');
 Route::get('/login', 'SessionsController@create');

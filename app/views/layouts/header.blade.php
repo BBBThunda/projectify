@@ -24,6 +24,10 @@
         <!-- Links and dropdowns -->
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
+                
+                <li><a href="/about">About</a></li>
+                <li><a href="/contribute">Contribute</a></li>
+
                 @if (Auth::guest())
 
                 <!-- User not logged in -->
