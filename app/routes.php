@@ -35,6 +35,10 @@ Route::post('/projects', [
     'as' => 'projects.store',
     'uses' => 'ProjectsController@store'
     ])->before(['auth', 'csrf']);
+Route::post('/storeProject', [
+    'as' => 'projects.storeProject',
+    'uses' => 'ProjectsController@storeProject'
+    ])->before(['auth', 'csrf']);
 Route::post('/projects/setCompleted', 'ProjectsController@setCompleted')->before(['auth', 'csrf']);
 //Route::resource('projects', 'ProjectsController');
 Route::get('/projectify/{project_id}', 'ProjectsController@projectify')->before('auth');
