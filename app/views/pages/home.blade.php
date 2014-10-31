@@ -24,9 +24,9 @@
         </strong></p>
 
         <p class="text-warning">This site is pre-alpha stage, meaning there are
-        a few more features needed before it wil be considered alpha.  In the
-        meantime, please try out the site and contact Support (which is
-        currently Bobby) with your comments/suggestions/issues: 
+        a few more features needed before it will be considered alpha.  In the
+        meantime, please try out the site and contact Support with your
+        comments/suggestions/issues: 
         <a href="mailto:bobby@<?php print $_SERVER['SERVER_NAME'] ?>">
             bobby@<?php print $_SERVER['SERVER_NAME'] ?></a></p>
 
