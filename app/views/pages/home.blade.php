@@ -32,7 +32,7 @@
 
         <p>This project is open source.  For more info about the site, see the
         <a href="/about">ABOUT</a> page.  If you are interested in contributing
-        to the project, check out the <a href="/contributing">CONTRIBUTING</a>
+        to the project, check out the <a href="/contribute">CONTRIBUTE</a>
         page.  Links are also in the nav bar at the top of the page.</p>
 
         <p><a class="btn btn-primary btn-lg" href="/register" role="button">Sign Up Now!</a></p>
