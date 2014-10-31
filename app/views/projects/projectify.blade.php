@@ -22,7 +22,7 @@
                 @endif
 
                 {{-- Completed checkbox --}}
-                {{ Form::checkbox($data['project']->id . '_completed', $data['project']->id, 
+                {{ Form::checkbox('completed', $data['project']->id, 
                 $data['project']->completed, ['class' => 'cb-completed']) }}
 
                 {{-- Description field ---------------------------------}}
@@ -35,20 +35,27 @@
 
                 {{-- Contexts --}}
                 @if (!empty($data['contexts']))
-                <div class="col-md-4">
-                    {{-- Context Checkboxes ---------------------------------}}
-                    {{ Form::label('context', 'Context:') }}
+                
+                <div class="col-md-4 contextsWidgetTemplate">
+                    {{-- Label --}}
+                    {{ Form::label('context', 'Context: ') }}
+
+                    {{-- Checkboxes --}} 
                     @foreach ($data['contexts'] as $context)
-                    <div class="form-group-fluid">
+                    
+                    {{-- <div class="form-group-fluid"> --}}
                         {{ Form::checkbox('context[]', $context['id'], 
                         $context['checked'], 
                         ['id' => 'context_' . $context['id'] ]) }}
                         {{ Form::label('context_' . $context['id'], 
                         $context['description']) }}
-                    </div>
+                        {{-- </div> --}}
+                  
                     @endforeach
+
                 </div>
                 @endif
+
             </div>
         </div>
     </div>
@@ -62,32 +69,9 @@
             {{-- Tags --}}
 
         </div>
-    </div>    
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-
-                {{-- Tasks --}}
-                <h4>Child Tasks</h4>
-
-                @if (!empty($data['subtasks']))
-                {{-- Existing Child Tasks --}}
-
-                @foreach ($data['subtasks'] as $subtask)
-
-
-
-                @endforeach
-
-                @endif
-
-                {{-- Add Child Task Button --}}
-                <a class="btn btn-default task-add-btn" id="task-add-btn" 
-                    name="AddTask" href="">+</a>
-
-            </div>
-        </div>
     </div>
+
+    <!-- Submit button -->
     <div class="row">
         <div class="col-md-12">
 
