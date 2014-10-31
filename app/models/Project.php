@@ -160,8 +160,12 @@ class Project extends Eloquent {
      *
      * @return array(array)
      */
-    public function getContextChanges(array $inputs) {
+    public function getContextChanges(array $inputs = null) {
 
+        if (empty($inputs)) { 
+            $inputs = array(); 
+        }
+        
         $changes = array(
             'attach' => array(),
             'detach' => array()
@@ -193,7 +197,7 @@ class Project extends Eloquent {
                 array_push($changes['detach'], $context->id);
             }
         }
-
+        
         return $changes;
 
     }
