@@ -42,21 +42,32 @@
 
                     {{-- Checkboxes --}} 
                     @foreach ($data['contexts'] as $context)
-                    
-                    {{-- <div class="form-group-fluid"> --}}
+
+                    <span class="form-group-fluid">
                         {{ Form::checkbox('context[]', $context['id'], 
                         $context['checked'], 
                         ['id' => 'context_' . $context['id'] ]) }}
                         {{ Form::label('context_' . $context['id'], 
                         $context['description']) }}
-                        {{-- </div> --}}
-                  
+                    </span>
+
                     @endforeach
 
                 </div>
                 @endif
 
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 well">
+            <h4>Subtasks</h4>
+            <ul>
+                <li>
+                <span class="task-add-btn glyphicon glyphicon-plus"
+                    title="Add Subtask"></span>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="row">

@@ -1,16 +1,20 @@
-$(document).ready(function() {
 
     // Hide list initially
     $('li.project').hide();
+
+$(document).ready(function() {
+
+    // Hide list initially
+    //$('li.project').hide();
 
     // INITIALIZE GLOBAL SETTINGS
     window.showContext = 'All';
     window.showCompleted = false;
     window.showRoadblocks = true;
 
-    // Bind refreshVisibility function to projects and trigger to immediately refresh list
+    // Bind refreshVisibility to projects, trigger to immediately refresh list
     $('li.project').bind('refreshVisibility', refreshVisibility);
-    //TODO: check whether calling this before it's defined can affect performance
+    //TODO: check whether calling this before defined can affect performance
     $('li.project').trigger('refreshVisibility');
 
     // Clicking 'Show Completed' button 
@@ -23,6 +27,9 @@ $(document).ready(function() {
     $('.context-label').click(function() {
         $('#context-btn-' + $(this).text()).trigger( "click" )
     });
+
+    // Add task button (for adding Project sub-tasks)
+    $('.task-add-btn').on('click',addTaskInputs);
 
 });
 
@@ -148,4 +155,61 @@ function toggleProjectCompleted() {
         }
     });
 
+}
+
+var newTasks = 0;
+
+// Add task input fields before the task-add-btn button
+// a.task-add-btn should be inside an li, span or div
+function addTaskInputs(event) {
+    event.preventDefault();
+
+    // Initialize global count object if not exists
+    if (window.addTaskCount == null) { window.addTaskCount = 1; }
+    var suffix = 'newTask_' + window.addTaskCount;
+    var containerTagName = $(this).parent().prop('tagName').toLowerCase();
+    // If parent container is not li, div or span, exit
+    if (containerTagName != 'li' && containerTagName != 'div'
+            && containerTagName != 'span') { return false; }
+               
+    // jQuery requires the brackets
+    var containerTag = '<' + containerTagName + '>';
+
+    // Insert the task widget before task-add-btn
+    var newContainer = $(containerTag, { id: suffix } )
+        .append(
+                $('<input>', { 
+                    name: 'completed_' + suffix,
+                    type: 'checkbox',
+                    class: 'cb-completed' }
+                    )
+                )
+        .append(
+                $('<input>', { 
+                    name: 'description_' + suffix,
+                    type: 'text' }
+                    )
+                )
+        .insertBefore($(this).parent());
+
+    // Now append the Contexts widget
+    $(newContainer).append(cloneContextsWidget(suffix));
+
+    window.addTaskCount++;
+
+}
+
+// Clone the Contexts template
+// Must have a 'template' instance of the widget in a container.contextsWidget
+function cloneContextsWidget(suffix) {
+    console.log(suffix);
+    
+    var element = $('.contextsWidgetTemplate').clone()
+        .attr('id', 'contextsWidget_' + suffix)
+        .find('*').each(function() {
+            console.log(this.id);
+            $(this).attr('id', this.id + suffix);
+        })
+
+    return element;
 }
