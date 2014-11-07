@@ -1,6 +1,7 @@
-
-    // Hide list initially
-    $('li.project').hide();
+// Hopefully moving this here will prevent 'hidden' projects from being
+// displayed before the page is fully loaded
+// Hide list initially
+$('li.project').hide();
 
 $(document).ready(function() {
 
@@ -171,7 +172,7 @@ function addTaskInputs(event) {
     // If parent container is not li, div or span, exit
     if (containerTagName != 'li' && containerTagName != 'div'
             && containerTagName != 'span') { return false; }
-               
+
     // jQuery requires the brackets
     var containerTag = '<' + containerTagName + '>';
 
@@ -182,14 +183,14 @@ function addTaskInputs(event) {
                     name: 'completed_' + suffix,
                     type: 'checkbox',
                     class: 'cb-completed' }
-                    )
-                )
+                 )
+               )
         .append(
                 $('<input>', { 
                     name: 'description_' + suffix,
                     type: 'text' }
-                    )
-                )
+                 )
+               )
         .insertBefore($(this).parent());
 
     // Now append the Contexts widget
@@ -203,12 +204,24 @@ function addTaskInputs(event) {
 // Must have a 'template' instance of the widget in a container.contextsWidget
 function cloneContextsWidget(suffix) {
     console.log(suffix);
-    
+
     var element = $('.contextsWidgetTemplate').clone()
         .attr('id', 'contextsWidget_' + suffix)
         .find('*').each(function() {
-            console.log(this.id);
-            $(this).attr('id', this.id + suffix);
+            console.log('for1: ' + $(this).attr('for'));
+            if ($(this).attr('for') !== undefined) {
+                $(this).attr('for', $(this).attr('for') + suffix);
+                console.log('for2: ' + $(this).attr('for'));
+            }
+            console.log('id1: ' + $(this).attr('id'));
+            if (this.id !== undefined ) {
+                $(this).attr('id', this.id + suffix);
+                console.log('id2: ' + $(this).attr('id'));
+            }
+            console.log('name1: ' + $(this).attr('name'));
+            $(this).attr('name', 
+                $(this).attr('name').split('[')[0] + suffix + '[]');
+            console.log('name2: ' + $(this).attr('name'));
         })
 
     return element;

@@ -251,6 +251,8 @@ class ProjectsController extends BaseController {
         $message = 'Project created!';
         try {
 
+            dd(Input::all());
+
             // TODO: Wrap this block in a reversible DB transaction
 
             // Get existing project
@@ -285,6 +287,7 @@ class ProjectsController extends BaseController {
 
 
             // Now to add the subtasks, YAY!!!
+
         }
         catch (Exception $e) {
             $message = 'Sorry, we were unable to create the task due to the'
