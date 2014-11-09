@@ -18,6 +18,12 @@ Route::get('/', function()
     }
     return View::make('pages.home');
 });
+Route::get('/contribute', function() {
+    return View::make('pages.contribute');
+});
+Route::get('/about', function() {
+    return View::make('pages.about');
+});
 
 Route::resource('sessions', 'SessionsController');
 Route::get('/login', 'SessionsController@create');
@@ -28,6 +34,10 @@ Route::get('/addProject', 'ProjectsController@add')->before('auth');
 Route::post('/projects', [
     'as' => 'projects.store',
     'uses' => 'ProjectsController@store'
+    ])->before(['auth', 'csrf']);
+Route::post('/storeProject', [
+    'as' => 'projects.storeProject',
+    'uses' => 'ProjectsController@storeProject'
     ])->before(['auth', 'csrf']);
 Route::post('/projects/setCompleted', 'ProjectsController@setCompleted')->before(['auth', 'csrf']);
 //Route::resource('projects', 'ProjectsController');

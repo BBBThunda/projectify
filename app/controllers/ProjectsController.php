@@ -31,14 +31,11 @@ class ProjectsController extends BaseController {
      */
     public function add() {
 
-        if (Auth::check())
-        {
-            // Get contexts
-            $contexts = Context::getUserContexts(Auth::id());
+        // Get contexts
+        $contexts = Context::getUserContexts(Auth::id());
 
-            // Pass to view
-            return View::make('projects.add')->with('contexts', $contexts);;
-        }
+        // Pass to view
+        return View::make('projects.add')->with('contexts', $contexts);;
     }
 
 
@@ -82,7 +79,7 @@ class ProjectsController extends BaseController {
                 ->withInput();
         }
 
-        // Create project
+        // CREATE PROJECT
         $message = 'Project created!';
         try {
 
@@ -97,33 +94,33 @@ class ProjectsController extends BaseController {
             $project->completed = false;
             $project->save();
 
-            // Get selected contexts and insert into junction table
-            // TODO: Find out if there's a way to optimize this
-            if (Input::has('context')) {
-                $contexts = Input::get('context');
-                $time = new Carbon;
-                foreach($contexts as $context) {
-                    // TODO: Request enhancement to handle timestamps
-                    // or to update projects.updated_at when making changes to junction table
-                    // NOTE: either way, we can't see when a context is removed unless we add
-                    // an 'active' field to the junction table or something
-                    $project->contexts()->attach($context, array(
-                        'created_at' => $time,
-                        'updated_at' => $time
-                    ));
-                }
-                $project->save();
+            // CONTEXTS
+            // If the project's contexts have changed, update those
+            $contextChanges = $project->getContextChanges(
+                Input::get('context'));
+
+            if (!empty($contextChanges['detach'])) {
+                throw new Exception("New Project should not have contexts!");
+            }
+            if (empty($contextChanges['attach'])) {
+                //TODO: put info level logging here?
+            }
+            else {
+                // Update project's contexts relationship
+                $project->updateContexts($contextChanges);
             }
 
-            // Tags
-            
 
-            // Roadblocks
+            // ROADBLOCKS
+
+
+            // TAGS
 
 
         }
         catch (Exception $e) {
-            $message = 'Sorry, we were unable to create the user due to the following issue: '
+            $message = 'Sorry, we were unable to create the task due to the'
+                . ' following issue: '
                 . $e->getMessage();
         }
 
@@ -148,12 +145,11 @@ class ProjectsController extends BaseController {
     public function home($message = null) {
 
         // Get projects for this user
-        $projects = Project::where('user_id', Auth::id())->get();
-
-        //die($projects->toJson());
+        $data['projects'] = Project::where('user_id', Auth::id())->get();
+        $data['contexts'] = Context::getUserContexts(Auth::id());
 
         // Display home screen page
-        return View::make('projects.home')->with('projects', $projects);
+        return View::make('projects.home')->with('data', $data);
 
     }
 
@@ -175,7 +171,7 @@ class ProjectsController extends BaseController {
         // Get inputs from request
         $projectId = Input::get('project_id');
         $value = Input::get('value') == "0" ? 0 : 1; //Prevent strange values
-        
+
         // First make sure the user is authorized to modify this project
         $project = Project::find($projectId);
 
@@ -206,10 +202,101 @@ class ProjectsController extends BaseController {
      *
      * @return Response
      */
-    public function projectify($projectid) {
-        $data['project'] = Project::find($projectid);
-        $data['subtasks'] = Project::where('parent_project_id', $projectid);
-        return View::make('projects.projectify')->with('project', $project);
+    public function projectify($project_id) {
+
+        // Get data
+        $data['project'] = Project::find($project_id);
+        $data['contexts'] = 
+            Context::getUserContexts(Auth::id(), $data['project']->contexts);
+        
+        //$data['subtasks'] = Project::where('parent_project_id', $project_id);
+
+        return View::make('projects.projectify')->with('data', $data);
+    }
+
+    /**
+     * storeProject
+     *
+     * @return Response
+     */
+    public function storeProject() {
+
+        $project = Project::find(Input::get('project_id'));
+
+        // Validate inputs
+        $user = Auth::id();
+        if ($user != $project->user_id) {
+            //TODO: Throw error
+            return Redirect::to('project.home');
+        }
+
+        $data = array(
+            'description' => Input::get('description'),
+            'completed' => Input::get('completed')
+        );
+
+        // Validate user input
+        $validator = Project::validate($data, 'update');
+        if ($validator->fails()) {
+            return Redirect::back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $message = 'Task updated!';
+
+        //$sequence = Project::where('user_id', $user)->max('sequence') + 1;
+
+        // Create tasks
+        $message = 'Project created!';
+        try {
+
+            dd(Input::all());
+
+            // TODO: Wrap this block in a reversible DB transaction
+
+            // Get existing project
+            $project = Project::find(Input::get('project_id'));
+
+            // If the project hasn't been changed, skip update 
+            if (!empty(Input::get('completed')) == $project->completed
+                && Input::get('description') == $project->description) {
+                    //throw new Exception('Project did not change.');
+                }
+            else {
+                // Update parent project's attributes
+                $project->description = Input::get('description');
+                $project->completed = !empty(Input::get('completed'));
+                $project->save();
+            }
+
+
+            // If the project's contexts have changed, update those
+            $contextChanges = $project->getContextChanges(
+                Input::get('context'));
+
+            if (empty($contextChanges['attach'])
+                && empty($contextChanges['detach'])) {
+                    //throw new Exception("Project's contexts did not change");
+                }
+            else
+            {
+                // Update project's contexts relationship
+                $project->updateContexts($contextChanges);
+            }
+
+
+            // Now to add the subtasks, YAY!!!
+
+        }
+        catch (Exception $e) {
+            $message = 'Sorry, we were unable to create the task due to the'
+                . ' following issue: '
+                . $e->getMessage();
+        }
+
+        return Redirect::to('/home')->with('message', $message);
+
     }
 
 }

@@ -4,7 +4,9 @@ use Carbon\Carbon;
 
 class Project extends Eloquent { 
 
-    protected $fillable = array('user_id', 'parent_project', 'sequence', 'description', 'completed');
+    protected $fillable = array(
+        'user_id', 'parent_project', 'sequence', 'description', 'completed'
+    );
 
 
 
@@ -56,17 +58,26 @@ class Project extends Eloquent {
      * @param array() $data
      * @return Validator
      */
-    public static function validate($data)
+    public static function validate($data, $type = 'insert')
     {
-        // Validation rules
-        $rules = array(
-
-            'user_id' => array('required', 'in:' . Auth::id()),
-            'sequence' => 'integer',
-            'description' => array('required', 'min:1', 'max:255'),
-            'completed' => 'boolean'
-
-        );
+        // Validation rules depend on what we're about to do
+        
+        // Create project (task)
+        if ($type == 'insert') {
+            $rules = array(
+                'user_id' => array('required', 'in:' . Auth::id()),
+                'sequence' => 'integer',
+                'description' => array('required', 'min:1', 'max:255'),
+                'completed' => 'boolean'
+            );
+        }
+        elseif ($type == 'update') {
+            $rules = array(
+                'sequence' => 'integer',
+                'description' => array('required', 'min:1', 'max:255'),
+                'completed' => 'boolean'
+            );
+        }
 
         return Validator::make($data, $rules);
     }
@@ -82,7 +93,8 @@ class Project extends Eloquent {
 
         // Only update if value is changing
         if ($value == $this->completed) {
-            Log::warning('Completed value for project id ' . $this->id . ' already set to ' . $value);
+            Log::warning('Completed value for project id ' . $this->id 
+                . ' already set to ' . $value);
             return false;
         }
 
@@ -95,7 +107,98 @@ class Project extends Eloquent {
 
         return true;
 
-        //TODO: If there are incomplete child tasks, complete them as well (maybe do this in controller?):
+        //TODO: If there are incomplete child tasks, complete them as well
+        //(maybe do this in controller?)
+
+    }
+
+
+
+
+
+    /**
+     * Take array of context id's and update contexts for project accordingly
+     * User must pass in result of getContextChanges() method
+     *
+     * @param array
+     *
+     * @return Project
+     */
+    public function updateContexts(array $contextChanges = [])
+    {
+        
+        $time = new Carbon;
+
+        // Make the changes
+        if (!empty($contextChanges['detach'])) {
+            $this->contexts()->detach($contextChanges['detach'], array(
+                'created_at' => $time,
+                'updated_at' => $time
+            ));
+        }
+        if (!empty($contextChanges['attach'])) {
+            $this->contexts()->attach($contextChanges['attach'], array(
+                'created_at' => $time,
+                'updated_at' => $time
+            ));
+        }
+
+        // Be happy (maybe add some error handling later?)
+        return true;
+    }
+
+
+
+
+
+    /**
+     * Takes an array of context id's
+     * Returns changes to be made to DB to update Project::contexts
+     * Returns 2 arrays indexed by 'attach' and 'detach'
+     *
+     * @param array
+     *
+     * @return array(array)
+     */
+    public function getContextChanges(array $inputs = null) {
+
+        if (empty($inputs)) { 
+            $inputs = array(); 
+        }
+        
+        $changes = array(
+            'attach' => array(),
+            'detach' => array()
+        );
+        $contexts = $this->contexts;
+        
+        // Build list of contexts to attach
+        foreach($inputs as $input) {
+            $found = false;
+            foreach($contexts as $context) {
+                if ($input == $context->id) {
+                    $found = true;
+                }
+            }
+            if ($found === false) {
+                array_push($changes['attach'], $input);
+            }
+        }
+
+        // Build list of contexts to detach
+        foreach($contexts as $context) {
+            $found = false;
+            foreach($inputs as $input) {
+                if ($context->id == $input) {
+                    $found = true;
+                }
+            }
+            if ($found === false) {
+                array_push($changes['detach'], $context->id);
+            }
+        }
+        
+        return $changes;
 
     }
 

@@ -2,16 +2,15 @@
 
 @section('bodyContent')
 
-{{ Form::open([ 'route' => 'projects.store' ]) }}
+{{ Form::open([ 'route' => [ 'projects.storeProject', 
+'project_id' => $data['project']->id ] ]) }}
 
 <div class="row">
-    <h2>Projectify! Task</h2>
+    <h2>Projectify a Task</h2>
     <div class="row">
         <div class="col-md-4">
+            <h4>Project</h4>
             <div class="form-group">
-                {{-- Completed checkbox --}}
-                {{ Form::checkbox($project->id . '_completed', $project->id, 
-                $project->completed, ['class' => 'cb-completed']) }}
 
                 {{-- Description error messages --}}
                 @if (!empty($errors))
@@ -21,74 +20,77 @@
                     @endforeach
                 </ul>
                 @endif
+
+                {{-- Completed checkbox --}}
+                {{ Form::checkbox('completed', $data['project']->id, 
+                $data['project']->completed, ['class' => 'cb-completed']) }}
+
                 {{-- Description field ---------------------------------}}
-                {{ Form::label('description', 'Description:') }}
-                {{ Form::text('description', $project->description, ['autofocus' => 'autofocus', 'tabindex' => '1' ]) }}
+                {{ Form::text('description', $data['project']->description, 
+                ['autofocus' => 'autofocus', 'tabindex' => '1' ]) }}
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
             <div class="form-group">
 
                 {{-- Contexts --}}
-                @if (!empty($contexts))
-                <div class="col-md-4">
-                    {{-- Context Checkboxes ---------------------------------}}
-                    {{ Form::label('context', 'Context:') }}
-                    @foreach ($contexts as $context)
-                    <div class="form-group-fluid">
-                        {{ Form::checkbox('context[]', $context['id'], $context['checked'],
+                @if (!empty($data['contexts']))
+                
+                <div class="col-md-4 contextsWidgetTemplate">
+                    {{-- Label --}}
+                    {{ Form::label('context', 'Context: ') }}
+
+                    {{-- Checkboxes --}} 
+                    @foreach ($data['contexts'] as $context)
+
+                    <span class="form-group-fluid">
+                        {{ Form::checkbox('context[]', $context['id'], 
+                        $context['checked'], 
                         ['id' => 'context_' . $context['id'] ]) }}
-                        {{ Form::label('context_' . $context['id'], $context['description']) }}
-                    </div>
+                        {{ Form::label('context_' . $context['id'], 
+                        $context['description']) }}
+                    </span>
+
                     @endforeach
+
                 </div>
                 @endif
 
-
-                {{-- Roadblocks --}}
-
-
-                {{-- Tags --}}
-
             </div>
         </div>
-    </div>    
+    </div>
+    <div class="row">
+        <div class="col-md-4 well">
+            <h4>Subtasks</h4>
+            <ul>
+                <li>
+                <span class="task-add-btn glyphicon glyphicon-plus"
+                    title="Add Subtask"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-4">
-            <div class="form-group">
-                {{-- Tasks --}}
-                @if (!empty($subtasks))
-                {{-- Existing Child Tasks --}}
-
-                @foreach ($subtasks as $subtask)
-                
-                @endforeach
-
-                @endif
 
 
-                {{-- Submit button ----------------------------------------------}}
-                {{ Form::submit('Save Project', ['class' => 'btn btn-primary'] ) }}
-            </div>
+            {{-- Roadblocks --}}
+
+
+            {{-- Tags --}}
+
         </div>
     </div>
 
-    @if (!empty($contexts))
-    <div class="col-md-4">
-        {{-- Context Checkboxes ---------------------------------}}
-        {{ Form::label('context', 'Context:') }}
-        @foreach ($contexts as $context)
-        <div class="form-group-fluid">
-            {{ Form::checkbox('context[]', $context['id'], $context['checked'], 
-            ['id' => 'context_' . $context['id'] ]) }}
-            {{ Form::label('context_' . $context['id'], $context['description']) }}
-        </div>
-        @endforeach
-    </div>
-    @endif
+    <!-- Submit button -->
+    <div class="row">
+        <div class="col-md-12">
 
+            {{-- Submit button ----------------------------------------------}}
+            {{ Form::submit('Save Project', ['class' => 'btn btn-primary'] ) }}
+
+        </div>
+    </div> 
 </div>
 
 {{-- TODO: add a way to select context(s) --}}
