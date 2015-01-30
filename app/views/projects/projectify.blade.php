@@ -4,7 +4,12 @@
 
 {{ Form::open([ 'route' => [ 'projects.storeProject', 
 'project_id' => $data['project']->id ] ]) }}
-
+{{-- { dd($errors->get('completed')) } --}}
+<ul class="errors">
+    @foreach($errors->get('completed') as $message)
+    <li>{{ $message }}</li>
+    @endforeach
+</ul>
 <div class="row">
     <h2>Projectify a Task</h2>
     <div class="row">
@@ -12,9 +17,12 @@
             <h4>Project</h4>
             <div class="form-group">
 
-                {{-- Description error messages --}}
+                {{-- Completed/Description error messages --}}
                 @if (!empty($errors))
                 <ul class="errors">
+                    @foreach($errors->get('completed') as $message)
+                    <li>{{ $message }}</li>
+                    @endforeach
                     @foreach($errors->get('description') as $message)
                     <li>{{ $message }}</li>
                     @endforeach
@@ -22,7 +30,7 @@
                 @endif
 
                 {{-- Completed checkbox --}}
-                {{ Form::checkbox('completed', $data['project']->id, 
+                {{ Form::checkbox('completed', 1, 
                 $data['project']->completed, ['class' => 'cb-completed']) }}
 
                 {{-- Description field ---------------------------------}}
@@ -35,7 +43,7 @@
 
                 {{-- Contexts --}}
                 @if (!empty($data['contexts']))
-                
+
                 <div class="col-md-4 contextsWidgetTemplate">
                     {{-- Label --}}
                     {{ Form::label('context', 'Context: ') }}

@@ -61,7 +61,7 @@ class Project extends Eloquent {
     public static function validate($data, $type = 'insert')
     {
         // Validation rules depend on what we're about to do
-        
+
         // Create project (task)
         if ($type == 'insert') {
             $rules = array(
@@ -126,8 +126,12 @@ class Project extends Eloquent {
      */
     public function updateContexts(array $contextChanges = [])
     {
-        
+
         $time = new Carbon;
+
+        //For some reason Eloquent doesn't update the created_at and updated_at
+        //columns when you attach/detach many-to-many keys, so we're overriding
+        //that behavior here
 
         // Make the changes
         if (!empty($contextChanges['detach'])) {
@@ -165,13 +169,13 @@ class Project extends Eloquent {
         if (empty($inputs)) { 
             $inputs = array(); 
         }
-        
+
         $changes = array(
             'attach' => array(),
             'detach' => array()
         );
         $contexts = $this->contexts;
-        
+
         // Build list of contexts to attach
         foreach($inputs as $input) {
             $found = false;
@@ -197,9 +201,76 @@ class Project extends Eloquent {
                 array_push($changes['detach'], $context->id);
             }
         }
-        
+
         return $changes;
 
+    }
+
+
+
+    public static function storeProject(array $data = null, array $context = null, Project $project = null) {
+
+        // CREATE PROJECT
+        $message = 'Project created!';
+
+        // TODO: Figure out how to make these transactions atomic
+
+        if($project) {
+            $action = 'update';
+            // Make sure authenticated user owns the project
+            if (Auth::id() != $project->user_id) {
+                //TODO: handle this error in the controller
+                //TODO: log error
+                return Redirect::to('/home');
+            }
+        }
+        else {
+            $action = 'create';
+            $project = new Project;
+            $project->user_id = Auth::id();
+        }
+
+        //Is there a cleaner way to do this?
+        if (!empty($data['parent_project_id'])) {
+            $project->parent_project_id = $data['parent_project_id'];
+        }
+        if (!empty($data['sequence'])) {
+            $project->sequence = $data['sequence'];
+        }
+        if (!empty($data['description'])) {
+            $project->description = $data['description'];
+        }
+        if (!empty($data['completed'])) {
+            $project->completed = $data['completed'] | false;
+        }
+
+        $project->save();
+
+
+        // CONTEXTS
+        // If the project's contexts have changed, update those
+        $contextChanges = $project->getContextChanges($context);
+
+        if ($action == 'create' && !empty($contextChanges['detach'])) {
+            throw new Exception("New Project should not have contexts!");
+        }
+        if (empty($contextChanges['attach'])) {
+            //TODO: put info level logging here?
+        }
+        else {
+            // Update project's contexts relationship
+            $project->updateContexts($contextChanges);
+        }
+
+
+        // ROADBLOCKS
+
+
+        // TAGS
+
+
+        $project->message = $message;
+        return $project;
     }
 
 }
