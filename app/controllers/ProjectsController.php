@@ -72,6 +72,7 @@ class ProjectsController extends BaseController {
         );
             
         // Validate user input
+        // TODO: Move validation into model
         $validator = Project::validate($data);
         if ($validator->fails()) {
             return Redirect::back()
@@ -79,52 +80,9 @@ class ProjectsController extends BaseController {
                 ->withInput();
         }
 
-        // CREATE PROJECT
-        $message = 'Project created!';
-        try {
+        $project = Project::storeProject($data, Input::get('context'));
 
-            // TODO: Wrap this block in a reversable DB transaction
-
-            // Insert new project
-            $project = new Project;
-            $project->user_id = $user;
-            $project->parent_project_id = null;
-            $project->sequence = $sequence;
-            $project->description = Input::get('description');
-            $project->completed = false;
-            $project->save();
-
-            // CONTEXTS
-            // If the project's contexts have changed, update those
-            $contextChanges = $project->getContextChanges(
-                Input::get('context'));
-
-            if (!empty($contextChanges['detach'])) {
-                throw new Exception("New Project should not have contexts!");
-            }
-            if (empty($contextChanges['attach'])) {
-                //TODO: put info level logging here?
-            }
-            else {
-                // Update project's contexts relationship
-                $project->updateContexts($contextChanges);
-            }
-
-
-            // ROADBLOCKS
-
-
-            // TAGS
-
-
-        }
-        catch (Exception $e) {
-            $message = 'Sorry, we were unable to create the task due to the'
-                . ' following issue: '
-                . $e->getMessage();
-        }
-
-        return Redirect::to('/home')->with('message', $message);
+        return Redirect::to('/home')->with('message', $project->message);
 
     }
 
@@ -221,9 +179,16 @@ class ProjectsController extends BaseController {
      */
     public function storeProject() {
 
-        $project = Project::find(Input::get('project_id'));
+        /////////////////////////
+        /// PARENT TASK (PROJECT)
+        /////////////////////////
 
-        // Validate inputs
+        // Get project from DB
+        $parentProjectId = Input::get('project_id');
+        $project = Project::find($parentProjectId);
+        $sequence = Project::where('user_id', Auth::id())->max('sequence') + 1;
+
+        // Validate user
         $user = Auth::id();
         if ($user != $project->user_id) {
             //TODO: Throw error
@@ -231,65 +196,90 @@ class ProjectsController extends BaseController {
         }
 
         $data = array(
+            'user_id' => $user,
             'description' => Input::get('description'),
             'completed' => Input::get('completed')
         );
-
+            
         // Validate user input
-        $validator = Project::validate($data, 'update');
+        // TODO: Move validation into model
+        $validator = Project::validate($data);
         if ($validator->fails()) {
             return Redirect::back()
                 ->withErrors($validator)
                 ->withInput();
         }
 
-        $message = 'Task updated!';
+        $result = Project::storeProject($data, Input::get('context'), $project);
+        $message = $project->message;
 
-        //$sequence = Project::where('user_id', $user)->max('sequence') + 1;
+        
+        ////////////
+        /// SUBTASKS
+        ////////////
 
-        // Create tasks
-        $message = 'Project created!';
-        try {
+        // CREATE ARRAY OF NEW TASKS FROM INPUT
+        $input = Input::all();
+        $newTask = array();
 
-            // TODO: Wrap this block in a reversible DB transaction
+        foreach ($input as $key => $value) {
+            if(strpos($key, 'newTask_') !== false) {
 
-            // Get existing project
-            $project = Project::find(Input::get('project_id'));
+                echo $key . ': ';
+                var_dump($value); 
+                echo '<br />';
+                
+                // Get the task number
+                $taskNum = explode('_', $key)[1];
+                echo 'TaskNum:'. $taskNum; 
+                $newKey = explode( 'newTask_' . $taskNum . '_', $key )[1];
+                echo 'NewKey:'. $newKey; 
 
-            // If the project hasn't been changed, skip update 
-            if (!empty(Input::get('completed')) == $project->completed
-                && Input::get('description') == $project->description) {
-                    //throw new Exception('Project did not change.');
+                // create subarray if needed
+                if (empty($newTask[$taskNum])) {
+                    $newTask[$taskNum] = array();
                 }
-            else {
-                // Update parent project's attributes
-                $project->description = Input::get('description');
-                $project->completed = !empty(Input::get('completed'));
-                $project->save();
+
+                // add to subarray
+                $newTask[$taskNum][$newKey] = $value;
+
+
+                echo '<br />';
+                echo '<br />';
             }
-
-
-            // If the project's contexts have changed, update those
-            $contextChanges = $project->getContextChanges(
-                Input::get('context'));
-
-            if (empty($contextChanges['attach'])
-                && empty($contextChanges['detach'])) {
-                    //throw new Exception("Project's contexts did not change");
-                }
-            else
-            {
-                // Update project's contexts relationship
-                $project->updateContexts($contextChanges);
-            }
-
-
-            // Now to add the subtasks, YAY!!!
         }
-        catch (Exception $e) {
-            $message = 'Sorry, we were unable to create the task due to the'
-                . ' following issue: '
-                . $e->getMessage();
+
+        echo "<br />\n<br />\n";
+
+        // CREATE TASK FOR EACH NEW TASK IN THE ARRAY
+
+        // TODO: Handle validation issues on a per-task basis
+        // For now, just validate each and redirect back if one fails
+        foreach ($newTask as $task) {
+            $sequence++;
+
+            $data = array(
+                'user_id' => $user,
+                'parent_project_id' => $parentProjectId,
+                'sequence' => $sequence,
+                'description' => $task['description']
+            );
+
+            if (!empty($task['completed'])) {
+                $data['completed'] = $task['completed'];
+            }
+
+            // Validate user input
+            // TODO: Move validation into model
+            $validator = Project::validate($data);
+            if ($validator->fails()) {
+                return Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $project = Project::storeProject($data, $task['context']);
+
         }
 
         return Redirect::to('/home')->with('message', $message);

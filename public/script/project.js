@@ -1,6 +1,7 @@
-
-    // Hide list initially
-    $('li.project').hide();
+// Hopefully moving this here will prevent 'hidden' projects from being
+// displayed before the page is fully loaded
+// Hide list initially
+$('li.project').hide();
 
 $(document).ready(function() {
 
@@ -166,49 +167,67 @@ function addTaskInputs(event) {
 
     // Initialize global count object if not exists
     if (window.addTaskCount == null) { window.addTaskCount = 1; }
-    var suffix = 'newTask_' + window.addTaskCount;
+    var prefix = 'newTask_' + window.addTaskCount;
     var containerTagName = $(this).parent().prop('tagName').toLowerCase();
     // If parent container is not li, div or span, exit
     if (containerTagName != 'li' && containerTagName != 'div'
             && containerTagName != 'span') { return false; }
-               
+
     // jQuery requires the brackets
     var containerTag = '<' + containerTagName + '>';
 
     // Insert the task widget before task-add-btn
-    var newContainer = $(containerTag, { id: suffix } )
+    var newContainer = $(containerTag, { id: prefix } )
         .append(
                 $('<input>', { 
-                    name: 'completed_' + suffix,
+                    name: prefix + '_completed',
                     type: 'checkbox',
                     class: 'cb-completed' }
-                    )
-                )
+                 )
+               )
         .append(
                 $('<input>', { 
-                    name: 'description_' + suffix,
+                    name: prefix + '_description',
                     type: 'text' }
-                    )
-                )
+                 )
+               )
         .insertBefore($(this).parent());
 
     // Now append the Contexts widget
-    $(newContainer).append(cloneContextsWidget(suffix));
-
+    $(newContainer).append(cloneContextsWidget(prefix));
+contextContainer = newContainer;
     window.addTaskCount++;
 
 }
 
+var contextContainer;
+
 // Clone the Contexts template
-// Must have a 'template' instance of the widget in a container.contextsWidget
-function cloneContextsWidget(suffix) {
-    console.log(suffix);
-    
+// DOM must include a 'template' instance of the widget in a
+// container.contextsWidgetTemplate
+function cloneContextsWidget(prefix) {
+    //console.log(prefix);
+    var lastIndex = prefix.length - 1;
+    if (prefix[lastIndex] != '_') { prefix = prefix + '_'; }
+
     var element = $('.contextsWidgetTemplate').clone()
-        .attr('id', 'contextsWidget_' + suffix)
+        .attr('id', prefix + '_contextsWidget')
         .find('*').each(function() {
-            console.log(this.id);
-            $(this).attr('id', this.id + suffix);
+            //console.log('for1: ' + $(this).attr('for'));
+            if ($(this).attr('for') !== undefined) {
+                $(this).attr('for', prefix + $(this).attr('for'));
+                //console.log('for2: ' + $(this).attr('for'));
+            }
+            //console.log('id1: ' + $(this).attr('id'));
+            if (this.id !== undefined ) {
+                $(this).attr('id', prefix + this.id);
+                //console.log('id2: ' + $(this).attr('id'));
+            }
+            //console.log('name1: ' + $(this).attr('name'));
+            if ($(this).attr('name') !== undefined) {
+                $(this).attr('name', prefix + $(this).attr('name'));  
+                //console.log('name2: ' + $(this).attr('name'));
+            }
         })
 
     return element;
