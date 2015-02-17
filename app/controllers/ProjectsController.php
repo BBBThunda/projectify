@@ -155,6 +155,35 @@ class ProjectsController extends BaseController {
     }
 
     /**
+     * getSubTasks
+     * Given a project id, recursively grab all child projects and return them
+     * as an array of projects ordered as if you plan to display the tasks in
+     * a nested <ul>
+     *
+     * @return Array(Project)
+     */
+    private function getSubTasks($projectId, $list = array()) {
+
+        //Get all child projects
+        $children = Project::where('parent_project_id', '=', $projectId)->get();
+
+        //Loop through, add each to array and call self for each
+        foreach ($children as $child) {
+
+            array_push($list, $child);
+            $subtasks = $this->getSubTasks($child->id);
+            foreach ($subtasks as $subtask) {
+                array_push($list, $subtask);
+            }
+
+        }
+
+        return $list;
+
+    }
+
+
+    /**
      * projectify
      * Turn a task into a project (or just edit the task)
      *
@@ -166,8 +195,8 @@ class ProjectsController extends BaseController {
         $data['project'] = Project::find($project_id);
         $data['contexts'] = 
             Context::getUserContexts(Auth::id(), $data['project']->contexts);
-        
-        //$data['subtasks'] = Project::where('parent_project_id', $project_id);
+
+        $data['subtasks'] = $this->getSubTasks($project_id);
 
         return View::make('projects.projectify')->with('data', $data);
     }
@@ -200,7 +229,7 @@ class ProjectsController extends BaseController {
             'description' => Input::get('description'),
             'completed' => Input::get('completed')
         );
-            
+
         // Validate user input
         // TODO: Move validation into model
         $validator = Project::validate($data);
@@ -213,10 +242,10 @@ class ProjectsController extends BaseController {
         $result = Project::storeProject($data, Input::get('context'), $project);
         $message = $project->message;
 
-        
-        ////////////
+
+        ////////////////
         /// SUBTASKS
-        ////////////
+        ////////////////
 
         // CREATE ARRAY OF NEW TASKS FROM INPUT
         $input = Input::all();
@@ -225,17 +254,11 @@ class ProjectsController extends BaseController {
         foreach ($input as $key => $value) {
             if(strpos($key, 'newTask_') !== false) {
 
-                echo $key . ': ';
-                var_dump($value); 
-                echo '<br />';
-                
                 // Get the task number
                 $taskNum = explode('_', $key)[1];
-                echo 'TaskNum:'. $taskNum; 
                 $newKey = explode( 'newTask_' . $taskNum . '_', $key )[1];
-                echo 'NewKey:'. $newKey; 
 
-                // create subarray if needed
+                // create new subarray if needed
                 if (empty($newTask[$taskNum])) {
                     $newTask[$taskNum] = array();
                 }
@@ -243,13 +266,9 @@ class ProjectsController extends BaseController {
                 // add to subarray
                 $newTask[$taskNum][$newKey] = $value;
 
-
-                echo '<br />';
-                echo '<br />';
             }
         }
 
-        echo "<br />\n<br />\n";
 
         // CREATE TASK FOR EACH NEW TASK IN THE ARRAY
 
