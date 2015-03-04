@@ -176,7 +176,7 @@ function addTaskInputs(event) {
     event.preventDefault();
 
     // Initialize global count object if not exists
-    if (window.addTaskCount == null) { window.addTaskCount = 1; }
+    if (window.addTaskCount == null) { window.addTaskCount = 0; }
     var prefix = 'newTask_' + window.addTaskCount;
     var containerTagName = $(this).parent().prop('tagName').toLowerCase();
     // If parent container is not li, div or span, exit
