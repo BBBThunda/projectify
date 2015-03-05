@@ -58,6 +58,7 @@
                     <li>Complete/uncomplete tasks</li>
                     <li>Filter completed tasks</li>
                     <li>Edit task and add/remove contexts</li>
+                    <li>Projectify task (add child tasks, etc.)</li>
                 </ul>
                 </p>
             </div>
@@ -66,7 +67,6 @@
                 <h2>Coming Soon</h2>
                 <ul>
                     <li>Customize contexts</li>
-                    <li>Projectify task (add child tasks, etc.)</li>
                     <li>Roadblocks</li>
                     <li>Tags</li>
                     <li>Roadblock reminders</li>
