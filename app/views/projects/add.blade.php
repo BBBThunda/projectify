@@ -36,12 +36,17 @@
             {{ Form::label('context_' . $context['id'], $context['description']) }}
         </div>
         @endforeach
+
+        {{-- Add a context --------------------------------------}}
+        <div class="newContexts">
+            <span class="context-add-btn glyphicon glyphicon-plus"
+                title="Add Context"></span>
+        </div>
+        
     </div>
     @endif
 
 </div>
-
-{{-- TODO: add a way to select context(s) --}}
 
 {{ Form::close() }}
 

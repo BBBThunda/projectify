@@ -38,6 +38,9 @@ $(document).ready(function() {
     // Add task button (for adding Project sub-tasks)
     $('.task-add-btn').on('click',addTaskInputs);
 
+    // Add context button (for adding new context)
+    $('.context-add-btn').on('click',addContextInputs);
+
 });
 
 
@@ -242,3 +245,56 @@ function cloneContextsWidget(prefix) {
 
     return element;
 }
+
+// Add context input fields before the context-add-btn button
+// a.task-add-btn should be inside an li, span or div
+function addContextInputs(event) {
+    event.preventDefault();
+
+    // Initialize global count object if not exists
+    if (window.addContextCount == null) { window.addContextCount = 0; }
+    window.addContextCount++;
+    var prefix = 'newContext_' + window.addContextCount;
+    
+    // Insert the context widget before context-add-btn
+    var newContainer = $('<div>', { class: 'form-group-fluid',
+	    id: prefix } )
+        .append(
+                $('<label>', { 
+		    id: prefix + '_lbl',
+                    name: prefix + '_lbl',
+                    for: prefix + '_',
+		    style: 'display:none;'}
+                 )
+               )
+	.append(
+	        $('<input>', {
+		    id: prefix,
+		    name: prefix + '',
+		    type: 'checkbox',
+		    disabled: 'disabled'}
+		)
+	       )
+        .append(
+                $('<input>', { 
+		    id: prefix,
+                    name: prefix,
+                    type: 'text' }
+                 )
+               )
+        .insertBefore($(this).parent());
+    // Now append the Contexts widget
+    $(newContainer).append(cloneContextsWidget(prefix));
+contextContainer = newContainer;
+    window.addTaskCount++;
+
+}
+
+
+// LEFT OFF HERE:
+// Next, create function to respond to ENTER event
+// which makes an ajax request to add context and on success:
+// -removes the disabled attribute from checkbox
+// -replaces the label value with the value of the text
+// -toggle label
+// -toggle text
