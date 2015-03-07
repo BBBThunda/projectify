@@ -52,4 +52,20 @@ class Context extends Eloquent {
 
     }
 
+
+    /**
+     * addContext
+     *
+     * @return String
+     */
+    public static function addContext($description) {
+
+       //LEFT OFF HERE!!!!!!!!
+
+       $status = 0; 
+
+       return $status;
+
+    }
+
 }
