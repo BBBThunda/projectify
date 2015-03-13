@@ -112,7 +112,7 @@
 
     <p>With the peace of mind that comes from knowing you will be reminded of
     doable tasks at an appropriate time, you will have the confidence to focus
-    on the things that are important right now andstop worrying that you might
+    on the things that are important right now and stop worrying that you might
     forget something.</p>
 
 </div>
