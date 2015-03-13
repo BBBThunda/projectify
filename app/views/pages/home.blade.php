@@ -23,6 +23,9 @@
             people who are serious about digitizing their responsibilities.
         </strong></p>
 
+        <p><a class="btn btn-primary btn-lg" href="/register" role="button">
+            Sign Up Now!</a></p>
+
         <p class="text-warning">This site is pre-alpha stage, meaning there are
         a few more features needed before it will be considered alpha.  In the
         meantime, please try out the site and contact Support with your
@@ -35,7 +38,13 @@
         to the project, check out the <a href="/contribute">CONTRIBUTE</a>
         page.  Links are also in the nav bar at the top of the page.</p>
 
-        <p><a class="btn btn-primary btn-lg" href="/register" role="button">Sign Up Now!</a></p>
+        <p><strong>UPDATE:</strong> You can now add your own custom contexts to 
+        the list. Go to the "Add Task" page and click the '+' icon to get a 
+        textbox where you can enter your new context name.  Press ENTER to save
+        it to your list.  But be careful for now about how many contexts you
+        add.  Generally it's a good idea to keep these to a minimum anyway, but
+        at the moment there's no way to delete contexts or a practical way to
+        display a large list of them.</p>
 
     </div>
 </div>
@@ -67,8 +76,9 @@
             <div class="col-md-4">
                 <h2>Coming Soon</h2>
                 <ul>
+                    <li>Enabled context toggle</li>
                     <li>Roadblocks</li>
-                    <li>Tags</li>
+                    <li>Add tags</li>
                     <li>Roadblock reminders</li>
                     <li>Search by tag</li>
                     <li>Archive tasks completed X days</li>
