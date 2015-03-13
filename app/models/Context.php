@@ -52,4 +52,42 @@ class Context extends Eloquent {
 
     }
 
+
+    /**
+     * addContext
+     *
+     * @return String
+     */
+    public static function addContext($description) {
+
+	    // User must be logged in to add a Context
+	    $user = Auth::id();
+	    if (empty($user)) {
+            return array(
+                'success' => false,
+                'message' => 'must be logged in to add context' );
+	    }
+
+	    $context = new Context();
+	    $context->user_id = $user;
+	    $context->description = $description;
+	    $status = $context->save();
+
+        if ($status == true) { 
+            return array(
+                'success' => true,
+                'message' => 'context added',
+                'id' => $context->id
+            );
+        }
+        else {
+           //TODO: Add better error handling/logging for SQL errors 
+            return array(
+                'success' => false,
+                'message' => 'failed to add context'
+            );
+        }
+
+    }
+
 }
