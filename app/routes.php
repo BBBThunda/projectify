@@ -43,6 +43,9 @@ Route::post('/projects/setCompleted', 'ProjectsController@setCompleted')->before
 //Route::resource('projects', 'ProjectsController');
 Route::get('/projectify/{project_id}', 'ProjectsController@projectify')->before('auth');
 
+//Contexts
+Route::post('/contexts', 'ContextsController@addContext')->before(['auth', 'csrf']);
+
 Route::resource('users', 'UsersController');
 
 //Stuff to be moved to Profile controller
