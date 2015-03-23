@@ -66,3 +66,9 @@ Route::get('/editProfile', 'UsersController@editProfile')->before('auth');
 Route::post('/updateProfile', 'UsersController@updateProfile')->before(['auth','csrf']);
 
 Route::controller('password', 'RemindersController');
+
+
+if($app->env != 'live') {
+    Route::get('/test', 'TestsController@test');
+}
+            
