@@ -363,17 +363,21 @@ function addContextInputs(event) {
                )
         .insertBefore($(this).parent());
 
-    // Now add the Contexts widget to the DOM
+    // Now add the Contexts widget to the DOM and set focus on text box
     $(newContainer).append(cloneContextsWidget(prefix));
     contextContainer = newContainer;
     window.addTaskCount++;
 
+    //console.log(prefix + '_txt');
+    $('#' + prefix + '_txt').focus();
+
     // We want to call submitAddContext when user presses ENTER on the text box
-    // Apparently binding to a class selector doesn't work for dynamically
-    // addded elements, so we're binding by ID on creation instead, which, 
-    // although annoying and a tad messier, is probably much faster.
+    // Apparently binding to a class selector on page load doesn't work for
+    // dynamically addded elements, so we're binding by ID on creation instead,
+    // which, although annoying and a tad messier, is probably much faster.
     // TODO: Figure out why repeating the 2nd parameter seems to work???
-    $('#' + prefix + '_txt').on('keypress', null, {'handler': submitAddContext}, preventSubmitOnEnter);
+    $('#' + prefix + '_txt').on('keypress', null, {'handler': submitAddContext},
+            preventSubmitOnEnter);
 
 }
 
