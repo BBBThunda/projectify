@@ -31,11 +31,12 @@ class Context extends Eloquent {
                 ->orWhere('user_id', null);
         }) 
             ->where('enabled', 1)
+            ->orderBy('id') //TODO: Order by most used context
             ->get();
 
-        //TODO: 1. give users option to add/remove contexts as they see fit
-        //TODO: 2. Add migration to generate defaults by user and make user_id required
-        //TODO: 3. Update the above query to not select on null user_id
+        //TODO: 1. Add migration to generate default contexts by user
+        //         and make user_id required
+        //TODO: 2. Update the above query to not select on null user_id
 
         // Loop through contexts and generate array
         foreach ($myContexts as $thisContext) {

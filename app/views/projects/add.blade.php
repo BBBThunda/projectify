@@ -35,8 +35,10 @@
             ['id' => 'context_' . $context['id'] ]) }}
             {{ Form::label('context_' . $context['id'], $context['description']) }}
             @if (!empty($context['owner']))
-{{--TODO: Add onclick event to submit AJAX request --}}
-            <button class="removeContextButton" value="{{ $context['id'] }}">-</button>
+            {{--TODO: Add onclick event to submit AJAX request --}}
+            <button class="removeContextButton"
+                value="{{ $context['id'] }}"
+                title="Remove context">-</button>
             @endif
         </div>
         @endforeach

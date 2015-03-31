@@ -42,14 +42,7 @@ $(document).ready(function() {
     $('.context-add-btn').on('click', addContextInputs);
 
     // Remove context button
-    $('.removeContextButton').on('click', removeContext)
-
-        $('form').on('keypress', function(e){
-            if ( e.keyCode == 13 ) {
-                //e.preventDefault();
-            }
-        });
-
+    $('.removeContextButton').on('click', removeContext);
 
 });
 
@@ -112,8 +105,6 @@ function refreshVisibility() {
     // COMPLETED : Hide completed tasks if Show Completed not selected
     //TODO: add filtering based on completed timestamp
     if (!window.showCompleted && $(this).hasClass('completed')) { visible = false; }
-
-    //console.log(window.showContext + ': ' + $(this).attr('class') + ' ' + window.showCompleted + '|' + visible);
 
     //TODO: Add roadblocks piece later
 
@@ -226,27 +217,24 @@ var contextContainer;
 // DOM must include a 'template' instance of the widget in a
 // container.contextsWidgetTemplate
 function cloneContextsWidget(prefix) {
-    //console.log(prefix);
+    
     var lastIndex = prefix.length - 1;
     if (prefix[lastIndex] != '_') { prefix = prefix + '_'; }
 
     var element = $('.contextsWidgetTemplate').clone()
         .attr('id', prefix + '_contextsWidget')
         .find('*').each(function() {
-            //console.log('for1: ' + $(this).attr('for'));
+            
             if ($(this).attr('for') !== undefined) {
                 $(this).attr('for', prefix + $(this).attr('for'));
-                //console.log('for2: ' + $(this).attr('for'));
             }
-            //console.log('id1: ' + $(this).attr('id'));
+            
             if (this.id !== undefined ) {
                 $(this).attr('id', prefix + this.id);
-                //console.log('id2: ' + $(this).attr('id'));
             }
-            //console.log('name1: ' + $(this).attr('name'));
+            
             if ($(this).attr('name') !== undefined) {
                 $(this).attr('name', prefix + $(this).attr('name'));  
-                //console.log('name2: ' + $(this).attr('name'));
             }
         })
 
@@ -285,22 +273,11 @@ function submitAddContext(element) {
         retryLimit: 5,
         success: function(data){
 
-            debug = element; console.log(data);
             if (data.success) {
-                //TODO: Move this to another function
-                var val = $(element).val();;
-                // Enable checkbox and rename to match others
-                $(element).siblings('input[type=checkbox]')
-        .removeAttr('disabled')
-        .attr('name', 'context[]')
-        .attr('id', 'context_' + data.context_id)
-        .val(data.context_id);
-                $(element).siblings('label').text(val);
-                $(element).toggle();
-                $(element).siblings('label').toggle();
 
-                //TODO: add disableContextButton button after label
-                //LEFT OFF HERE!!!!!!!!!
+                // Update UI to match changed data
+                addNewContextToUi(element, data.context_id);
+
             }
             else {
                 //TODO: add better error handling
@@ -311,12 +288,6 @@ function submitAddContext(element) {
         error: function(xhr, textStatus, errorThrown) {
         }
     });
-
-    // -removes the disabled attribute from checkbox
-    // -replaces the label value with the value of the text
-    // -toggle label
-    // -toggle text
-    // -maybe update all context widgets on page?
 
     return false;
 
@@ -368,7 +339,6 @@ function addContextInputs(event) {
     contextContainer = newContainer;
     window.addTaskCount++;
 
-    //console.log(prefix + '_txt');
     $('#' + prefix + '_txt').focus();
 
     // We want to call submitAddContext when user presses ENTER on the text box
@@ -382,12 +352,10 @@ function addContextInputs(event) {
 }
 
 function removeContext(event) {
-    console.log('removeContext');
+    
     event.preventDefault();
 
     var thisButton = this;
-    console.log(this);
-    console.log($(this));
     var url = "/contexts/" + $(this).val();
 
     $.ajax({
@@ -401,11 +369,10 @@ function removeContext(event) {
         retryLimit: 5,
         success: function(data){
             if (data.success == true) {
+                // If successful, remove context from UI
                 $(thisButton).parent().slideUp(650);
             }
             else {
-                // If AJAX succeeds, but error is returned by server, undo the change event
-                console.log('AJAX successful with errors');
             }
 
         },
@@ -428,4 +395,36 @@ function removeContext(event) {
             }
         }
     });
+}
+
+function addNewContextToUi(element, context_id) {
+
+    var val = $(element).val();;
+    
+    // Enable checkbox and rename to match others
+    $(element).siblings('input[type=checkbox]')
+        .removeAttr('disabled')
+        .attr('name', 'context[]')
+        .attr('id', 'context_' + context_id)
+        .val(context_id);
+
+    // Replace text box with label
+    $(element).siblings('label').text(val);
+    $(element).toggle();
+    $(element).siblings('label').toggle();
+
+    // Add removeContextButton button after label
+    $('<button>', { 
+        class: 'removeContextButton',
+        id: 'removeContextButton_' + context_id,
+        value: context_id,
+        text: '-',
+        title: 'Remove context'
+    }).insertAfter($(element).siblings('label'));
+
+    // Dynamically bind click event to dynamic element
+    $('#removeContextButton_' + context_id).on('click', removeContext);
+
+    //TODO: update all context widgets on page
+
 }
