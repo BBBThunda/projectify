@@ -24,7 +24,7 @@
         {{ Form::submit('Add Task', ['class' => 'btn btn-primary'] ) }}
 
     </div>
-
+    
     @if (!empty($contexts))
     <div class="col-md-4">
         {{-- Context Checkboxes ---------------------------------}}
@@ -34,6 +34,10 @@
             {{ Form::checkbox('context[]', $context['id'], $context['checked'], 
             ['id' => 'context_' . $context['id'] ]) }}
             {{ Form::label('context_' . $context['id'], $context['description']) }}
+            @if (!empty($context['owner']))
+{{--TODO: Add onclick event to submit AJAX request --}}
+            <button class="removeContextButton" value="{{ $context['id'] }}">-</button>
+            @endif
         </div>
         @endforeach
 

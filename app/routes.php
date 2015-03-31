@@ -44,7 +44,10 @@ Route::post('/projects/setCompleted', 'ProjectsController@setCompleted')->before
 Route::get('/projectify/{project_id}', 'ProjectsController@projectify')->before('auth');
 
 //Contexts
-Route::post('/contexts', 'ContextsController@addContext')->before(['auth', 'csrf']);
+Route::post('/contexts', 'ContextsController@addContext')
+	->before(['auth', 'csrf']);
+Route::delete('/contexts/{contextId}', 'ContextsController@removeContext')
+	->before(['auth', 'csrf']);
 
 Route::resource('users', 'UsersController');
 
