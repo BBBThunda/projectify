@@ -38,13 +38,11 @@
         to the project, check out the <a href="/contribute">CONTRIBUTE</a>
         page.  Links are also in the nav bar at the top of the page.</p>
 
-        <p><strong>UPDATE:</strong> You can now add your own custom contexts to 
-        the list. Go to the "Add Task" page and click the '+' icon to get a 
-        textbox where you can enter your new context name.  Press ENTER to save
-        it to your list.  But be careful for now about how many contexts you
-        add.  Generally it's a good idea to keep these to a minimum anyway, but
-        at the moment there's no way to delete contexts or a practical way to
-        display a large list of them.</p>
+        <p><strong>UPDATE</strong><em>(04/01/2015): </em>You can now add your
+        own custom contexts to the list. Go to the "Add Task" page and click
+        the '+' icon to get a textbox where you can enter your new context name.
+        Press ENTER to save it to your list.  Contexts you've added will have a
+        remove button you can click to remove the context.</p>
 
     </div>
 </div>
@@ -69,6 +67,7 @@
                     <li>Edit task and add/remove contexts</li>
                     <li>Projectify task (add child tasks, etc.)</li>
                     <li>Customize contexts</li>
+                    <li>Remove context button</li>
                 </ul>
                 </p>
             </div>
@@ -76,7 +75,6 @@
             <div class="col-md-4">
                 <h2>Coming Soon</h2>
                 <ul>
-                    <li>Enabled context toggle</li>
                     <li>Roadblocks</li>
                     <li>Add tags</li>
                     <li>Roadblock reminders</li>
