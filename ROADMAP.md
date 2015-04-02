@@ -16,7 +16,11 @@ This is just a checklist for now.
 - [x] Create task
 - [x] List tasks (home screen)
 - [x] Check off completed tasks
-- [ ] Projectify screen
+- [x] Projectify screen
+- [x] Add subtasks
+- [ ] Add tabindex to button and content checkboxes in Add Task screen
+- [ ] Allow select/deselect multiple contexts
+- [ ] Remember selected contexts
 - [ ] Inline edit task
 - [ ] Algorithm for displaying nested tasks by context
 
@@ -24,7 +28,8 @@ This is just a checklist for now.
 - [x] getContexts
 - [x] Add contexts to task
 - [x] Filter by context
-- [ ] Add/list custom contexts
+- [x] Add/list custom contexts
+- [x] Remove custom contexts
 
 ## Roadblocks
 - [ ] getRoadblocks function - start with hardcoded roadblocks
