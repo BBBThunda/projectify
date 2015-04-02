@@ -17,11 +17,14 @@
             </ul>
             @endif
             {{ Form::label('description', 'Description:') }}
-            {{ Form::text('description', '', ['autofocus' => 'autofocus', 'tabindex' => '1' ]) }}
+            {{ Form::text('description', '', ['autofocus' => 'autofocus', 'tabindex' => $tabindex ]) }}
+            <?php $tabindex++; ?>
         </div>
         
         {{-- Submit button ----------------------------------------------}}
-        {{ Form::submit('Add Task', ['class' => 'btn btn-primary'] ) }}
+        {{ Form::submit('Add Task', [
+        'class' => 'btn btn-primary',
+        'tabindex' => $tabindex] ) }}
 
     </div>
     
