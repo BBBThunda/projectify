@@ -303,6 +303,9 @@ function addContextInputs(event) {
     if (window.addContextCount == null) { window.addContextCount = 0; }
     window.addContextCount++;
     var prefix = 'newContext_' + window.addContextCount;
+    var nextTI = parseInt($('input[name=ti_seq]').val());
+    $('input[name=ti_seq]').val(nextTI + 1);
+
 
     // Insert the context widget before context-add-btn
     var newContainer = $('<div>', { class: 'form-group-fluid',
@@ -312,7 +315,8 @@ function addContextInputs(event) {
                     id: prefix + '_cb',
                 name: prefix + '_cb',
                 type: 'checkbox',
-                disabled: 'disabled'}
+                disabled: 'disabled',
+                tabindex: nextTI }
                 )
                )
         .append('&nbsp;')
@@ -321,7 +325,8 @@ function addContextInputs(event) {
                     id: prefix + '_txt',
                 name: prefix + '_txt',
                 class: 'newContext',
-                type: 'text' }
+                type: 'text',
+                tabindex: nextTI }
                 )
                )
         .append(

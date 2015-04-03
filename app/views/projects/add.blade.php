@@ -18,17 +18,19 @@
             </ul>
             @endif
             {{ Form::label('description', 'Description:') }}
-            {{ Form::text('description', '', ['autofocus' => 'autofocus', 'tabindex' => $tabindex ]) }}
+            {{ Form::text('description', '', ['autofocus' => 'autofocus',
+            'tabindex' => $tabindex ]) }}
             <?php $tabindex++; ?>
         </div>
-        
+
         {{-- Submit button ----------------------------------------------}}
         {{ Form::submit('Add Task', [
         'class' => 'btn btn-primary',
         'tabindex' => $tabindex] ) }}
+        <?php $tabindex++; ?>
 
     </div>
-    
+
     @if (!empty($contexts))
     <div class="col-md-4">
         {{-- Context Checkboxes ---------------------------------}}
@@ -36,7 +38,9 @@
         @foreach ($contexts as $context)
         <div class="form-group-fluid">
             {{ Form::checkbox('context[]', $context['id'], $context['checked'], 
-            ['id' => 'context_' . $context['id'] ]) }}
+            ['id' => 'context_' . $context['id'],
+            'tabindex' => $tabindex ]) }}
+            <?php $tabindex++; ?>
             {{ Form::label('context_' . $context['id'], $context['description']) }}
             @if (!empty($context['owner']))
             {{--TODO: Add onclick event to submit AJAX request --}}
@@ -52,9 +56,12 @@
             <span class="context-add-btn glyphicon glyphicon-plus"
                 title="Add Context"></span>
         </div>
-        
+
     </div>
     @endif
+
+    {{-- Embed tabindex in DOM so it's accessible to JS --}}
+    {{ Form::hidden('ti_seq', $tabindex) }}
 
 </div>
 
