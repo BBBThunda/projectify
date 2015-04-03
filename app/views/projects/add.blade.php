@@ -2,6 +2,7 @@
 
 @section('bodyContent')
 
+<?php if (empty($tabindex)) {$tabindex = 1;} ?>
 {{ Form::open([ 'route' => 'projects.store' ]) }}
 
 <div class="row">
