@@ -44,6 +44,9 @@
         Press ENTER to save it to your list.  Contexts you've added will have a
         remove button you can click to remove the context.</p>
 
+        <p>Also some tabindex functionality was added to the Add Task page to
+        improve usability.</p>
+
     </div>
 </div>
 
@@ -80,6 +83,8 @@
                     <li>Roadblock reminders</li>
                     <li>Search by tag</li>
                     <li>Archive tasks completed X days</li>
+                    <li>Reorder tasks</li>
+                    <li>Indicate subtasks of the same parent task</li>
                 </ul>
             </div>
 
