@@ -1,6 +1,6 @@
 </div>
 <div class="panel text-center">
-    <p>&copy;2014 Bobby Cahill</p>
+    <p>&copy;2014-<?php echo date("Y"); ?> Bobby Cahill</p>
 </div>
 
 {{-- Include libraries from CDN if live, else use local files --}}
