@@ -66,7 +66,7 @@
             }
 
             if ($project->completed) {
-                $class .= ' completed';
+                $class .= ' completed hidden';
             } ?>
 
             <li class="{{{ $class }}}">

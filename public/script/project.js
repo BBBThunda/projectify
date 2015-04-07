@@ -1,7 +1,5 @@
-// Hopefully moving this here will prevent 'hidden' projects from being
-// displayed before the page is fully loaded
-// Hide list initially
-//$('li.project').hide();
+window.showContext = [];
+window.showContext['All'] = true;
 
 $(document).ready(function() {
 
@@ -9,7 +7,6 @@ $(document).ready(function() {
     //$('li.project').hide();
 
     // INITIALIZE GLOBAL SETTINGS
-    window.showContext = 'All';
     window.showCompleted = false;
     window.showRoadblocks = true;
 
@@ -62,13 +59,32 @@ function contextButtonClick(event) {
     event.preventDefault();
 
     // Update global option and refresh list
-    window.showContext = $(this).attr('name');
-    $('li.project').hide();
+    var context = $(this).attr('name');
+    var curVal = window.showContext[context];
+    console.log('context = '+context);
+    console.log('curVal = '+curVal);
+    if (curVal == 'All') {
+        for (ctx in window.showContext) {
+            console.log('setting '+ctx+' to false');
+            window.showContext[ctx] = false;
+        }
+    }
+    else {
+        window.showContext['All'] = false;
+        window.showContext[context] = curVal ? false : true;
+    }
+    
     $('li.project').trigger('refreshVisibility');
 
     // Update buttons
-    $('.context-btn.btn-info').removeClass('btn-info');
-    $(this).addClass('btn-info');
+    if (context == 'All') {
+        $('.context-btn.btn-info').removeClass('btn-info');
+        $(this).addClass('btn-info');
+    }
+    else {
+        $('#context-btn-All').removeClass('btn-info');
+        $(this).toggleClass('btn-info');
+    }
 
 }
 
@@ -83,11 +99,7 @@ function showCompletedToggle(event) {
 
     // Update global option and refresh list
     window.showCompleted = !$(this).hasClass('btn-info');
-    $('li.project').hide();
     $('li.project').trigger('refreshVisibility');
-
-    // LEFT OFF HERE!!!
-    $('li.project.completed').toggleClass('hidden');
 
     $(this).toggleClass('btn-info');
 
@@ -102,11 +114,19 @@ function refreshVisibility() {
 
     // CONTEXT : Start by showing all projects in current context
     //TODO: add multiple context support
-    if (window.showContext == 'All') { visible = true; }
-    else if ($(this).hasClass(window.showContext)) { visible = true; }
+    for (key in window.showContext) {
+        //console.log(window.showContext[key]);
+    }
+    if (window.showContext['All'] == true) { visible = true; }
+    else {
+        for (context in window.showContext) {
+            if (window.showContext[context] && $(this).hasClass(context)) {
+                visible = true;
+            }
+        }
+    } 
 
     // COMPLETED : Hide completed tasks if Show Completed not selected
-    //TODO: add filtering based on completed timestamp
     if (!window.showCompleted && $(this).hasClass('completed')) { visible = false; }
 
     //TODO: Add roadblocks piece later
@@ -114,7 +134,7 @@ function refreshVisibility() {
 
 
     // Now show/hide based on result
-    visible ? $(this).show() : $(this).hide();
+    visible ? $(this).removeClass('hidden') : $(this).addClass('hidden');
 
 }
 
