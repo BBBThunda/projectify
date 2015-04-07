@@ -29,3 +29,8 @@ li.project.completed>span.projectDesc {
 a.projectifyButton {
     margin-right: 10px;
 }
+
+// LEFT OFF HERE!!!
+li.project.hidden {
+    display: none;
+}

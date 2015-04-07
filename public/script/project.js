@@ -1,7 +1,7 @@
 // Hopefully moving this here will prevent 'hidden' projects from being
 // displayed before the page is fully loaded
 // Hide list initially
-$('li.project').hide();
+//$('li.project').hide();
 
 $(document).ready(function() {
 
@@ -85,6 +85,9 @@ function showCompletedToggle(event) {
     window.showCompleted = !$(this).hasClass('btn-info');
     $('li.project').hide();
     $('li.project').trigger('refreshVisibility');
+
+    // LEFT OFF HERE!!!
+    $('li.project.completed').toggleClass('hidden');
 
     $(this).toggleClass('btn-info');
 
