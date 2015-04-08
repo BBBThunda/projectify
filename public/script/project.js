@@ -1,6 +1,6 @@
 window.showContext = [];
 window.showContext['All'] = true;
-
+ 
 $(document).ready(function() {
 
     // Hide list initially
@@ -29,7 +29,8 @@ $(document).ready(function() {
 
     // Clicking context labels should trigger Context button click as well
     $('.context-label').click(function() {
-        $('#context-btn-' + $(this).text()).trigger( "click" )
+        var contextButtonSelector = '#context-btn-' + $(this).text().trim();
+        $(contextButtonSelector).trigger('click');
     });
 
     // Add task button (for adding Project sub-tasks)
@@ -61,8 +62,6 @@ function contextButtonClick(event) {
     // Update global option and refresh list
     var context = $(this).attr('name');
     var curVal = window.showContext[context];
-    console.log('context = '+context);
-    console.log('curVal = '+curVal);
     if (curVal == 'All') {
         for (ctx in window.showContext) {
             console.log('setting '+ctx+' to false');
