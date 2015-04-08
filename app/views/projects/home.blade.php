@@ -107,4 +107,11 @@
 
 </div>
 
+{{-- Include libraries from CDN if live, else use local files --}}
+@if ($app->env == 'live')
+<script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.1.1/Sortable.min.js"></script>
+@else
+<script src="/script/Sortable.min.js"></script>
+@endif
+
 @stop
