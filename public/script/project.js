@@ -13,7 +13,7 @@ $(document).ready(function() {
     // Bind refreshVisibility to projects, trigger to immediately refresh list
     $('li.project').bind('refreshVisibility', refreshVisibility);
     //TODO: check whether calling this before defined can affect performance
-    $('li.project').trigger('refreshVisibility');
+    //$('li.project').trigger('refreshVisibility');
 
     // Double clicking task description allows edit
     //$('li.project').doubleclick(makeEditable);
@@ -41,6 +41,9 @@ $(document).ready(function() {
 
     // Remove context button
     $('.removeContextButton').on('click', removeContext);
+
+    // Make list sortable 
+    Sortable.create(project-list-main);
 
 });
 
