@@ -42,8 +42,8 @@ $(document).ready(function() {
     // Remove context button
     $('.removeContextButton').on('click', removeContext);
 
-    // Make list sortable 
-    Sortable.create(project-list-main);
+    // Make list sortable
+    makeListSortable('project-list-main');
 
 });
 
@@ -497,4 +497,12 @@ function readCookie (name) {
 
 function eraseCookie (name) {
     createCookie(name, '', -1);
+}
+
+
+function makeListSortable(elementId) {
+
+    // Make the element with the provided ID sortable using the Sortable library
+    var sortable = Sortable.create(document.getElementById(elementId));
+
 }
