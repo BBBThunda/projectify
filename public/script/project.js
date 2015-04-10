@@ -12,8 +12,6 @@ $(document).ready(function() {
 
     // Bind refreshVisibility to projects, trigger to immediately refresh list
     $('li.project').bind('refreshVisibility', refreshVisibility);
-    //TODO: check whether calling this before defined can affect performance
-    //$('li.project').trigger('refreshVisibility');
 
     // Double clicking task description allows edit
     //$('li.project').doubleclick(makeEditable);
@@ -501,8 +499,10 @@ function eraseCookie (name) {
 
 
 function makeListSortable(elementId) {
-
+// LEFT OFF HERE!!!!!!!!!!!!
     // Make the element with the provided ID sortable using the Sortable library
-    var sortable = Sortable.create(document.getElementById(elementId));
+    var sortable = Sortable.create(document.getElementById(elementId), {
+//        handle: ".my-handle"
+    });
 
 }

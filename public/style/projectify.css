@@ -30,7 +30,17 @@ a.projectifyButton {
     margin-right: 10px;
 }
 
-// LEFT OFF HERE!!!
 li.project.hidden {
     display: none;
+}
+
+li.project {
+    border: 1;
+    border-radius: 50px;
+    background-color: #EEEEEE;
+    margin: 0, 0, 5px, 0;
+}
+
+//LEFT OFF HERE!!!!!!!
+#project-list-main {
 }

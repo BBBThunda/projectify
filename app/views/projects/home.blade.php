@@ -50,7 +50,7 @@
         {{ Form::open([ 'method' => 'post', 
         'url' => '/projects/setCompleted' ]) }}
 
-        <ul id="project-list-main">
+        <ul class="list-unstyled" id="project-list-main">
             @if (!empty($data['projects']))
             
             @foreach ($data['projects'] as $project)
@@ -71,28 +71,32 @@
 
             <li class="{{{ $class }}}">
 
-            {{-- Projectify icon --}}
-            <a class="projectifyButton" 
-                title="Projectify/Edit Task"
-                href="/projectify/{{ $project->id }}">
-                <img src="/img/projectify-icon2.jpg" /></a>
+            {{-- Handle for dragging sortable projects --}}
+            {{-- LEFT OFF HERE!!!!!!!!!!!!! --}}
+                <span class="icon icon-menu drag-project"><img src="/img/menu-2x.png" /></span>
 
-            {{-- Completed checkbox --}}
-            {{ Form::checkbox($project->id . '_completed', 
-                $project->id, 
-                $project->completed, 
-                ['class' => 'cb-completed',
-                'title' => 'Mark whether task is complete'])
-            }}
+                {{-- Projectify icon --}}
+                <a class="projectifyButton" 
+                    title="Projectify/Edit Task"
+                    href="/projectify/{{ $project->id }}">
+                    <img src="/img/projectify-icon2.jpg" /></a>
 
-            {{-- Description --}}
-            <span class="projectDesc">{{{ $project->description }}}</span>
+                {{-- Completed checkbox --}}
+                {{ Form::checkbox($project->id . '_completed', 
+                    $project->id, 
+                    $project->completed, 
+                    ['class' => 'cb-completed',
+                    'title' => 'Mark whether task is complete'])
+                }}
 
-            {{-- Context labels --}}
-            @foreach ($project->contexts as $context)
-            <a class="context-label label label-info">
-                {{{ $context->description }}}</a>
-            @endforeach
+                {{-- Description --}}
+                <span class="projectDesc">{{{ $project->description }}}</span>
+
+                {{-- Context labels --}}
+                @foreach ($project->contexts as $context)
+                <a class="context-label label label-info">
+                    {{{ $context->description }}}</a>
+                @endforeach
 
             </li>
             @endforeach {{-- End project foreach --}}
