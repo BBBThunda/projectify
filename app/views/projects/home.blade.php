@@ -73,7 +73,7 @@
 
             {{-- Handle for dragging sortable projects --}}
             {{-- LEFT OFF HERE!!!!!!!!!!!!! --}}
-                <span class="icon icon-menu drag-project"><img src="/img/menu-2x.png" /></span>
+                <span class="icon icon-menu drag-project"><img src="/img/menu.png" /></span>
 
                 {{-- Projectify icon --}}
                 <a class="projectifyButton" 
