@@ -502,7 +502,7 @@ function makeListSortable(elementId) {
 // LEFT OFF HERE!!!!!!!!!!!!
     // Make the element with the provided ID sortable using the Sortable library
     var sortable = Sortable.create(document.getElementById(elementId), {
-//        handle: ".my-handle"
+        handle: ".drag-project"
     });
 
 }
