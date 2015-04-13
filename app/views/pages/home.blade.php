@@ -38,6 +38,12 @@
         to the project, check out the <a href="/contribute">CONTRIBUTE</a>
         page.  Links are also in the nav bar at the top of the page.</p>
 
+        <p><strong>UPDATE</strong><em>(04/13/2015): </em>We've taken some first
+        steps toward making the task list sortable.  For now you can sort the
+        list manually by dragging and dropping tasks.  Currently your new sort
+        sequence will not be saved for subsequent page loads, but we plan to
+        change that soon
+
         <p><strong>UPDATE</strong><em>(04/01/2015): </em>You can now add your
         own custom contexts to the list. Go to the "Add Task" page and click
         the '+' icon to get a textbox where you can enter your new context name.
