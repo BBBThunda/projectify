@@ -12,7 +12,7 @@
 
 <!-- Primary Controls -->
 <div class="row">
-    
+
     <!-- Add Task Button -->
     <div class="col-md-2">
         <a class="btn btn-primary" href="/addProject">Add Task</a>
@@ -52,7 +52,7 @@
 
         <ul class="list-unstyled" id="project-list-main">
             @if (!empty($data['projects']))
-            
+
             @foreach ($data['projects'] as $project)
 
             <?php
@@ -62,41 +62,40 @@
 
             // Include contexts
             foreach ($project->contexts as $context) { 
-                $class .= ' ' . $context->description;
+            $class .= ' ' . $context->description;
             }
 
             if ($project->completed) {
-                $class .= ' completed hidden';
+            $class .= ' completed hidden';
             } ?>
 
             <li class="{{{ $class }}}">
 
             {{-- Handle for dragging sortable projects --}}
-            {{-- LEFT OFF HERE!!!!!!!!!!!!! --}}
-                <span class="icon icon-menu drag-project"><img src="/img/menu.png" /></span>
+            <span class="icon icon-menu drag-project"><img src="/img/menu.png" /></span>
 
-                {{-- Projectify icon --}}
-                <a class="projectifyButton" 
-                    title="Projectify/Edit Task"
-                    href="/projectify/{{ $project->id }}">
-                    <img src="/img/projectify-icon2.jpg" /></a>
+            {{-- Projectify icon --}}
+            <a class="projectifyButton" 
+                title="Projectify/Edit Task"
+                href="/projectify/{{ $project->id }}">
+                <img src="/img/projectify-icon2.jpg" /></a>
 
-                {{-- Completed checkbox --}}
-                {{ Form::checkbox($project->id . '_completed', 
-                    $project->id, 
-                    $project->completed, 
-                    ['class' => 'cb-completed',
-                    'title' => 'Mark whether task is complete'])
-                }}
+            {{-- Completed checkbox --}}
+            {{ Form::checkbox($project->id . '_completed', 
+            $project->id, 
+            $project->completed, 
+            ['class' => 'cb-completed',
+            'title' => 'Mark whether task is complete'])
+            }}
 
-                {{-- Description --}}
-                <span class="projectDesc">{{{ $project->description }}}</span>
+            {{-- Description --}}
+            <span class="projectDesc">{{{ $project->description }}}</span>
 
-                {{-- Context labels --}}
-                @foreach ($project->contexts as $context)
-                <a class="context-label label label-info">
-                    {{{ $context->description }}}</a>
-                @endforeach
+            {{-- Context labels --}}
+            @foreach ($project->contexts as $context)
+            <a class="context-label label label-info">
+                {{{ $context->description }}}</a>
+            @endforeach
 
             </li>
             @endforeach {{-- End project foreach --}}

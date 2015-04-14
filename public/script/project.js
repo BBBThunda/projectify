@@ -3,9 +3,6 @@ window.showContext['All'] = true;
  
 $(document).ready(function() {
 
-    // Hide list initially
-    //$('li.project').hide();
-
     // INITIALIZE GLOBAL SETTINGS
     window.showCompleted = false;
     window.showRoadblocks = true;
@@ -499,10 +496,21 @@ function eraseCookie (name) {
 
 
 function makeListSortable(elementId) {
-// LEFT OFF HERE!!!!!!!!!!!!
     // Make the element with the provided ID sortable using the Sortable library
     var sortable = Sortable.create(document.getElementById(elementId), {
-        handle: ".drag-project"
+        handle: ".drag-project",
+
+        onUpdate: function (e) {
+            console.log(e);
+            var oldIndex = e.oldIndex;
+            var newIndex = e.newIndex;
+        }
+
+    //LEFT OFF HERE!!!!!!!!!!!!!!!!!!!!!!
+    // TODO: Function to match index with task
+    // TODO: Function to update sequences on update
+
+
     });
 
 }
