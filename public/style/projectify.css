@@ -35,13 +35,19 @@ li.project.hidden {
 }
 
 li.project {
-    border: 1;
-    border-radius: 50px;
+    border: 1px;
+    border-radius: 15px;
     background-color: #EEEEEE;
-    margin: 0, 0, 5px, 0;
+    margin: 0 0 2px 0;
+    padding: 2px 10px;
+    border: 1px solid;
+    border-color: #DDDDDD;
 }
 
-/* Not needed yet
-#project-list-main {
+span.drag-project {
+    padding: 0 0 0 0;
 }
-*/
+span.drag-project > img {
+    height: 12px;
+    margin: 0 4px 4px 0;
+}
