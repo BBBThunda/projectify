@@ -21,4 +21,5 @@
 <script src="/script/ie10-viewport-bug-workaround.js"></script>
 
 <!-- Custom JS for entire site -->
+<script src="/script/projectify.js"></script>
 <script src="/script/project.js"></script>

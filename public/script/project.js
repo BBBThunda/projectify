@@ -499,18 +499,29 @@ function makeListSortable(elementId) {
     // Make the element with the provided ID sortable using the Sortable library
     var sortable = Sortable.create(document.getElementById(elementId), {
         handle: ".drag-project",
-
-        onUpdate: function (e) {
-            console.log(e);
-            var oldIndex = e.oldIndex;
-            var newIndex = e.newIndex;
-        }
-
-    //LEFT OFF HERE!!!!!!!!!!!!!!!!!!!!!!
-    // TODO: Function to match index with task
-    // TODO: Function to update sequences on update
-
-
+        onUpdate: sortProject
     });
 
+}
+var debug;
+
+/**
+ * Get the filters currently set by the user
+ *
+ * @return array
+ */
+function getCurrentFilters() {
+    var filters = {
+        contexts: null,
+        roadblocks: null,
+        completed: null
+    };
+   
+    // Hopefully we don't need a loop for these
+
+    filters.contexts = window.showContext;
+    filters.roadblocks = window.showRoadblocks;
+    filters.completed = window.showCompleted;
+
+    console.log(filters);
 }
