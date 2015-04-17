@@ -22,7 +22,7 @@
     <div class="col-md-5">
         {{-- All button for removing context filters --}}
         <a class="btn btn-default btn-info context-btn" 
-            id="context-btn-All" name="All" href="">All</a>
+            id="context-btn-_All" name="_All" href="">All</a>
 
         {{-- Show buttons for filtering tasks by context --}}
         @foreach ($data['contexts'] as $context)

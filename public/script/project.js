@@ -1,11 +1,21 @@
 window.showContext = [];
-window.showContext['All'] = true;
+var allConst = '_All';
+var expireDays = 30;
+// Needs to be more tricky to handle arrays
+//var showContextAllKey = "showContext['" + allConst + "']";
+//if (getSetting(showContextAllKey) === null) {
+//    changeSetting(showContextAllKey, true, expireDays);
+//}
+window.showContext[allConst] = true;
+
  
 $(document).ready(function() {
 
     // INITIALIZE GLOBAL SETTINGS
-    window.showCompleted = false;
-    window.showRoadblocks = true;
+    changeSetting('showCompleted', false);
+    //window.showCompleted = false;
+    changeSetting('showRoadblocks', true);
+    //window.showRoadblocks = true;
 
     // Bind refreshVisibility to projects, trigger to immediately refresh list
     $('li.project').bind('refreshVisibility', refreshVisibility);
@@ -48,6 +58,28 @@ $(document).ready(function() {
 
 
 
+// Change a user setting in the window and in the session/cookie
+function changeSetting(name, newValue) {
+    window[name] = newValue;
+    createCookie(name, newValue, 14);
+}
+
+// Get a user setting from the window, or if empty, check the session/cookie
+function getSetting(name) {
+    var cookieVal;
+
+    if (window[name] != undefined) {
+        return window[name];
+    }
+
+    cookieVal = readCookie(name);
+
+    window[name] = cookieVal;
+
+    return cookieVal;
+}
+
+
 // Toggle checkbox helper function
 function toggleCheckbox(box) {
     $(box).prop('checked', !$(box).prop('checked'));
@@ -56,30 +88,29 @@ function toggleCheckbox(box) {
 
 function contextButtonClick(event) {
     event.preventDefault();
-
     // Update global option and refresh list
     var context = $(this).attr('name');
     var curVal = window.showContext[context];
-    if (curVal == 'All') {
+    if (curVal == allConst) {
         for (ctx in window.showContext) {
             console.log('setting '+ctx+' to false');
             window.showContext[ctx] = false;
         }
     }
     else {
-        window.showContext['All'] = false;
+        window.showContext[allConst] = false;
         window.showContext[context] = curVal ? false : true;
     }
     
     $('li.project').trigger('refreshVisibility');
 
     // Update buttons
-    if (context == 'All') {
+    if (context == allConst) {
         $('.context-btn.btn-info').removeClass('btn-info');
         $(this).addClass('btn-info');
     }
     else {
-        $('#context-btn-All').removeClass('btn-info');
+        $('#context-btn-' + allConst).removeClass('btn-info');
         $(this).toggleClass('btn-info');
     }
 
@@ -95,7 +126,9 @@ function showCompletedToggle(event) {
     event.preventDefault();
 
     // Update global option and refresh list
-    window.showCompleted = !$(this).hasClass('btn-info');
+    // LEFT OFF HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    changeSetting('showCompleted', !$(this).hasClass('btn-info'));
+    //window.showCompleted = !$(this).hasClass('btn-info');
     $('li.project').trigger('refreshVisibility');
 
     $(this).toggleClass('btn-info');
@@ -114,7 +147,7 @@ function refreshVisibility() {
     for (key in window.showContext) {
         //console.log(window.showContext[key]);
     }
-    if (window.showContext['All'] == true) { visible = true; }
+    if (window.showContext[allConst] == true) { visible = true; }
     else {
         for (context in window.showContext) {
             if (window.showContext[context] && $(this).hasClass(context)) {
@@ -458,10 +491,11 @@ function addNewContextToUi(element, context_id) {
 // COOKIE HELPERS
 function createCookie(name, value, days) {
     var expires;
+    var msPerDay = 24 * 60 * 60 * 1000;
 
     if(days) {
         var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        date.setTime(date.getTime() + (days * msPerDay));
 
         expires = '; expires=' + date.toGMTString();
     }
@@ -476,14 +510,15 @@ function createCookie(name, value, days) {
 
 function readCookie (name) {
     var nameEQ = encodeURIComponent(name) + '=';
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1,c.length);
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var curCookie = cookies[i];
+        while (curCookie.charAt(0) === ' ') {
+            curCookie = curCookie.substring(1,curCookie.length);
         }
-        if (c.indexOf(nameEQ === 0)) {
-            return decodeURIComponent(c.substring(nameEQ.length, c.length));
+        if (curCookie.indexOf(nameEQ) === 0) {
+            return decodeURIComponent(curCookie.substring(nameEQ.length,
+                        curCookie.length));
         }
 
     }
