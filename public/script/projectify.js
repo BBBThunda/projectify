@@ -13,9 +13,7 @@ $(document).ready(function() {
 
     // INITIALIZE GLOBAL SETTINGS
     changeSetting('showCompleted', false);
-    //window.showCompleted = false;
-    changeSetting('showRoadblocks', true);
-    //window.showRoadblocks = true;
+    //changeSetting('showRoadblocks', true);
 
     // Bind refreshVisibility to projects, trigger to immediately refresh list
     $('li.project').bind('refreshVisibility', refreshVisibility);
@@ -56,11 +54,12 @@ $(document).ready(function() {
 
 
 
-
-
 // Change a user setting in the window and in the session/cookie
 function changeSetting(name, newValue) {
     window[name] = newValue;
+    //LEFT OFF HERE!!!!!!!!!!!!!!!!!!!!!
+    //if( Object.prototype.toString.call( someVar ) === '[object Array]' ) {
+    //}
     createCookie(name, newValue, 14);
 }
 
@@ -126,9 +125,7 @@ function showCompletedToggle(event) {
     event.preventDefault();
 
     // Update global option and refresh list
-    // LEFT OFF HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     changeSetting('showCompleted', !$(this).hasClass('btn-info'));
-    //window.showCompleted = !$(this).hasClass('btn-info');
     $('li.project').trigger('refreshVisibility');
 
     $(this).toggleClass('btn-info');
