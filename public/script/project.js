@@ -21,5 +21,5 @@ function sortProject(changeEvent) {
     // TODO: Function to update sequences on update
     
     // TODO: make this queue-able
-}
 
+}
