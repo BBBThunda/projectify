@@ -1,12 +1,12 @@
-window.showContext = [];
+var pSettings = {};
 var allConst = '_All';
 var expireDays = 30;
-// Needs to be more tricky to handle arrays
-//var showContextAllKey = "showContext['" + allConst + "']";
-//if (getSetting(showContextAllKey) === null) {
-//    changeSetting(showContextAllKey, true, expireDays);
+loadSettingsFromCookies();
+updateButtonStyles();
+//if (getSetting('showContext', allConst) === null) {
+//    changeSetting('showContext', true, allConst);
 //}
-window.showContext[allConst] = true;
+//pSettings.showContext[allConst] = true;
 
  
 $(document).ready(function() {
@@ -17,6 +17,7 @@ $(document).ready(function() {
 
     // Bind refreshVisibility to projects, trigger to immediately refresh list
     $('li.project').bind('refreshVisibility', refreshVisibility);
+    $('li.project').trigger('refreshVisibility');
 
     // Double clicking task description allows edit
     //$('li.project').doubleclick(makeEditable);
@@ -45,8 +46,11 @@ $(document).ready(function() {
     // Remove context button
     $('.removeContextButton').on('click', removeContext);
 
+    //TODO: Move this such that it's only called by user home page
     // Make list sortable
-    makeListSortable('project-list-main');
+    if ($('#project-list-main').length > 0) {
+        makeListSortable('project-list-main');
+    }
 
 });
 
@@ -54,28 +58,98 @@ $(document).ready(function() {
 
 
 
-// Change a user setting in the window and in the session/cookie
-function changeSetting(name, newValue) {
-    window[name] = newValue;
-    //LEFT OFF HERE!!!!!!!!!!!!!!!!!!!!!
-    //if( Object.prototype.toString.call( someVar ) === '[object Array]' ) {
-    //}
-    createCookie(name, newValue, 14);
-}
+// Change a user setting in the global variable and in the session/cookie
+function changeSetting(name, newValue, index) {
+    var cookieName = null;
 
-// Get a user setting from the window, or if empty, check the session/cookie
-function getSetting(name) {
-    var cookieVal;
-
-    if (window[name] != undefined) {
-        return window[name];
+    if (index) {
+        if (pSettings[name] === undefined) {
+            pSettings[name] = {};
+        }
+        pSettings[name][index] = newValue;
+        cookieName = name + '~' + index;
+    }
+    else {
+        pSettings[name] = newValue;
+        cookieName = name;
     }
 
-    cookieVal = readCookie(name);
+    createCookie(cookieName, newValue, expireDays);
+}
 
-    window[name] = cookieVal;
+// Get a user setting from the global, or if empty, check the session/cookie
+function getSetting(name, index) {
+    var cookieName = null;
+    var globalValue = null;
 
-    return cookieVal;
+    if (index) {
+        if (pSettings[name] === undefined) {
+            console.log('parent undefined');
+            pSettings[name] = {};
+        }
+        cookieName = name + '~' + index;
+        globalValue = pSettings[name][index];
+    }
+    else {
+        cookieName = name;
+        globalValue = pSettings[name];
+    }
+    
+    if (globalValue != undefined) {
+        return globalValue;
+    }
+
+    cookieValue = readCookie(name);
+
+    if (index) {
+        pSettings[name][index] = cookieValue;
+    }
+    else {
+        pSettings[name] = cookieValue;
+    }
+
+    return cookieValue;
+}
+
+function loadSettingsFromCookies() {
+   var cookies = document.cookie.split('; ');
+   for (i = 0; i < cookies.length; i++) {
+       var thisCookie = cookies[i].split('=');
+       var thisValue = thisCookie.pop();
+       if (thisValue === "true") {
+           thisValue = true;
+       } else if (thisValue === "false") {
+           thisValue = false;
+       }
+       var thisName = thisCookie.join('=');;
+       var thisNameParts = thisName.split('~');
+       var thisRoot = thisNameParts.shift();
+       var thisIndex = thisNameParts.join('~');
+       if (thisIndex != '') {
+           if (pSettings[thisRoot] === undefined) {
+               pSettings[thisRoot] = {};
+           }
+           pSettings[thisRoot][thisIndex] = thisValue;
+console.log('thisRoot: '+thisRoot);
+console.log('thisIndex: '+thisIndex);
+console.log('thisValue: '+thisValue);
+       } else {
+           pSettings[thisRoot] = thisValue;
+       }
+   }
+}
+
+
+function updateButtonStyles() {
+    $('.context-btn').each(function(){
+        var context = $(this).attr('name');
+        var setting = getSetting('showContext', context);
+        if (setting) {
+            $(this).addClass('btn-info');
+        } else {
+            $(this).removeClass('btn-info');
+        }
+    });
 }
 
 
@@ -87,24 +161,27 @@ function toggleCheckbox(box) {
 
 function contextButtonClick(event) {
     event.preventDefault();
+
     // Update global option and refresh list
     var context = $(this).attr('name');
-    var curVal = window.showContext[context];
-    if (curVal == allConst) {
-        for (ctx in window.showContext) {
-            console.log('setting '+ctx+' to false');
-            window.showContext[ctx] = false;
+    var settingName = 'showContext';
+    var curVal = getSetting(settingName, context);
+    if (context === allConst) {
+        for (ctx in pSettings.showContext) {
+            changeSetting(settingName, false, ctx);
         }
+        changeSetting(settingName, true, allConst);
     }
     else {
-        window.showContext[allConst] = false;
-        window.showContext[context] = curVal ? false : true;
+        changeSetting(settingName, false, allConst);
+        var toggle = curVal ? false : true;
+        changeSetting(settingName, toggle, context);
     }
     
     $('li.project').trigger('refreshVisibility');
 
     // Update buttons
-    if (context == allConst) {
+    if (context === allConst) {
         $('.context-btn.btn-info').removeClass('btn-info');
         $(this).addClass('btn-info');
     }
@@ -141,20 +218,20 @@ function refreshVisibility() {
 
     // CONTEXT : Start by showing all projects in current context
     //TODO: add multiple context support
-    for (key in window.showContext) {
-        //console.log(window.showContext[key]);
+    for (key in pSettings.showContext) {
+        //console.log(pSettings.showContext[key]);
     }
-    if (window.showContext[allConst] == true) { visible = true; }
+    if (pSettings.showContext[allConst] == true) { visible = true; }
     else {
-        for (context in window.showContext) {
-            if (window.showContext[context] && $(this).hasClass(context)) {
+        for (context in pSettings.showContext) {
+            if (pSettings.showContext[context] && $(this).hasClass(context)) {
                 visible = true;
             }
         }
     } 
 
     // COMPLETED : Hide completed tasks if Show Completed not selected
-    if (!window.showCompleted && $(this).hasClass('completed')) { visible = false; }
+    if (!pSettings.showCompleted && $(this).hasClass('completed')) { visible = false; }
 
     //TODO: Add roadblocks piece later
 
@@ -227,8 +304,8 @@ function addTaskInputs(event) {
     event.preventDefault();
 
     // Initialize global count object if not exists
-    if (window.addTaskCount == null) { window.addTaskCount = 0; }
-    var prefix = 'newTask_' + window.addTaskCount;
+    if (pSettings.addTaskCount == null) { pSettings.addTaskCount = 0; }
+    var prefix = 'newTask_' + pSettings.addTaskCount;
     var containerTagName = $(this).parent().prop('tagName').toLowerCase();
     // If parent container is not li, div or span, exit
     if (containerTagName != 'li' && containerTagName != 'div'
@@ -257,7 +334,7 @@ function addTaskInputs(event) {
     // Now append the Contexts widget
     $(newContainer).append(cloneContextsWidget(prefix));
     contextContainer = newContainer;
-    window.addTaskCount++;
+    pSettings.addTaskCount++;
 
 }
 
@@ -306,11 +383,14 @@ function preventSubmitOnEnter(e) {
 }
 
 var debug;
-// Submit AJAX request to add a new context to user's custom list
-// 'element' receives 'this' object from calling function
-// If successful, update the DOM
+/**
+ * Submit AJAX request to add a new context to user's custom list
+ * 'element' receives 'this' object from calling function
+ * If successful, update the DOM
+ *
+ * @param element
+ */
 function submitAddContext(element) {
-
     // make an ajax request to add context and on success:
     $.ajax({
         url: "/contexts",
@@ -344,15 +424,19 @@ function submitAddContext(element) {
 }
 
 
-// Add context input fields before the context-add-btn button
-// a.task-add-btn should be inside an li, span or div
+/**
+ * Add context input fields before the context-add-btn button
+ * a.task-add-btn should be inside an li, span or div
+ *
+ * @param object event
+ */
 function addContextInputs(event) {
     event.preventDefault();
 
     // Initialize global count object if not exists
-    if (window.addContextCount == null) { window.addContextCount = 0; }
-    window.addContextCount++;
-    var prefix = 'newContext_' + window.addContextCount;
+    if (pSettings.addContextCount == null) { pSettings.addContextCount = 0; }
+    pSettings.addContextCount++;
+    var prefix = 'newContext_' + pSettings.addContextCount;
     var nextTI = parseInt($('input[name=ti_seq]').val());
     $('input[name=ti_seq]').val(nextTI + 1);
 
@@ -392,7 +476,7 @@ function addContextInputs(event) {
     // Now add the Contexts widget to the DOM and set focus on text box
     $(newContainer).append(cloneContextsWidget(prefix));
     contextContainer = newContainer;
-    window.addTaskCount++;
+    pSettings.addTaskCount++;
 
     $('#' + prefix + '_txt').focus();
 
@@ -406,8 +490,12 @@ function addContextInputs(event) {
 
 }
 
+/**
+ * Remove a context from the user's context list
+ *
+ * @param object event
+ */
 function removeContext(event) {
-    
     event.preventDefault();
 
     var thisButton = this;
@@ -452,6 +540,13 @@ function removeContext(event) {
     });
 }
 
+
+/**
+ * Add a context to the context selection widget
+ *
+ * @param Element element
+ * @param int context_id
+ */
 function addNewContextToUi(element, context_id) {
 
     var val = $(element).val();;
@@ -486,6 +581,15 @@ function addNewContextToUi(element, context_id) {
 
 
 // COOKIE HELPERS
+/**
+ * Add or replace a cookie in the document
+ *
+ * @param string name
+ * @param string value
+ * @param int days
+ *
+ * @return 
+ */
 function createCookie(name, value, days) {
     var expires;
     var msPerDay = 24 * 60 * 60 * 1000;
@@ -505,9 +609,18 @@ function createCookie(name, value, days) {
 
 }
 
-function readCookie (name) {
+
+/**
+ * Return the value of a cookie stored in the document
+ *
+ * @param name string
+ *
+ * @return string
+ */
+function readCookie (name, index) {
     var nameEQ = encodeURIComponent(name) + '=';
     var cookies = document.cookie.split(';');
+
     for (var i = 0; i < cookies.length; i++) {
         var curCookie = cookies[i];
         while (curCookie.charAt(0) === ' ') {
@@ -522,8 +635,51 @@ function readCookie (name) {
     return null;
 }
 
-function eraseCookie (name) {
+
+/**
+ * Erase a cookie by setting its value to null and setting the expires value
+ * to a time in the past
+ *
+ * @param string name
+ *
+ * @return int
+ */
+function eraseCookie(name) {
     createCookie(name, '', -1);
+
+    if (document.cookie.indexOf('; ' + name + '=') === -1)
+    {
+        return 0;
+    }
+    return 1;
+}
+
+
+/**
+ * Iterate through each cookie in the document and clear each one.
+ * Return 0 for success, error code for failure
+ *
+ * @return int
+ */
+function clearCookies() {
+    var cookies = document.cookie.split('; ');
+    for (i = 0; i < cookies.length; i++) {
+       var thisCookie = cookies[i].split('=');
+       var thisValue = thisCookie.pop();
+       if (thisValue === "true") {
+           thisValue === true;
+       } else if (thisValue === "false") {
+           thisValue === false;
+       }
+       var thisName = thisCookie.join('=');
+
+       eraseCookie(thisName);
+    }
+
+    if (document.cookie === '') {
+        return 0;
+    }
+    return 1;
 }
 
 
@@ -540,7 +696,7 @@ var debug;
 /**
  * Get the filters currently set by the user
  *
- * @return array
+ * @return object 
  */
 function getCurrentFilters() {
     var filters = {
@@ -551,9 +707,9 @@ function getCurrentFilters() {
    
     // Hopefully we don't need a loop for these
 
-    filters.contexts = window.showContext;
-    filters.roadblocks = window.showRoadblocks;
-    filters.completed = window.showCompleted;
+    filters.contexts = pSettings.showContext;
+    filters.roadblocks = pSettings.showRoadblocks;
+    filters.completed = pSettings.showCompleted;
 
-    console.log(filters);
+    return filters;
 }
