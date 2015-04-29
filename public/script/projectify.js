@@ -2,17 +2,18 @@ var pSettings = {};
 var allConst = '_All';
 var expireDays = 30;
 loadSettingsFromCookies();
+if (getSetting('showContext', allConst) === null) {
+    changeSetting('showContext', true, allConst);
+}
 updateButtonStyles();
-//if (getSetting('showContext', allConst) === null) {
-//    changeSetting('showContext', true, allConst);
-//}
-//pSettings.showContext[allConst] = true;
 
  
 $(document).ready(function() {
 
     // INITIALIZE GLOBAL SETTINGS
-    changeSetting('showCompleted', false);
+    if (getSetting('showCompleted') === null) {
+        changeSetting('showCompleted', false);
+    }
     //changeSetting('showRoadblocks', true);
 
     // Bind refreshVisibility to projects, trigger to immediately refresh list
@@ -84,7 +85,6 @@ function getSetting(name, index) {
 
     if (index) {
         if (pSettings[name] === undefined) {
-            console.log('parent undefined');
             pSettings[name] = {};
         }
         cookieName = name + '~' + index;
@@ -130,17 +130,15 @@ function loadSettingsFromCookies() {
                pSettings[thisRoot] = {};
            }
            pSettings[thisRoot][thisIndex] = thisValue;
-console.log('thisRoot: '+thisRoot);
-console.log('thisIndex: '+thisIndex);
-console.log('thisValue: '+thisValue);
        } else {
            pSettings[thisRoot] = thisValue;
        }
    }
 }
 
-
+// Check the settings and make sure the active class matches the setting
 function updateButtonStyles() {
+    // Context filter buttons
     $('.context-btn').each(function(){
         var context = $(this).attr('name');
         var setting = getSetting('showContext', context);
@@ -150,6 +148,16 @@ function updateButtonStyles() {
             $(this).removeClass('btn-info');
         }
     });
+
+    // Show Completed button
+    var showCompletedButton = $('#show-completed-btn'),
+        showCompletedSetting = getSetting('showCompleted');
+    if (showCompletedSetting) {
+        showCompletedButton.addClass('btn-info');
+    } else {
+        showCompletedButton.removeClass('btn-info');
+    }
+
 }
 
 
