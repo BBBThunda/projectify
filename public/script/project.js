@@ -16,10 +16,10 @@ function sortProject(changeEvent) {
     console.log(data);
 
     // Make AJAX call to sort 
-    
+
     // TODO: Function to match index with task
     // TODO: Function to update sequences on update
-    
+
     // TODO: make this queue-able
 }
 

@@ -8,7 +8,7 @@ class SessionsController extends BaseController {
     |--------------------------------------------------------------------------
     |
     |
-    */
+     */
 
     public function create()
     {
@@ -35,10 +35,10 @@ class SessionsController extends BaseController {
                 return Redirect::to('/unverified');
             }
         }
-        
+
         //TODO: add an error message flash here
         Session::flash('error', 'The email/password combination was not found in our system.');
-        
+
         // Re-display login form
         return Redirect::to('/login')->withInput();
     }
