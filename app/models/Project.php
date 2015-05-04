@@ -211,7 +211,7 @@ class Project extends Eloquent {
 
 
 
-    public static function storeProject(array $data = null, array $context = [], Project $project = null) {
+    public static function storeProject(array $data = null, $context, Project $project = null) {
 
         // CREATE PROJECT
         $message = 'Project created!';
