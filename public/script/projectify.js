@@ -7,7 +7,7 @@ if (getSetting('showContext', allConst) === null) {
 }
 updateButtonStyles();
 
- 
+
 $(document).ready(function() {
 
     // INITIALIZE GLOBAL SETTINGS
@@ -94,7 +94,7 @@ function getSetting(name, index) {
         cookieName = name;
         globalValue = pSettings[name];
     }
-    
+
     if (globalValue != undefined) {
         return globalValue;
     }
@@ -112,28 +112,28 @@ function getSetting(name, index) {
 }
 
 function loadSettingsFromCookies() {
-   var cookies = document.cookie.split('; ');
-   for (i = 0; i < cookies.length; i++) {
-       var thisCookie = cookies[i].split('=');
-       var thisValue = thisCookie.pop();
-       if (thisValue === "true") {
-           thisValue = true;
-       } else if (thisValue === "false") {
-           thisValue = false;
-       }
-       var thisName = thisCookie.join('=');;
-       var thisNameParts = thisName.split('~');
-       var thisRoot = thisNameParts.shift();
-       var thisIndex = thisNameParts.join('~');
-       if (thisIndex != '') {
-           if (pSettings[thisRoot] === undefined) {
-               pSettings[thisRoot] = {};
-           }
-           pSettings[thisRoot][thisIndex] = thisValue;
-       } else {
-           pSettings[thisRoot] = thisValue;
-       }
-   }
+    var cookies = document.cookie.split('; ');
+    for (i = 0; i < cookies.length; i++) {
+        var thisCookie = cookies[i].split('=');
+        var thisValue = thisCookie.pop();
+        if (thisValue === "true") {
+            thisValue = true;
+        } else if (thisValue === "false") {
+            thisValue = false;
+        }
+        var thisName = thisCookie.join('=');;
+        var thisNameParts = thisName.split('~');
+        var thisRoot = thisNameParts.shift();
+        var thisIndex = thisNameParts.join('~');
+        if (thisIndex != '') {
+            if (pSettings[thisRoot] === undefined) {
+                pSettings[thisRoot] = {};
+            }
+            pSettings[thisRoot][thisIndex] = thisValue;
+        } else {
+            pSettings[thisRoot] = thisValue;
+        }
+    }
 }
 
 // Check the settings and make sure the active class matches the setting
@@ -185,7 +185,7 @@ function contextButtonClick(event) {
         var toggle = curVal ? false : true;
         changeSetting(settingName, toggle, context);
     }
-    
+
     $('li.project').trigger('refreshVisibility');
 
     // Update buttons
@@ -352,22 +352,22 @@ var contextContainer;
 // DOM must include a 'template' instance of the widget in a
 // container.contextsWidgetTemplate
 function cloneContextsWidget(prefix) {
-    
+
     var lastIndex = prefix.length - 1;
     if (prefix[lastIndex] != '_') { prefix = prefix + '_'; }
 
     var element = $('.contextsWidgetTemplate').clone()
         .attr('id', prefix + '_contextsWidget')
         .find('*').each(function() {
-            
+
             if ($(this).attr('for') !== undefined) {
                 $(this).attr('for', prefix + $(this).attr('for'));
             }
-            
+
             if (this.id !== undefined ) {
                 $(this).attr('id', prefix + this.id);
             }
-            
+
             if ($(this).attr('name') !== undefined) {
                 $(this).attr('name', prefix + $(this).attr('name'));  
             }
@@ -558,7 +558,7 @@ function removeContext(event) {
 function addNewContextToUi(element, context_id) {
 
     var val = $(element).val();;
-    
+
     // Enable checkbox and rename to match others
     $(element).siblings('input[type=checkbox]')
         .removeAttr('disabled')
@@ -672,16 +672,16 @@ function eraseCookie(name) {
 function clearCookies() {
     var cookies = document.cookie.split('; ');
     for (i = 0; i < cookies.length; i++) {
-       var thisCookie = cookies[i].split('=');
-       var thisValue = thisCookie.pop();
-       if (thisValue === "true") {
-           thisValue === true;
-       } else if (thisValue === "false") {
-           thisValue === false;
-       }
-       var thisName = thisCookie.join('=');
+        var thisCookie = cookies[i].split('=');
+        var thisValue = thisCookie.pop();
+        if (thisValue === "true") {
+            thisValue === true;
+        } else if (thisValue === "false") {
+            thisValue === false;
+        }
+        var thisName = thisCookie.join('=');
 
-       eraseCookie(thisName);
+        eraseCookie(thisName);
     }
 
     if (document.cookie === '') {
@@ -712,7 +712,7 @@ function getCurrentFilters() {
         roadblocks: null,
         completed: null
     };
-   
+
     // Hopefully we don't need a loop for these
 
     filters.contexts = pSettings.showContext;

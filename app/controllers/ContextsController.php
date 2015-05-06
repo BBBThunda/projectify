@@ -15,13 +15,13 @@ class ContextsController extends BaseController {
      * @return JSONString
      */
     public function addContext() {
-        
+
         // Get inputs from request
         $description = Input::get('description');
 
         // Insert into DB and build/return response
         $status = Context::addContext($description);
-        
+
         $response = array(
             'success' => $status['success'],
             'message' => $status['message']
@@ -38,7 +38,7 @@ class ContextsController extends BaseController {
 
 
     public function removeContext($contextId) {
-        
+
         $response = Context::find($contextId)->disableContext();
 
         return Response::json($response);

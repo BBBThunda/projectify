@@ -71,7 +71,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
                 'email' => array('required', 'email', 'unique:users'),
                 'display_name' => array('required', 'alpha_num', 'min:3', 'max:32', 'unique:users'),
                 'password' => array('required', 'confirmed', 'min:8', 'max:128', 'password')
-                
+
             );
         }
         else
@@ -83,7 +83,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
                 'display_name' => array(
                     'alpha_num', 'min:3', 'max:32', 'unique:users,display_name,' . $userId),
                 'password' => array('confirmed', 'min:8', 'max:128', 'password')
-            
+
             );
 
         }

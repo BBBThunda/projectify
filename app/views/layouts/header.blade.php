@@ -3,7 +3,7 @@
 
         <!-- Main nav bar -->
         <div class="navbar-header">
-            
+
             <!-- Button w/ dropdown replaces links if mobile -->
             <button type="button" class="navbar-toggle collapsed"
                 data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -24,7 +24,7 @@
         <!-- Links and dropdowns -->
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                
+
                 <li><a href="/about">About</a></li>
                 <li><a href="/contribute">Contribute</a></li>
 

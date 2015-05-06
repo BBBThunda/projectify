@@ -19,7 +19,7 @@
 
                 {{-- Completed/Description error messages --}}
                 @if (sizeof($errors) > 0)
-                
+
                 <ul class="errors">
                     @foreach($errors->get('completed') as $message)
                     <li>{{ $message }}</li>
@@ -38,11 +38,11 @@
                 {{-- Description field ---------------------------------}}
                 {{ Form::text('description', $data['project']->description, 
                 ['class' => 'taskDescription',
-                    'autofocus' => 'autofocus', 'tabindex' => '1' ]) }}
+                'autofocus' => 'autofocus', 'tabindex' => '1' ]) }}
             </div>
-<!--        </div>
+            <!--        </div>
         <div class="col-md-8">
--->            <div class="form-group">
+            -->            <div class="form-group">
 
                 {{-- Contexts --}}
                 @if (!empty($data['contexts']))
@@ -79,23 +79,23 @@
         <div class="col-md-6 well">
             <h4>Subtasks</h4>
             <ul>
-                
+
                 <?php $subtaskCount = 0; ?>
 
                 @foreach ($data['subtasks'] as $subtask)
 
                 <li>
 
-                    <?php $prefix = 'subtask_' . $subtask->id . '_'; ?>
+                <?php $prefix = 'subtask_' . $subtask->id . '_'; ?>
 
-                    {{-- Completed checkbox --}}
-                    {{ Form::checkbox($prefix . 'completed', 1, 
-                        $subtask->completed, ['class' => 'cb-completed']) }}
+                {{-- Completed checkbox --}}
+                {{ Form::checkbox($prefix . 'completed', 1, 
+                $subtask->completed, ['class' => 'cb-completed']) }}
 
-                    {{-- Description field ---------------------------------}}
-                    {{ Form::text($prefix . 'description', 
-                        $subtask->description, 
-                        ['tabindex' => $subtaskCount * 2 + 1 ]) }}
+                {{-- Description field ---------------------------------}}
+                {{ Form::text($prefix . 'description', 
+                $subtask->description, 
+                ['tabindex' => $subtaskCount * 2 + 1 ]) }}
 
                 {{-- Contexts --}}
                 @if (!empty($data['contexts']))
@@ -106,13 +106,13 @@
                     {{-- Checkboxes --}} 
                     @foreach ($data['contexts'] as $context)
 
-{{-- TODO: see if making hashmap of $sub_context->id's improves performance with a large context list --}}
-<?php $checked = false; ?>
-@foreach($subtask->contexts as $sub_context)
-@if ($sub_context->id == $context['id'])
-<?php $checked = true; ?>
-@endif
-@endforeach
+                    {{-- TODO: see if making hashmap of $sub_context->id's improves performance with a large context list --}}
+                    <?php $checked = false; ?>
+                    @foreach($subtask->contexts as $sub_context)
+                    @if ($sub_context->id == $context['id'])
+                    <?php $checked = true; ?>
+                    @endif
+                    @endforeach
 
                     <span class="form-group-fluid">
 
@@ -130,13 +130,13 @@
                 </div>
                 @endif
 
-               </li>
+                </li>
 
                 @endforeach
 
                 <input type="hidden" id="subtaskCount" name="subtaskCount" 
-                    value="{{ $subtaskCount }}" />
-                
+                value="{{ $subtaskCount }}" />
+
                 <li>
                 <span class="task-add-btn glyphicon glyphicon-plus"
                     title="Add Subtask"></span>

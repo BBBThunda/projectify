@@ -173,7 +173,7 @@ class Context extends Eloquent {
                 'success' => true,
                 'message' => 'context deleted');
         }
-        
+
         // DISABLE
         $this->enabled = false;
         $this->save();

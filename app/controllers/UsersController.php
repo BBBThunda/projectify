@@ -8,7 +8,7 @@ class UsersController extends BaseController {
     |------------------
     |
     |
-    */
+     */
 
     /**
      * Display registration page
@@ -43,13 +43,13 @@ class UsersController extends BaseController {
         try {
             $user = User::create([
                 'email' => Input::get('email'),
-                'display_name' => Input::get('display_name'),
-                'password' => Hash::make(Input::get('password'))
-                ]);
+                    'display_name' => Input::get('display_name'),
+                    'password' => Hash::make(Input::get('password'))
+                    ]);
         }
         catch (Exception $e) {
             $message = 'Sorry, we were unable to create the user due to the following issue: '
-            . $e->getMessage();
+                . $e->getMessage();
         }
 
         if (!$this->sendVerificationMail($user)) {
@@ -75,7 +75,7 @@ class UsersController extends BaseController {
             dd('no user');
             return false;
         }
-        
+
         if ($user->confirmed == 1) {
             dd($user->confirmed);
             return false;
@@ -97,7 +97,7 @@ class UsersController extends BaseController {
         });
 
         return true;
-        
+
     }
 
 
@@ -127,13 +127,13 @@ class UsersController extends BaseController {
         if (!$user) {
             return 'User ' . Session::get('unverifiedUserId') . ' not found';
         }
-        
+
         if (!$this->sendVerificationMail($user)) {
             return 'There was a problem sending the verification email for this user.  Please try logging in and you will be given a link to resend the welcome email.';
         }
 
         return 'A new verification link has been sent to your email address. Any previous links are no longer valid and this one will remain valid for 60 minutes.  Please check your email and browse to the link provided.';
-        
+
     }
 
 
@@ -203,7 +203,7 @@ class UsersController extends BaseController {
      */
     public function editProfile()
     {
-        
+
         If (Auth::guest()) {
             return Redirect::to('/login');
         }
@@ -319,12 +319,12 @@ class UsersController extends BaseController {
      */
     public function delete($id)
     {
-       //Todo 
+        //Todo 
     }
 
 
 
-    
+
     /**
      * destroy
      * Delete User from DB
@@ -334,7 +334,7 @@ class UsersController extends BaseController {
      */
     public function destroy($id)
     {
-        
+
         $user = User::find($id);
         $result = $user->delete();
 

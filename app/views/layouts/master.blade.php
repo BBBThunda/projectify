@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        
+
         @include('layouts.style')
 
         <title>Projectify {{ isset($pageTitle) ? ' - ' . $pageTitle : ' - Get Stuff Done' }}</title>
@@ -15,4 +15,4 @@
 
         @include('layouts.footer')
 
-    </html>
+</html>
