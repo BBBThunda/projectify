@@ -251,59 +251,6 @@ function refreshVisibility() {
 }
 
 
-// Changing 'Completed' checkboxes sends an AJAX request to update DB
-$('.cb-completed').change(toggleProjectCompleted);
-
-function toggleProjectCompleted() {
-
-    var thisBox = this;
-    var cbValue = $(this).prop('checked') ? "1" : "0";
-
-    $.ajax({
-        url: "/projects/setCompleted",
-        type: "POST",
-        data: {
-            '_token': $('[name=_token]').val(),
-        'project_id': $(this).val(),
-        'value': cbValue
-        },
-        tryCount: 0,
-        retryLimit: 5,
-        success: function(data){
-            if (data.response == true) {
-                $(thisBox).parent().toggleClass('completed');
-            }
-            else {
-                // If AJAX succeeds, but error is returned by server, undo the change event
-                toggleCheckbox(thisBox);
-            }
-
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            // If AJAX call fails, undo the change event
-            toggleCheckbox(thisBox);
-
-
-            if (textStatus == 'timeout') {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    //try again
-                    $.ajax(this);
-                    return;
-                }            
-                return;
-            }
-            if (xhr.status == 500) {
-                //TODO: Implement error popup widget (like android toast) and call it here
-            } 
-            else {
-                //TODO: Call error popup widget here
-            }
-        }
-    });
-
-}
-
 var newTasks = 0;
 
 // Add task input fields before the task-add-btn button
