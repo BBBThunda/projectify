@@ -272,4 +272,38 @@ class Project extends Eloquent {
         return $project;
     }
 
+    public static function resequence($sequences) {
+
+        $result = false;
+        $resultMsg = '';
+
+        if (!is_array($sequences)) {
+            $resultMsg = 'No data passed';
+        }
+        else {
+
+            // Grab all projectIDs from array
+            $projectIds = array_map(
+                function($obj) {
+                    return $obj['projectID'];
+                },
+                $sequences
+            );
+
+            // Select projects from DB
+            $projects = Project::whereIn('id', $projectIds)->get();
+
+            // Find projects with sequences that don't match
+            foreach ($projects as $key => $project ) {
+                echo 'key: '.$key.', project: '.$project->id."\n";
+            }
+dd($sequences);
+            $result = true;
+
+        }
+
+        return new Lib\Result($result, $resultMsg);
+
+    }
+
 }

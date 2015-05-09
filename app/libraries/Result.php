@@ -1,4 +1,4 @@
-<?php
+<?php namespace Lib;
 
 /**
  * Provides a standard object for passing results/data to the Response object
@@ -26,11 +26,13 @@ class Result {
      * @access public
      * @since  5/6/2015
      */
-    public function __construct($is_success, $msg, $dataObj) {
+    public function __construct($is_success, $msg, $dataObj = null) {
 
-        $success = $is_success;
-        $message = $msg;
-        $data = $dataObj;
+        $this->success = $is_success ? true : false;
+        $this->message = $msg;
+        if (!empty($dataObj)) {
+            $this->data = $dataObj;
+        }
 
     }
 
