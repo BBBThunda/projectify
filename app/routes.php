@@ -73,5 +73,6 @@ Route::controller('password', 'RemindersController');
 
 if($app->env != 'live') {
     Route::get('/test', 'TestsController@test');
+    Route::post('/test', 'TestsController@test');
 }
             
