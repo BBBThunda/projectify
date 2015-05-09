@@ -19,7 +19,7 @@
     </div>
 
     <!-- Context filters -->
-    <div class="col-md-5">
+    <div class="col-md-6">
         {{-- All button for removing context filters --}}
         <a class="btn btn-default btn-info context-btn" 
             id="context-btn-_All" name="_All" href="">All</a>
@@ -34,7 +34,7 @@
     </div>
 
     <!-- Completed filter -->
-    <div class="col-md-5">
+    <div class="col-md-2">
         <a class="btn btn-default completed-btn" id="show-completed-btn" 
             href="">Show Completed</a>
     </div>
@@ -46,7 +46,7 @@
 <!-- Todo List -->
 <div class="row">
 
-    <div class="col-md-8">
+    <div class="col-md-10">
         {{ Form::open([ 'method' => 'post', 
         'url' => '/projects/setCompleted' ]) }}
 
