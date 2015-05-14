@@ -272,6 +272,14 @@ class Project extends Eloquent {
         return $project;
     }
 
+    /**
+     * Takes an associative array of project->sequence representing the
+     * sequence on the client and make the database match
+     *
+     * @param array $sequences Array mapping project_id to sequence
+     * 
+     * @return Lib\Result
+     */
     public static function resequence($sequences) {
 
         $result = false;
@@ -282,22 +290,35 @@ class Project extends Eloquent {
         }
         else {
 
+            $dbSequences = [];
+            $newSequences = [];
+
             // Grab all projectIDs from array
-            $projectIds = array_map(
-                function($obj) {
-                    return $obj['projectID'];
-                },
-                $sequences
-            );
+            $projectIds = array_values($sequences);
 
             // Select projects from DB
             $projects = Project::whereIn('id', $projectIds)->get();
 
-            // Find projects with sequences that don't match
-            foreach ($projects as $key => $project ) {
-                echo 'key: '.$key.', project: '.$project->id."\n";
+            // Create a id=>sequence map and index results by id
+            foreach ($projects as $project) {
+                $dbSequences[$project->id] = +$project->sequence;
+                $projIndex[$project->id] = $project;
             }
-dd($sequences);
+
+            // Find projects with mismatched sequences and create updates list
+            $newSequence = 0;
+            foreach ($sequences as $sequence => $project) {
+                $newSequence++;
+                if ($newSequence !== $dbSequences[$project]) {
+                    $newSequences[$project] = $newSequence;
+
+                    // For now just update each inline.
+                    //TODO: Is there a way to do them all in one query?
+                    $projIndex[$project]->sequence = $newSequence;
+                    $projIndex[$project]->save();
+                }
+            }
+
             $result = true;
 
         }

@@ -17,7 +17,7 @@ function toggleProjectCompleted() {
         tryCount: 0,
         retryLimit: 5,
         success: function(data){
-            if (data.response == true) {
+            if (data.success == true) {
                 $(thisBox).parent().toggleClass('completed');
             }
             else {
@@ -55,7 +55,7 @@ function toggleProjectCompleted() {
 function sortProject(changeEvent) {
 
     // Make the 'changes pending' element visible
-
+window.projectSortChanged = 1;
 
 
 
@@ -88,11 +88,10 @@ function resequence()
         retryLimit: 5,
         success: function(data){
             if (data.response == true) {
-                $(thisBox).parent().toggleClass('completed');
+                window.projectSortChanged = 0;
             }
             else {
                 // If AJAX succeeds, but error is returned by server, undo the change event
-                toggleCheckbox(thisBox);
             }
 
         },
@@ -136,28 +135,26 @@ function getSequence() {
     var element = $('li.project');
     for (var i=0; i<element.length; i++) {
         var curElement = element[i];
-        console.log(curElement);
-        //console.log({id: $(curElement).find('input[type =checkbox]').val(), sequence: i});
         project.push({id: $(curElement).find('input[type =checkbox]').val(), sequence: i});
     }
-    //console.log(project);
 }
 
-// LEFT OFF HERE!!! Copied from toggleProjectCompleted
-function testResequence() {
+
+
+function resequence() {
 
     var listObj = $('.cb-completed');
-    var sequences = [];
+    var sequences = {};
 
     for (var i = 0; i < listObj.length; i++) {
-        sequence = $(listObj[i]).attr('data-sequence');
+        sequence = i+1;
         projectID = $(listObj[i]).val();
 
-        sequences.push({sequence: sequence, projectID: projectID});
+        sequences[sequence] = projectID;
     }
 
     $.ajax({
-        url: "/test",
+        url: "/resequence",
         type: "POST",
         data: {
             '_token': $('[name=_token]').val(),
@@ -166,20 +163,18 @@ function testResequence() {
         tryCount: 0,
         retryLimit: 5,
         success: function(data){
-            if (data.response == true) {
-console.log('SUCCESS!!!');
+            if (data.success == true) {
+                // REMOVE RESEQUENCE ELEMENT
             }
             else {
-                // If AJAX succeeds, but error is returned by server, undo the change event
-console.log('Unsuccessful response');
+                // If AJAX succeeds, but error is returned by server
+
+                // REPLACE RESEQUENCE ELEMENT WITH ERROR ELEMENT
             }
 
         },
         error: function(xhr, textStatus, errorThrown) {
-            // If AJAX call fails, undo the change event
-console.log('Ajax request failed');
-
-
+            // If AJAX call fails, retry
             if (textStatus == 'timeout') {
                 this.tryCount++;
                 if (this.tryCount <= this.retryLimit) {
@@ -189,13 +184,12 @@ console.log('Ajax request failed');
                 }
                 return;
             }
+
+            // If last AJAX attempt fails
+            // REPLACE RESEQUENCE ELEMENT WITH ERROR ELEMENT
+
             if (xhr.status == 500) {
-                //TODO: Implement error popup widget (like android toast) and call it here
-console.log('500 Server error');
-            }
-            else {
-                //TODO: Call error popup widget here
-console.log('WTF?');
+                //TODO: Log application error to server
             }
         }
     });

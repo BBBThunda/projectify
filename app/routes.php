@@ -29,6 +29,7 @@ Route::resource('sessions', 'SessionsController');
 Route::get('/login', 'SessionsController@create');
 Route::get('/logout', 'SessionsController@destroy');
 
+//Projects
 Route::get('/home', 'ProjectsController@home')->before('auth');
 Route::get('/addProject', 'ProjectsController@add')->before('auth');
 Route::post('/projects', [
@@ -40,6 +41,10 @@ Route::post('/storeProject', [
     'uses' => 'ProjectsController@storeProject'
     ])->before(['auth', 'csrf']);
 Route::post('/projects/setCompleted', 'ProjectsController@setCompleted')->before(['auth', 'csrf']);
+Route::post('/resequence', [
+    'as' => 'projects.resequence',
+    'uses' => 'ProjectsController@resequence'
+    ])->before(['auth', 'csrf']);
 //Route::resource('projects', 'ProjectsController');
 Route::get('/projectify/{project_id}', 'ProjectsController@projectify')->before('auth');
 

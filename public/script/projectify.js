@@ -642,6 +642,7 @@ function makeListSortable(elementId) {
     // Make the element with the provided ID sortable using the Sortable library
     var sortable = Sortable.create(document.getElementById(elementId), {
         handle: ".drag-project",
+        sort: true,
         onUpdate: sortProject
     });
 

@@ -85,8 +85,7 @@
             $project->id, 
             $project->completed, 
             ['class' => 'cb-completed',
-            'title' => 'Mark whether task is complete',
-            'data-sequence' => $project->sequence])
+            'title' => 'Mark whether task is complete'])
             }}
 
             {{-- Description --}}
@@ -97,9 +96,6 @@
             <a class="context-label label label-info">
                 {{{ $context->description }}}</a>
             @endforeach
-
-            {{-- Sequence (debug) --}}
-            <span>{{{ $project->id }}}|{{{ $project->sequence }}}</span>
 
             </li>
             @endforeach {{-- End project foreach --}}
