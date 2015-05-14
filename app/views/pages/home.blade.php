@@ -38,21 +38,6 @@
         to the project, check out the <a href="/contribute">CONTRIBUTE</a>
         page.  Links are also in the nav bar at the top of the page.</p>
 
-        <p><strong>UPDATE</strong><em>(04/13/2015): </em>We've taken some first
-        steps toward making the task list sortable.  For now you can sort the
-        list manually by dragging and dropping tasks.  Currently your new sort
-        sequence will not be saved for subsequent page loads, but we plan to
-        change that soon
-
-        <p><strong>UPDATE</strong><em>(04/01/2015): </em>You can now add your
-        own custom contexts to the list. Go to the "Add Task" page and click
-        the '+' icon to get a textbox where you can enter your new context name.
-        Press ENTER to save it to your list.  Contexts you've added will have a
-        remove button you can click to remove the context.</p>
-
-        <p>Also some tabindex functionality was added to the Add Task page to
-        improve usability.</p>
-
     </div>
 </div>
 
@@ -77,6 +62,7 @@
                     <li>Projectify task (add child tasks, etc.)</li>
                     <li>Customize contexts</li>
                     <li>Remove context button</li>
+                    <li>Reorder tasks (does not save yet)</li>
                 </ul>
                 </p>
             </div>
@@ -84,13 +70,13 @@
             <div class="col-md-4">
                 <h2>Coming Soon</h2>
                 <ul>
-                    <li>Roadblocks</li>
-                    <li>Add tags</li>
-                    <li>Roadblock reminders</li>
-                    <li>Search by tag</li>
-                    <li>Archive tasks completed X days</li>
                     <li>Reorder tasks</li>
                     <li>Indicate subtasks of the same parent task</li>
+                    <li>Roadblocks</li>
+                    <li>Roadblock reminders</li>
+                    <li>Add tags</li>
+                    <li>Search by tag</li>
+                    <li>Archive tasks completed X days</li>
                 </ul>
             </div>
 
@@ -109,4 +95,28 @@
         </div> 
     </div>
 
-    @stop
+    <p><strong>UPDATE</strong><em>(05/14/2015): </em>Now when you select filters on
+    your main project list, these filters are saved in a cookie so when you refresh
+    the page you don't have to hit those buttons every time.  We've also made a few
+    behind-the-scenes improvements that will make development a little faster and
+    also made some layout changes that make the main project list a bit easier on
+    the eyes and better about using the screen in a somewhat responsive way.  The
+    backend functionality for manually sorting your tasks has been implemented.  Up
+    next is the ui and event handler components of the manual sort feature.  This
+    should be done in the next few days.
+
+    <p><strong>UPDATE</strong><em>(04/13/2015): </em>We've taken some first
+    steps toward making the task list sortable.  For now you can sort the
+    list manually by dragging and dropping tasks.  Currently your new sort
+    sequence will not be saved for subsequent page loads, but we plan to
+    change that soon
+
+    <p><strong>UPDATE</strong><em>(04/01/2015): </em>You can now add your
+    own custom contexts to the list. Go to the "Add Task" page and click
+    the '+' icon to get a textbox where you can enter your new context name.
+    Press ENTER to save it to your list.  Contexts you've added will have a
+    remove button you can click to remove the context.</p>
+
+</div>
+
+@stop
