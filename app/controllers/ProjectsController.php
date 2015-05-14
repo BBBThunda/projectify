@@ -104,7 +104,7 @@ class ProjectsController extends BaseController {
     public function home($message = null) {
 
         // Get projects for this user
-        $data['projects'] = Project::where('user_id', Auth::id())->get();
+        $data['projects'] = Project::where('user_id', Auth::id())->orderBy('sequence')->get();
         $data['contexts'] = Context::getUserContexts(Auth::id());
 
         // Display home screen page
@@ -376,6 +376,20 @@ class ProjectsController extends BaseController {
         }
 
         return Redirect::to('/home')->with('message', $message);
+
+    }
+
+
+    public function resequence() {
+
+        $sequences = $_POST['sequences'];
+
+        $response = new Lib\Result(true,'');
+        $response->data = $sequences;
+
+        $response = Project::resequence($sequences);
+
+        return Response::json($response);
 
     }
 
