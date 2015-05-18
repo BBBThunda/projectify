@@ -70,7 +70,10 @@ function sortProject(changeEvent) {
 
 // Check whether changes are pending, if so, sync them
 function resequenceCheck() {
-    if(!$('.js-updates-pending').hasClass('hidden') &&
+    // For now .length check makes sure we are on the right page.
+    //TODO: only include this function and calling function on the right pages
+    if($('.js-updates-pending').length > 0 &&
+            !$('.js-updates-pending').hasClass('hidden') &&
             !window.resequenceCheckRunning) {
                 window.resequenceCheckRunning = true;
                 resequence();
