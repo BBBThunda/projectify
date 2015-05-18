@@ -62,7 +62,7 @@
                     <li>Projectify task (add child tasks, etc.)</li>
                     <li>Customize contexts</li>
                     <li>Remove context button</li>
-                    <li>Reorder tasks (does not save yet)</li>
+                    <li>Reorder tasks</li>
                 </ul>
                 </p>
             </div>
@@ -70,7 +70,6 @@
             <div class="col-md-4">
                 <h2>Coming Soon</h2>
                 <ul>
-                    <li>Reorder tasks</li>
                     <li>Indicate subtasks of the same parent task</li>
                     <li>Roadblocks</li>
                     <li>Roadblock reminders</li>
@@ -95,6 +94,14 @@
         </div> 
     </div>
 
+    <p><strong>UPDATE</strong><em>(05/18/2015): </em>After the last update there
+    were some issues preventing users from checking project completed checkbox.  
+    These have been fixed.  Also the UI integration for syncing manually sorted
+    tasks is finished.  Now when you make changes a "changes pending" notice will
+    display.  A background sync job will pick it up and if successful the notice
+    will disappear.  If there are errors (loss of connection, for example),
+    there will be an error notice to let you know.</p>
+
     <p><strong>UPDATE</strong><em>(05/14/2015): </em>Now when you select filters on
     your main project list, these filters are saved in a cookie so when you refresh
     the page you don't have to hit those buttons every time.  We've also made a few
@@ -103,13 +110,13 @@
     the eyes and better about using the screen in a somewhat responsive way.  The
     backend functionality for manually sorting your tasks has been implemented.  Up
     next is the ui and event handler components of the manual sort feature.  This
-    should be done in the next few days.
+    should be done in the next few days.</p>
 
     <p><strong>UPDATE</strong><em>(04/13/2015): </em>We've taken some first
     steps toward making the task list sortable.  For now you can sort the
     list manually by dragging and dropping tasks.  Currently your new sort
     sequence will not be saved for subsequent page loads, but we plan to
-    change that soon
+    change that soon</p>
 
     <p><strong>UPDATE</strong><em>(04/01/2015): </em>You can now add your
     own custom contexts to the list. Go to the "Add Task" page and click
