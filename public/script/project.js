@@ -1,5 +1,14 @@
-// Changing 'Completed' checkboxes sends an AJAX request to update DB
-$('.cb-completed').change(toggleProjectCompleted);
+var syncInterval = 8000;
+
+$(document).ready(function() {
+   
+    // Changing 'Completed' checkboxes sends an AJAX request to update DB
+    $('.cb-completed').change(toggleProjectCompleted);
+
+    window.setInterval(function() {
+        resequenceCheck();        
+    }, syncInterval);
+});
 
 function toggleProjectCompleted() {
 
@@ -54,79 +63,37 @@ function toggleProjectCompleted() {
 
 function sortProject(changeEvent) {
 
-    // Make the 'changes pending' element visible
-window.projectSortChanged = 1;
-
-
-
-
-    // Make AJAX call to sort 
-
-    // TODO: Function to match index with task
-    // TODO: Function to update sequences on update
-
-    // TODO: make this queue-able
+    // Make the 'updates pending' element visible
+    resequencePending();
 
 }
 
-// Function that gets called every x seconds and sends an ajax request to server with new sequence
-function resequence()
-{
-    var sequenceObject = getSequence();
-
-    // Error handling
-
-    // AJAX Call to update server
-    $.ajax({
-        url: "/projects/resequence",
-        type: "POST",
-        data: {
-            '_token': $('[name=_token]').val(),
-        'sequence': sequenceObject
-        },
-        tryCount: 0,
-        retryLimit: 5,
-        success: function(data){
-            if (data.response == true) {
-                window.projectSortChanged = 0;
+// Check whether changes are pending, if so, sync them
+function resequenceCheck() {
+    if(!$('.js-updates-pending').hasClass('hidden') &&
+            !window.resequenceCheckRunning) {
+                window.resequenceCheckRunning = true;
+                resequence();
+                window.resequenceCheckRunning = false;
             }
-            else {
-                // If AJAX succeeds, but error is returned by server, undo the change event
-            }
+}
 
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            // If AJAX call fails, undo the change event
-            toggleCheckbox(thisBox);
+function resequenceFail() {
+    $('.js-updates').removeClass('hidden');
+    $('.js-updates-pending').addClass('hidden');
+    $('.js-updates-failed').removeClass('hidden');
+}
 
+function resequenceSuccess() {
+    $('.js-updates').addClass('hidden');
+    $('.js-updates-pending').addClass('hidden');
+    $('.js-updates-failed').addClass('hidden');
+}
 
-            if (textStatus == 'timeout') {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    //try again
-                    $.ajax(this);
-                    return;
-                }
-                return;
-            }
-            if (xhr.status == 500) {
-                //TODO: Implement error popup widget (like android toast) and call it here
-            }
-            else {
-                //TODO: Call error popup widget here
-            }
-        }
-    });
-
-
-    // On success
-    //   make 'changes pending' element hidden
-    //   make 'changes saved' element visible
-    //   make 'unable to save changes' element hidden
-
-    // On failure
-    //   make 'unable to save changes' element visible
-
+function resequencePending() {
+    $('.js-updates').removeClass('hidden');
+    $('.js-updates-pending').removeClass('hidden');
+    $('.js-updates-failed').addClass('hidden');
 }
 
 // Get new sequence as an array of objects
@@ -164,12 +131,11 @@ function resequence() {
         retryLimit: 5,
         success: function(data){
             if (data.success == true) {
-                // REMOVE RESEQUENCE ELEMENT
+                resequenceSuccess();
             }
             else {
                 // If AJAX succeeds, but error is returned by server
-
-                // REPLACE RESEQUENCE ELEMENT WITH ERROR ELEMENT
+                resequenceFail();
             }
 
         },
@@ -186,11 +152,8 @@ function resequence() {
             }
 
             // If last AJAX attempt fails
-            // REPLACE RESEQUENCE ELEMENT WITH ERROR ELEMENT
+            resequenceFail();
 
-            if (xhr.status == 500) {
-                //TODO: Log application error to server
-            }
         }
     });
 

@@ -146,9 +146,7 @@ class ProjectsController extends BaseController {
         // Update DB and build/return response
         $status = $project->setCompleted($value);
 
-        $response = array(
-            'response' => $status
-        );
+        $response = new Lib\Result($status,'');
 
         //TODO: add conditional here to support non-ajax form submit
         return Response::json($response);

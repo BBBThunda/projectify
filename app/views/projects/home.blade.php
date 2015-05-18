@@ -42,6 +42,14 @@
 </div>
 
 
+{{-- Elements to show sync status after changing project sort order --}}
+<div class="row">
+    <div class="js-updates hidden col-md-10">
+        <p class="js-updates-pending hidden">Updates Pending</p>
+        <p class="js-updates-failed hidden">Updates Failed</p>
+    </div>
+</div> 
+
 
 <!-- Todo List -->
 <div class="row">
