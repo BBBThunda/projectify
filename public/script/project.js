@@ -110,7 +110,7 @@ function getSequence() {
 }
 
 
-
+// Send the current sequence state to server for synchronization
 function resequence() {
 
     var listObj = $('.cb-completed');
@@ -161,5 +161,3 @@ function resequence() {
     });
 
 }
-
-
