@@ -161,6 +161,7 @@ class ProjectsController extends BaseController {
      *
      * @return Array(Project)
      */
+    //TODO: Add a max depth option
     private function getSubTasks($projectId, $list = array()) {
 
         //Get all child projects
@@ -195,6 +196,7 @@ class ProjectsController extends BaseController {
         $data['contexts'] = 
             Context::getUserContexts(Auth::id(), $data['project']->contexts);
 
+        //TODO: add max depth parameter once it's supported
         $data['subtasks'] = $this->getSubTasks($project_id);
 
         return View::make('projects.projectify')->with('data', $data);
