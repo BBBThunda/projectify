@@ -159,10 +159,13 @@ class ProjectsController extends BaseController {
      * as an array of projects ordered as if you plan to display the tasks in
      * a nested <ul>
      *
+     * @param int   $projectId  Id of project to search
+     * @param int   $max_depth  Max recursion depth - null to ignore
+     * @param array $list       Maintain state of list across recursion levels
+     *
      * @return Array(Project)
      */
-    //TODO: Add a max depth option
-    private function getSubTasks($projectId, $list = array()) {
+    private function getSubTasks($projectId, $max_depth, &$list = array()) {
 
         //Get all child projects
         $children = Project::where('parent_project_id', '=', $projectId)->get();
@@ -171,9 +174,9 @@ class ProjectsController extends BaseController {
         foreach ($children as $child) {
 
             array_push($list, $child);
-            $subtasks = $this->getSubTasks($child->id);
-            foreach ($subtasks as $subtask) {
-                array_push($list, $subtask);
+
+            if (!isset($max_depth) || $max_depth > 0) {
+                $subtasks = $this->getSubTasks($child->id, $max_depth - 1, $list);
             }
 
         }
@@ -193,11 +196,15 @@ class ProjectsController extends BaseController {
 
         // Get data
         $data['project'] = Project::find($project_id);
+
         $data['contexts'] = 
             Context::getUserContexts(Auth::id(), $data['project']->contexts);
 
-        //TODO: add max depth parameter once it's supported
-        $data['subtasks'] = $this->getSubTasks($project_id);
+        if ($data['project']->parent_project_id) {
+        $data['parentTask'] = Project::find($data['project']->parent_project_id);
+        }
+
+        $data['subtasks'] = $this->getSubTasks($project_id, 2);
 
         return View::make('projects.projectify')->with('data', $data);
     }
