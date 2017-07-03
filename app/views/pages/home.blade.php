@@ -29,7 +29,7 @@
         <p class="text-warning">This site is pre-alpha stage, meaning there are
         a few more features needed before it will be considered alpha.  In the
         meantime, please try out the site and contact Support with your
-        comments/suggestions/issues: 
+        comments/suggestions/issues:
         <a href="mailto:bobby@<?php print $_SERVER['SERVER_NAME'] ?>">
             bobby@<?php print $_SERVER['SERVER_NAME'] ?></a></p>
 
@@ -70,10 +70,10 @@
             <div class="col-md-4">
                 <h2>Coming Soon</h2>
                 <ul>
-                    <li>Indicate subtasks of the same parent task</li>
-                    <li>Roadblocks</li>
+                    <li>Create tags</li>
+                    <li>Create Roadblocks</li>
+                    <li>Indicate subtasks of same parent</li>
                     <li>Roadblock reminders</li>
-                    <li>Add tags</li>
                     <li>Search by tag</li>
                     <li>Archive tasks completed X days</li>
                 </ul>
@@ -91,11 +91,24 @@
                     <li>Recurring tasks</li>
                 </ul>
             </div>
-        </div> 
+        </div>
     </div>
 
+    <p><strong>UPDATE</strong><em>(07/03/2017): </em>After way too much time
+    off from this project, the SSL certificate was not being accepted by Chrome
+    because Google stopped trusting certificates by StartCom, which is the type
+    of cert we were using.  We were finally able to install a cert signed by
+    Let's Encrypt and we're back up and running.</p>
+    <p>The deploy process has been adjusted to use the GitHub repo to pull in
+    changes, so the code running in production should always match the master
+    branch going forward.</p>
+    <p>An issue has been fixed where creating a subtask with the completed box
+    checked would result in an error.  Next we will focus on adding tags
+    without confusing them with contexts and adding roadblocks. Improving the
+    layout will come after that.</p>
+
     <p><strong>UPDATE</strong><em>(05/18/2015): </em>After the last update there
-    were some issues preventing users from checking project completed checkbox.  
+    were some issues preventing users from checking project completed checkbox.
     These have been fixed.  Also the UI integration for syncing manually sorted
     tasks is finished.  Now when you make changes a "changes pending" notice will
     display.  A background sync job will pick it up and if successful the notice
