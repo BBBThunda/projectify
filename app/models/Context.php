@@ -1,6 +1,6 @@
 <?php
 
-class Context extends Eloquent { 
+class Context extends Eloquent {
 
     public function projects() {
         return $this->belongsToMany('Project');
@@ -27,9 +27,9 @@ class Context extends Eloquent {
 
         // Get all contexts available to the user
         $myContexts = Context::where(function($query) {
-            $query->where('user_id', Auth::id())
+            $query->where('user_id', (int)Auth::id())
                 ->orWhere('user_id', null);
-        }) 
+        })
             ->where('enabled', 1)
             ->orderBy('id') //TODO: Order by most used context
             ->get();
@@ -68,7 +68,7 @@ class Context extends Eloquent {
     public static function addContext($description) {
 
         // User must be logged in to add a Context
-        $user = Auth::id();
+        $user = (int)Auth::id();
         if (empty($user)) {
             return array(
                 'success' => false,
@@ -78,7 +78,7 @@ class Context extends Eloquent {
         // Check whether context already exists
         $context = Context::where(function($query) {
             $query->where('user_id', null)
-                ->orWhere('user_id', Auth::id());
+                ->orWhere('user_id', (int)Auth::id());
         })
             ->where('description', trim($description))
             ->first();
@@ -109,7 +109,7 @@ class Context extends Eloquent {
         $context->description = $description;
         $status = $context->save();
 
-        if ($status == true) { 
+        if ($status == true) {
             return array(
                 'success' => true,
                 'message' => 'context added',
@@ -117,7 +117,7 @@ class Context extends Eloquent {
             );
         }
         else {
-            //TODO: Add better error handling/logging for SQL errors 
+            //TODO: Add better error handling/logging for SQL errors
             return array(
                 'success' => false,
                 'message' => 'failed to add context'
@@ -134,7 +134,7 @@ class Context extends Eloquent {
     public function disableContext() {
 
         // User must be logged in to modify contexts
-        $user = Auth::id();
+        $user = (int)Auth::id();
         if (empty($user)) {
             return array(
                 'success' => false,

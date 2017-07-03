@@ -2,7 +2,7 @@
 
 use Carbon\Carbon;
 
-class Project extends Eloquent { 
+class Project extends Eloquent {
 
     protected $fillable = array(
         'user_id', 'parent_project', 'sequence', 'description', 'completed'
@@ -65,7 +65,8 @@ class Project extends Eloquent {
         // Create project (task)
         if ($type == 'insert') {
             $rules = array(
-                'user_id' => array('required', 'in:' . Auth::id()),
+                'user_id' => array('required', 'in:' . (int)Auth::id()),
+                'parent_project_id' => 'string',
                 'sequence' => 'integer',
                 'description' => array('required', 'min:1', 'max:255'),
                 'completed' => 'boolean'
@@ -73,12 +74,12 @@ class Project extends Eloquent {
         }
         elseif ($type == 'update') {
             $rules = array(
+                'parent_project_id' => 'string',
                 'sequence' => 'integer',
                 'description' => array('required', 'min:1', 'max:255'),
                 'completed' => 'boolean'
             );
         }
-
         return Validator::make($data, $rules);
     }
 
@@ -93,7 +94,7 @@ class Project extends Eloquent {
 
         // Only update if value is changing
         if ($value == $this->completed) {
-            Log::warning('Completed value for project id ' . $this->id 
+            Log::warning('Completed value for project id ' . $this->id
                 . ' already set to ' . $value);
             return false;
         }
@@ -169,8 +170,8 @@ class Project extends Eloquent {
      */
     public function getContextChanges(array $inputs = null) {
 
-        if (empty($inputs)) { 
-            $inputs = array(); 
+        if (empty($inputs)) {
+            $inputs = array();
         }
 
         $changes = array(
@@ -221,7 +222,7 @@ class Project extends Eloquent {
         if($project) {
             $action = 'update';
             // Make sure authenticated user owns the project
-            if (Auth::id() != $project->user_id) {
+            if ((int)Auth::id() != $project->user_id) {
                 //TODO: handle this error in the controller
                 //TODO: log error
                 return Redirect::to('/home');
@@ -230,7 +231,7 @@ class Project extends Eloquent {
         else {
             $action = 'create';
             $project = new Project;
-            $project->user_id = Auth::id();
+            $project->user_id = (int)Auth::id();
         }
 
         //Is there a cleaner way to do this?
@@ -277,7 +278,7 @@ class Project extends Eloquent {
      * sequence on the client and make the database match
      *
      * @param array $sequences Array mapping project_id to sequence
-     * 
+     *
      * @return Lib\Result
      */
     public static function resequence($sequences) {

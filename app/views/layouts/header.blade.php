@@ -39,7 +39,7 @@
                 <!-- Username dropdown -->
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    {{{ User::find(Auth::id())->display_name }}}
+                    {{{ User::find((int)Auth::id())->display_name }}}
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="/home">Home</a></li>

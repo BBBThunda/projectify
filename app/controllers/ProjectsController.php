@@ -32,7 +32,7 @@ class ProjectsController extends BaseController {
     public function add() {
 
         // Get contexts
-        $contexts = Context::getUserContexts(Auth::id());
+        $contexts = Context::getUserContexts((int)Auth::id());
 
         // Pass to view
         return View::make('projects.add')->with('contexts', $contexts);;
@@ -62,7 +62,7 @@ class ProjectsController extends BaseController {
 
         //dd(Input::get('context'));
         // Validate inputs
-        $user = Auth::id();
+        $user = (int)Auth::id();
         $sequence = Project::where('user_id', $user)->max('sequence') + 1;
         $data = array(
             'user_id' => $user,
@@ -104,8 +104,8 @@ class ProjectsController extends BaseController {
     public function home($message = null) {
 
         // Get projects for this user
-        $data['projects'] = Project::where('user_id', Auth::id())->orderBy('sequence')->get();
-        $data['contexts'] = Context::getUserContexts(Auth::id());
+        $data['projects'] = Project::where('user_id', (int)Auth::id())->orderBy('sequence')->get();
+        $data['contexts'] = Context::getUserContexts((int)Auth::id());
 
         // Display home screen page
         return View::make('projects.home')->with('data', $data);
@@ -117,7 +117,7 @@ class ProjectsController extends BaseController {
 
     /**
      * complete
-     * Mark project as completed or uncompleted
+     * Mark project as complete or incomplete
      *
      * Requires post values:
      * 'project_id' (valid project_id belonging to current user)
@@ -129,12 +129,12 @@ class ProjectsController extends BaseController {
 
         // Get inputs from request
         $projectId = Input::get('project_id');
-        $value = Input::get('value') == "0" ? 0 : 1; //Prevent strange values
+        $value = Input::get('value') == "0" ? false : true; //Prevent strange values
 
         // First make sure the user is authorized to modify this project
         $project = Project::find($projectId);
 
-        if (!$project || $project->user_id !== Auth::id()) {
+        if (!$project || $project->user_id !== (int)Auth::id()) {
             if (Request::ajax()) {
                 return Response::make('Unauthorized', 401);
             }
@@ -197,8 +197,8 @@ class ProjectsController extends BaseController {
         // Get data
         $data['project'] = Project::find($project_id);
 
-        $data['contexts'] = 
-            Context::getUserContexts(Auth::id(), $data['project']->contexts);
+        $data['contexts'] =
+            Context::getUserContexts((int)Auth::id(), $data['project']->contexts);
 
         if ($data['project']->parent_project_id) {
         $data['parentTask'] = Project::find($data['project']->parent_project_id);
@@ -223,10 +223,10 @@ class ProjectsController extends BaseController {
         // Get project from DB
         $parentProjectId = Input::get('project_id');
         $project = Project::find($parentProjectId);
-        $sequence = Project::where('user_id', Auth::id())->max('sequence') + 1;
+        $sequence = Project::where('user_id', (int)Auth::id())->max('sequence') + 1;
 
         // Validate user
-        $user = Auth::id();
+        $user = (int)Auth::id();
         if ($user != $project->user_id) {
             //TODO: Throw error
             return Redirect::to('project.home');
@@ -235,7 +235,7 @@ class ProjectsController extends BaseController {
         $data = array(
             'user_id' => $user,
             'description' => Input::get('description'),
-            'completed' => Input::get('completed')
+            'completed' => (bool)Input::get('completed')
         );
 
         // Validate user input
@@ -301,7 +301,6 @@ class ProjectsController extends BaseController {
             }
 
             // Validate user input
-            // TODO: Move validation into model
             $validator = Project::validate($data);
             if ($validator->fails()) {
                 return Redirect::back()
@@ -366,11 +365,10 @@ class ProjectsController extends BaseController {
             );
 
             if (!empty($task['completed'])) {
-                $data['completed'] = $task['completed'];
+                $data['completed'] = (bool)$task['completed'];
             }
 
             // Validate user input
-            // TODO: Move validation into model
             $validator = Project::validate($data);
             if ($validator->fails()) {
                 return Redirect::back()

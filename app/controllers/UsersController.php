@@ -1,14 +1,10 @@
 <?php
-
+/**
+ * Users Controller - Handle requests related to user management, registration, etc.
+ *
+ * @author Bobby Cahill <bobby@bobbycahill.com>
+ */
 class UsersController extends BaseController {
-
-    /*
-    |------------------
-    | Users Controller
-    |------------------
-    |
-    |
-     */
 
     /**
      * Display registration page
@@ -20,9 +16,6 @@ class UsersController extends BaseController {
         return View::make('users.register');
     }
 
-
-
-
     /**
      * Store a newly created User
      *
@@ -30,7 +23,6 @@ class UsersController extends BaseController {
      */
     public function store()
     {
-
         // Validate user input
         $validator = User::validate(Input::all());
         if ($validator->fails()) {
@@ -59,9 +51,6 @@ class UsersController extends BaseController {
         return View::make('users.welcome');
     }
 
-
-
-
     /**
      * sendVerificationMail
      * Send an email to verify user's email address
@@ -70,7 +59,6 @@ class UsersController extends BaseController {
      * @return Boolean
      */
     public function sendVerificationMail($user) {
-
         if (!$user) {
             dd('no user');
             return false;
@@ -97,11 +85,7 @@ class UsersController extends BaseController {
         });
 
         return true;
-
     }
-
-
-
 
     /**
      * resend
@@ -129,15 +113,13 @@ class UsersController extends BaseController {
         }
 
         if (!$this->sendVerificationMail($user)) {
-            return 'There was a problem sending the verification email for this user.  Please try logging in and you will be given a link to resend the welcome email.';
+            return 'There was a problem sending the verification email for this user.  Please try logging in and you'
+            . ' will be given a link to resend the welcome email.';
         }
 
-        return 'A new verification link has been sent to your email address. Any previous links are no longer valid and this one will remain valid for 60 minutes.  Please check your email and browse to the link provided.';
-
+        return 'A new verification link has been sent to your email address.  Any previous links are no longer valid'
+          . ' and this one will remain valid for 60 minutes.  Please check your email and browse to the link provided.';
     }
-
-
-
 
     /**
      * verifyEmail
@@ -150,7 +132,8 @@ class UsersController extends BaseController {
     {
 
         // Default message if there are no errors
-        $message = 'Your email address has been verified.  You may now <a href="/login">log in</a>.  Welcome to the Projectify community!';
+        $message = 'Your email address has been verified.  You may now <a href="/login">log in</a>.  Welcome to the'
+          . ' Projectify community!';
 
         try {
             User::confirmEmail($confirmation_code);
@@ -165,9 +148,6 @@ class UsersController extends BaseController {
             return View::make('users.verified')->with('message', $message);
         }
     }
-
-
-
 
     /**
      * unverified
@@ -192,9 +172,6 @@ class UsersController extends BaseController {
         return Redirect::to('/');
     }
 
-
-
-
     /**
      * editProfile
      * Display form for logged in user to edit their profile
@@ -208,14 +185,11 @@ class UsersController extends BaseController {
             return Redirect::to('/login');
         }
 
-        $user = User::find(Auth::id());
+        $user = User::find((int)Auth::id());
 
         return View::make('users.editProfile')->with('user', $user);
 
     }
-
-
-
 
     /**
      * updateProfile
@@ -225,11 +199,10 @@ class UsersController extends BaseController {
      */
     public function updateProfile()
     {
-
         // Default success message
         $message = 'Profile updated successfully!';
 
-        $user = User::find(Auth::id());
+        $user = User::find((int)Auth::id());
 
         // Validate user input
         $validator = User::validate(Input::all(), $user->id);
@@ -252,11 +225,7 @@ class UsersController extends BaseController {
         }
 
         return Redirect::to('/home')->with('message', $message);
-
     }
-
-
-
 
     /**
      * List Users - Administrators
@@ -319,11 +288,8 @@ class UsersController extends BaseController {
      */
     public function delete($id)
     {
-        //Todo 
+        //Todo
     }
-
-
-
 
     /**
      * destroy
