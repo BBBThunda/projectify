@@ -32,7 +32,7 @@ class ProjectsController extends BaseController {
     public function add() {
 
         // Get contexts
-        $contexts = Context::getUserContexts((int)Auth::id());
+        $contexts = Context::getUserContexts(Auth::id());
 
         // Pass to view
         return View::make('projects.add')->with('contexts', $contexts);;
@@ -62,7 +62,7 @@ class ProjectsController extends BaseController {
 
         //dd(Input::get('context'));
         // Validate inputs
-        $user = (int)Auth::id();
+        $user = Auth::id();
         $sequence = Project::where('user_id', $user)->max('sequence') + 1;
         $data = array(
             'user_id' => $user,
@@ -104,8 +104,8 @@ class ProjectsController extends BaseController {
     public function home($message = null) {
 
         // Get projects for this user
-        $data['projects'] = Project::where('user_id', (int)Auth::id())->orderBy('sequence')->get();
-        $data['contexts'] = Context::getUserContexts((int)Auth::id());
+        $data['projects'] = Project::where('user_id', Auth::id())->orderBy('sequence')->get();
+        $data['contexts'] = Context::getUserContexts(Auth::id());
 
         // Display home screen page
         return View::make('projects.home')->with('data', $data);
@@ -134,7 +134,7 @@ class ProjectsController extends BaseController {
         // First make sure the user is authorized to modify this project
         $project = Project::find($projectId);
 
-        if (!$project || $project->user_id !== (int)Auth::id()) {
+        if (!$project || $project->user_id !== Auth::id()) {
             if (Request::ajax()) {
                 return Response::make('Unauthorized', 401);
             }
@@ -198,7 +198,7 @@ class ProjectsController extends BaseController {
         $data['project'] = Project::find($project_id);
 
         $data['contexts'] =
-            Context::getUserContexts((int)Auth::id(), $data['project']->contexts);
+            Context::getUserContexts(Auth::id(), $data['project']->contexts);
 
         if ($data['project']->parent_project_id) {
         $data['parentTask'] = Project::find($data['project']->parent_project_id);
@@ -223,10 +223,10 @@ class ProjectsController extends BaseController {
         // Get project from DB
         $parentProjectId = Input::get('project_id');
         $project = Project::find($parentProjectId);
-        $sequence = Project::where('user_id', (int)Auth::id())->max('sequence') + 1;
+        $sequence = Project::where('user_id', Auth::id())->max('sequence') + 1;
 
         // Validate user
-        $user = (int)Auth::id();
+        $user = Auth::id();
         if ($user != $project->user_id) {
             //TODO: Throw error
             return Redirect::to('project.home');

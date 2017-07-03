@@ -185,7 +185,7 @@ class UsersController extends BaseController {
             return Redirect::to('/login');
         }
 
-        $user = User::find((int)Auth::id());
+        $user = User::find(Auth::id());
 
         return View::make('users.editProfile')->with('user', $user);
 
@@ -202,7 +202,7 @@ class UsersController extends BaseController {
         // Default success message
         $message = 'Profile updated successfully!';
 
-        $user = User::find((int)Auth::id());
+        $user = User::find(Auth::id());
 
         // Validate user input
         $validator = User::validate(Input::all(), $user->id);

@@ -27,7 +27,7 @@ class Context extends Eloquent {
 
         // Get all contexts available to the user
         $myContexts = Context::where(function($query) {
-            $query->where('user_id', (int)Auth::id())
+            $query->where('user_id', Auth::id())
                 ->orWhere('user_id', null);
         })
             ->where('enabled', 1)
@@ -68,7 +68,7 @@ class Context extends Eloquent {
     public static function addContext($description) {
 
         // User must be logged in to add a Context
-        $user = (int)Auth::id();
+        $user = Auth::id();
         if (empty($user)) {
             return array(
                 'success' => false,
@@ -78,7 +78,7 @@ class Context extends Eloquent {
         // Check whether context already exists
         $context = Context::where(function($query) {
             $query->where('user_id', null)
-                ->orWhere('user_id', (int)Auth::id());
+                ->orWhere('user_id', Auth::id());
         })
             ->where('description', trim($description))
             ->first();
@@ -134,7 +134,7 @@ class Context extends Eloquent {
     public function disableContext() {
 
         // User must be logged in to modify contexts
-        $user = (int)Auth::id();
+        $user = Auth::id();
         if (empty($user)) {
             return array(
                 'success' => false,
