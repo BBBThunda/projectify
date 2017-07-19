@@ -26,7 +26,7 @@ $(document).ready(function() {
         alert('dblclick');
     });
 
-    // Clicking 'Show Completed' button 
+    // Clicking 'Show Completed' button
     $('#show-completed-btn').click(showCompletedToggle);
 
     // Clicking Context buttons
@@ -166,6 +166,17 @@ function toggleCheckbox(box) {
     $(box).prop('checked', !$(box).prop('checked'));
 }
 
+// Are all of the settings under settingName equal to value?
+function settingAllEquals(settingName, value) {
+    let fail = false;
+    for (key in pSettings[settingName]) {
+        if (pSettings[settingName][key] !== value) {
+            fail = true;
+            break;
+        }
+    }
+    return !fail;
+}
 
 function contextButtonClick(event) {
     event.preventDefault();
@@ -174,30 +185,32 @@ function contextButtonClick(event) {
     var context = $(this).attr('name');
     var settingName = 'showContext';
     var curVal = getSetting(settingName, context);
-    if (context === allConst) {
-        for (ctx in pSettings.showContext) {
-            changeSetting(settingName, false, ctx);
-        }
-        changeSetting(settingName, true, allConst);
-    }
-    else {
+    if (context !== allConst) {
         changeSetting(settingName, false, allConst);
         var toggle = curVal ? false : true;
         changeSetting(settingName, toggle, context);
     }
 
+    // If "All" was clicked or nothing is left
+    if (context === allConst || settingAllEquals(settingName, false)) {
+        for (ctx in pSettings.showContext) {
+            changeSetting(settingName, false, ctx);
+        }
+        changeSetting(settingName, true, allConst);
+    }
+
     $('li.project').trigger('refreshVisibility');
 
-    // Update buttons
-    if (context === allConst) {
-        $('.context-btn.btn-info').removeClass('btn-info');
-        $(this).addClass('btn-info');
-    }
-    else {
+    if (context !== allConst) {
         $('#context-btn-' + allConst).removeClass('btn-info');
         $(this).toggleClass('btn-info');
     }
 
+    // Update buttons
+    if (context === allConst || $('.context-btn.btn-info').length == 0) {
+        $('.context-btn.btn-info').removeClass('btn-info');
+        $('#context-btn-_All').addClass('btn-info');
+    }
 }
 
 function makeEditable(event) {
@@ -236,7 +249,7 @@ function refreshVisibility() {
                 visible = true;
             }
         }
-    } 
+    }
 
     // COMPLETED : Hide completed tasks if Show Completed not selected
     if (!pSettings.showCompleted && $(this).hasClass('completed')) { visible = false; }
@@ -272,14 +285,14 @@ function addTaskInputs(event) {
     // Insert the task widget before task-add-btn
     var newContainer = $(containerTag, { id: prefix } )
         .append(
-                $('<input>', { 
+                $('<input>', {
                     name: prefix + '_completed',
                     type: 'checkbox',
                     class: 'cb-completed' }
                  )
                )
         .append(
-                $('<input>', { 
+                $('<input>', {
                     name: prefix + '_description',
                     type: 'text' }
                  )
@@ -316,7 +329,7 @@ function cloneContextsWidget(prefix) {
             }
 
             if ($(this).attr('name') !== undefined) {
-                $(this).attr('name', prefix + $(this).attr('name'));  
+                $(this).attr('name', prefix + $(this).attr('name'));
             }
         })
 
@@ -410,7 +423,7 @@ function addContextInputs(event) {
                )
         .append('&nbsp;')
         .append(
-                $('<input>', { 
+                $('<input>', {
                     id: prefix + '_txt',
                 name: prefix + '_txt',
                 class: 'newContext',
@@ -419,7 +432,7 @@ function addContextInputs(event) {
                 )
                )
         .append(
-                $('<label>', { 
+                $('<label>', {
                     id: prefix + '_lbl',
                 name: prefix + '_lbl',
                 for: prefix + '_',
@@ -482,12 +495,12 @@ function removeContext(event) {
                     //try again
                     $.ajax(this);
                     return;
-                }            
+                }
                 return;
             }
             if (xhr.status == 500) {
                 //TODO: Implement error popup widget (like android toast) and call it here
-            } 
+            }
             else {
                 //TODO: Call error popup widget here
             }
@@ -519,7 +532,7 @@ function addNewContextToUi(element, context_id) {
     $(element).siblings('label').toggle();
 
     // Add removeContextButton button after label
-    $('<button>', { 
+    $('<button>', {
         class: 'removeContextButton',
         id: 'removeContextButton_' + context_id,
         value: context_id,
@@ -543,7 +556,7 @@ function addNewContextToUi(element, context_id) {
  * @param string value
  * @param int days
  *
- * @return 
+ * @return
  */
 function createCookie(name, value, days) {
     var expires;
@@ -652,7 +665,7 @@ var debug;
 /**
  * Get the filters currently set by the user
  *
- * @return object 
+ * @return object
  */
 function getCurrentFilters() {
     var filters = {
