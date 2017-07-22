@@ -94,6 +94,14 @@
         </div>
     </div>
 
+    <p><strong>UPDATE</strong><em>(07/22/2017): </em>TL;DR: MIT LICENSE FTW!!!
+    </p>
+    <p>I decided a while back that I'd rather go with the short and sweet MIT
+    license for this project. And after the long hiatus, I haven't seen
+    evidence of anyone forking the repository or otherwise inplementing the
+    project elsewhere, so I'm just going to change it now and be done with it.
+    </p>
+
     <p><strong>UPDATE</strong><em>(07/03/2017): </em>After way too much time
     off from this project, the SSL certificate was not being accepted by Chrome
     because Google stopped trusting certificates by StartCom, which is the type
