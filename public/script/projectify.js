@@ -1,9 +1,9 @@
-var pSettings = {};
-var allConst = '_All';
-var expireDays = 30;
+let pSettings = {};
+const CONTEXT_ALL = '_All';
+const EXPIRE_DAYS = 30;
 loadSettingsFromCookies();
-if (getSetting('showContext', allConst) === null) {
-    changeSetting('showContext', true, allConst);
+if (getSetting('showContext', CONTEXT_ALL) === null) {
+    changeSetting('showContext', true, CONTEXT_ALL);
 }
 updateButtonStyles();
 
@@ -61,7 +61,7 @@ $(document).ready(function() {
 
 // Change a user setting in the global variable and in the session/cookie
 function changeSetting(name, newValue, index) {
-    var cookieName = null;
+    let cookieName = null;
 
     if (index) {
         if (pSettings[name] === undefined) {
@@ -75,13 +75,13 @@ function changeSetting(name, newValue, index) {
         cookieName = name;
     }
 
-    createCookie(cookieName, newValue, expireDays);
+    createCookie(cookieName, newValue, EXPIRE_DAYS);
 }
 
 // Get a user setting from the global, or if empty, check the session/cookie
 function getSetting(name, index) {
-    var cookieName = null;
-    var globalValue = null;
+    let cookieName = null;
+    let globalValue = null;
 
     if (index) {
         if (pSettings[name] === undefined) {
@@ -112,19 +112,19 @@ function getSetting(name, index) {
 }
 
 function loadSettingsFromCookies() {
-    var cookies = document.cookie.split('; ');
+    const cookies = document.cookie.split('; ');
     for (i = 0; i < cookies.length; i++) {
-        var thisCookie = cookies[i].split('=');
-        var thisValue = thisCookie.pop();
+        const thisCookie = cookies[i].split('=');
+        let thisValue = thisCookie.pop();
         if (thisValue === "true") {
             thisValue = true;
         } else if (thisValue === "false") {
             thisValue = false;
         }
-        var thisName = thisCookie.join('=');;
-        var thisNameParts = thisName.split('~');
-        var thisRoot = thisNameParts.shift();
-        var thisIndex = thisNameParts.join('~');
+        const thisName = thisCookie.join('=');;
+        const thisNameParts = thisName.split('~');
+        const thisRoot = thisNameParts.shift();
+        const thisIndex = thisNameParts.join('~');
         if (thisIndex != '') {
             if (pSettings[thisRoot] === undefined) {
                 pSettings[thisRoot] = {};
@@ -140,8 +140,8 @@ function loadSettingsFromCookies() {
 function updateButtonStyles() {
     // Context filter buttons
     $('.context-btn').each(function(){
-        var context = $(this).attr('name');
-        var setting = getSetting('showContext', context);
+        const context = $(this).attr('name');
+        const setting = getSetting('showContext', context);
         if (setting) {
             $(this).addClass('btn-info');
         } else {
@@ -150,8 +150,8 @@ function updateButtonStyles() {
     });
 
     // Show Completed button
-    var showCompletedButton = $('#show-completed-btn'),
-        showCompletedSetting = getSetting('showCompleted');
+    const showCompletedButton = $('#show-completed-btn');
+    const showCompletedSetting = getSetting('showCompleted');
     if (showCompletedSetting) {
         showCompletedButton.addClass('btn-info');
     } else {
@@ -182,34 +182,35 @@ function contextButtonClick(event) {
     event.preventDefault();
 
     // Update global option and refresh list
-    var context = $(this).attr('name');
-    var settingName = 'showContext';
-    var curVal = getSetting(settingName, context);
-    if (context !== allConst) {
-        changeSetting(settingName, false, allConst);
-        var toggle = curVal ? false : true;
+    const context = $(this).attr('name');
+    const settingName = 'showContext';
+    const curVal = getSetting(settingName, context);
+    if (context !== CONTEXT_ALL) {
+        changeSetting(settingName, false, CONTEXT_ALL);
+        const toggle = curVal ? false : true;
         changeSetting(settingName, toggle, context);
     }
 
     // If "All" was clicked or nothing is left
-    if (context === allConst || settingAllEquals(settingName, false)) {
+    if (context === CONTEXT_ALL || settingAllEquals(settingName, false)) {
         for (ctx in pSettings.showContext) {
             changeSetting(settingName, false, ctx);
         }
-        changeSetting(settingName, true, allConst);
+        changeSetting(settingName, true, CONTEXT_ALL);
     }
 
+    // Apply filters to the task list
     $('li.project').trigger('refreshVisibility');
 
-    if (context !== allConst) {
-        $('#context-btn-' + allConst).removeClass('btn-info');
+    if (context !== CONTEXT_ALL) {
+        $('#context-btn-' + CONTEXT_ALL).removeClass('btn-info');
         $(this).toggleClass('btn-info');
     }
 
     // Update buttons
-    if (context === allConst || $('.context-btn.btn-info').length == 0) {
+    if (context === CONTEXT_ALL || $('.context-btn.btn-info').length == 0) {
         $('.context-btn.btn-info').removeClass('btn-info');
-        $('#context-btn-_All').addClass('btn-info');
+        $('#context-btn-' + CONTEXT_ALL).addClass('btn-info');
     }
 }
 
@@ -235,14 +236,14 @@ function showCompletedToggle(event) {
 function refreshVisibility() {
 
     // Rules to decide if project li should be visible
-    var visible = false;
+    let visible = false;
 
     // CONTEXT : Start by showing all projects in current context
     //TODO: add multiple context support
     for (key in pSettings.showContext) {
         //console.log(pSettings.showContext[key]);
     }
-    if (pSettings.showContext[allConst] == true) { visible = true; }
+    if (pSettings.showContext[CONTEXT_ALL] == true) { visible = true; }
     else {
         for (context in pSettings.showContext) {
             if (pSettings.showContext[context] && $(this).hasClass(context)) {
@@ -263,8 +264,6 @@ function refreshVisibility() {
 
 }
 
-
-var newTasks = 0;
 
 // Add task input fields before the task-add-btn button
 // a.task-add-btn should be inside an li, span or div
@@ -313,10 +312,10 @@ var contextContainer;
 // container.contextsWidgetTemplate
 function cloneContextsWidget(prefix) {
 
-    var lastIndex = prefix.length - 1;
+    const lastIndex = prefix.length - 1;
     if (prefix[lastIndex] != '_') { prefix = prefix + '_'; }
 
-    var element = $('.contextsWidgetTemplate').clone()
+    const element = $('.contextsWidgetTemplate').clone()
         .attr('id', prefix + '_contextsWidget')
         .find('*').each(function() {
 
@@ -370,25 +369,20 @@ function submitAddContext(element) {
         tryCount: 0,
         retryLimit: 5,
         success: function(data){
-
             if (data.success) {
-
                 // Update UI to match changed data
                 addNewContextToUi(element, data.context_id);
-
             }
             else {
                 //TODO: add better error handling
                 alert(data.message);
             }
-
         },
         error: function(xhr, textStatus, errorThrown) {
         }
     });
 
     return false;
-
 }
 
 
