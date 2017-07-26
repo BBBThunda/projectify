@@ -25,12 +25,12 @@ class SessionsController extends BaseController {
     {
         if (Auth::attempt(Input::only('email', 'password'), Input::has('remember')))
         {
-            if (User::find(Auth::id())->confirmed) {
+            if (User::find((int)Auth::id())->confirmed) {
                 return Redirect::to('/home');
             }
             else {
                 // User still needs to verify email address
-                Session::flash('unverifiedUserId', Auth::id());
+                Session::flash('unverifiedUserId', (int)Auth::id());
                 Auth::logout();
                 return Redirect::to('/unverified');
             }

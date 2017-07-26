@@ -134,7 +134,7 @@ class ProjectsController extends BaseController {
         // First make sure the user is authorized to modify this project
         $project = Project::find($projectId);
 
-        if (!$project || $project->user_id !== Auth::id()) {
+        if (!$project || $project->user_id != Auth::id()) {
             if (Request::ajax()) {
                 return Response::make('Unauthorized', 401);
             }

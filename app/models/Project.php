@@ -65,7 +65,7 @@ class Project extends Eloquent {
         // Create project (task)
         if ($type == 'insert') {
             $rules = array(
-                'user_id' => array('required', 'in:' . Auth::id()),
+                'user_id' => array('required', 'in:' . (int)Auth::id()),
                 'parent_project_id' => 'string',
                 'sequence' => 'integer',
                 'description' => array('required', 'min:1', 'max:255'),
@@ -94,6 +94,7 @@ class Project extends Eloquent {
 
         // Only update if value is changing
         if ($value == $this->completed) {
+var_dump($value); var_dump($this->completed); die();
             Log::warning('Completed value for project id ' . $this->id
                 . ' already set to ' . $value);
             return false;
@@ -222,7 +223,7 @@ class Project extends Eloquent {
         if($project) {
             $action = 'update';
             // Make sure authenticated user owns the project
-            if (Auth::id() != $project->user_id) {
+            if ((int)Auth::id() != $project->user_id) {
                 //TODO: handle this error in the controller
                 //TODO: log error
                 return Redirect::to('/home');
@@ -231,7 +232,7 @@ class Project extends Eloquent {
         else {
             $action = 'create';
             $project = new Project;
-            $project->user_id = Auth::id();
+            $project->user_id = (int)Auth::id();
         }
 
         //Is there a cleaner way to do this?
